@@ -35,4 +35,13 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to,from) => {  
+  if(from.name=="login" && !sessionStorage.getItem("usuario")){
+    return false;
+  }
+  else{
+    return true;
+  }
+})
+
 export default router;
