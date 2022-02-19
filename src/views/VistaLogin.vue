@@ -9,7 +9,7 @@
         <div class="card-body">
           <div class="row">
             <input
-              v-model="usuario"
+              v-model="codigo"
               type="text"
               class="form-control"
               placeholder="Usuario"
@@ -24,7 +24,11 @@
             />
           </div>
           <div class="row">
-            <button v-on:click="ingresar" type="button" class="btn btn-outline-primary">
+            <button
+              v-on:click="ingresar"
+              type="button"
+              class="btn btn-outline-primary"
+            >
               Ingresar
             </button>
           </div>
@@ -39,6 +43,7 @@ import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAl
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import api from "@/api.js";
 
 export default {
   name: "VistaLogin",
@@ -50,19 +55,26 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    const usuario = ref("");
+    const codigo = ref("");
     const clave = ref("");
 
     const ingresar = function () {
       try {
         mensajeAlerta.value = "";
-        if (usuario.value == "admin" && clave.value == "admin") {
-          sessionStorage.setItem("usuario", usuario.value);
-          store.commit("login");
-          router.push({ name: "principal" });
-        } else {
-          mensajeAlerta.value = "ingrese un usuario y clave correcta";
-        }
+        api
+          .consultarUsuario(codigo.value)
+          .then((data) => {
+            if (codigo.value == data.codigo && clave.value == data.clave) {
+              sessionStorage.setItem("usuario", codigo.value);
+              store.commit("login");
+              router.push({ name: "principal" });
+            }else{
+              mensajeAlerta.value = "ingrese un usuario y clave correcta";  
+            }
+          })
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
       } catch (e) {
         console.log(e);
       }
@@ -70,7 +82,7 @@ export default {
 
     const ingresarAutomaticamente = function () {
       try {
-        if(sessionStorage.getItem("usuario")){
+        if (sessionStorage.getItem("usuario")) {
           store.commit("login");
           router.push({ name: "principal" });
         }
@@ -82,7 +94,7 @@ export default {
     ingresarAutomaticamente();
 
     return {
-      usuario,
+      codigo,
       clave,
       ingresar,
       mensajeAlerta,

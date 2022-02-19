@@ -3,6 +3,9 @@ import VistaPrincipal from "@/views/VistaPrincipal.vue";
 import VistaLogin from "@/views/VistaLogin.vue";
 import MaestroGenericoGrid from "@/views/maestroGenerico/MaestroGenericoGrid.vue";
 import MaestroGenericoFormulario from "@/views/maestroGenerico/MaestroGenericoFormulario.vue";
+import UsuarioGrid from "@/views/usuario/UsuarioGrid.vue";
+import UsuarioFormulario from "@/views/usuario/UsuarioFormulario.vue";
+import InstitucionEducativaGrid from "@/views/institucionEducativa/InstitucionEducativaGrid.vue";
 
 const routes = [
   {
@@ -27,6 +30,27 @@ const routes = [
     path: "/maestrogenericoformulario",
     name: "maestrogenericoformulario",
     component: MaestroGenericoFormulario,
+  },
+  {
+    path: "/usuario",
+    name: "usuario",
+    component: UsuarioGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/usuarioformulario",
+    name: "usuarioformulario",
+    component: UsuarioFormulario,
+  },
+  {
+    path: "/institucioneducativa",
+    name: "institucioneducativa",
+    component: InstitucionEducativaGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
   },
 ];
 
