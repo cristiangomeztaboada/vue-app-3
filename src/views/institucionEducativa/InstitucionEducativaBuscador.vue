@@ -15,18 +15,18 @@
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#modalMaestroGenerico"
+            data-bs-target="#modalInstitucionEducativa"
           >
             🔎
           </button>
         </div>
       </div>
     </div>
-    <div class="modal" id="modalMaestroGenerico" tabindex="-1">
+    <div class="modal" id="modalInstitucionEducativa" tabindex="-1">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">maestroGenerico</h5>
+            <h5 class="modal-title">institución Educativa</h5>
             <button
               type="button"
               class="btn-close"
@@ -35,10 +35,10 @@
             ></button>
           </div>
           <div class="modal-body">
-            <maestro-generico-grid
+            <institucion-educativa-grid
               v-bind:mostrarColumnaBotones="false"
-              v-on:seleccionarMaestroGenerico="
-                recibirMaestroGenericoSeleccionado
+              v-on:seleccionarInstitucionEducativa="
+                recibirInstitucionEducativaSeleccionado
               "
             />
           </div>
@@ -49,14 +49,14 @@
 </template>
 
 <script>
-import MaestroGenericoGrid from "@/views/maestroGenerico/MaestroGenericoGrid.vue";
+import InstitucionEducativaGrid from "@/views/institucionEducativa/InstitucionEducativaGrid.vue";
 import $ from "jquery";
 import { ref, watch } from "vue";
 
 export default {
-  name: "MaestroGenericoBuscador",
+  name: "InstitucionEducativaBuscador",
   components: {
-    MaestroGenericoGrid,
+    InstitucionEducativaGrid,
   },
   props: {
     codigoPropiedad: String,
@@ -71,20 +71,20 @@ export default {
       }
     );
 
-    const recibirMaestroGenericoSeleccionado = function (c) {
-      $("#modalMaestroGenerico").modal("hide");
+    const recibirInstitucionEducativaSeleccionado = function (c) {
+      $("#modalInstitucionEducativa").modal("hide");
       codigo.value = c;
       perderFoco();
     };
 
     const perderFoco = function () {
-      $("#modalMaestroGenerico").modal("hide");
+      $("#modalInstitucionEducativa").modal("hide");
       context.emit("perderFoco", codigo.value);
     };
 
     return {
       codigo,
-      recibirMaestroGenericoSeleccionado,
+      recibirInstitucionEducativaSeleccionado,
       perderFoco,
     };
   },

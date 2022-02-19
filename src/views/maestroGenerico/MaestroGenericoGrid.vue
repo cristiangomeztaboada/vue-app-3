@@ -3,7 +3,12 @@
     <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
   </div>
   <div class="row">
-    <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11"></div>
+    <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
+      
+    </div>
+    <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+      <h1 class="display-6">MaestroGenerico</h1>
+    </div>
     <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
       <button
         v-if="mostrarColumnaBotones"

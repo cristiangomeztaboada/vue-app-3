@@ -6,6 +6,7 @@ import MaestroGenericoFormulario from "@/views/maestroGenerico/MaestroGenericoFo
 import UsuarioGrid from "@/views/usuario/UsuarioGrid.vue";
 import UsuarioFormulario from "@/views/usuario/UsuarioFormulario.vue";
 import InstitucionEducativaGrid from "@/views/institucionEducativa/InstitucionEducativaGrid.vue";
+import InstitucionEducativaFormulario from "@/views/institucionEducativa/InstitucionEducativaFormulario.vue";
 
 const routes = [
   {
@@ -51,6 +52,11 @@ const routes = [
     props: {
       mostrarColumnaBotones: true,
     },
+  },
+  {
+    path: "/institucioneducativaformulario",
+    name: "institucioneducativaformulario",
+    component: InstitucionEducativaFormulario,
   },
 ];
 

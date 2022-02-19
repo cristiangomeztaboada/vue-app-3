@@ -34,7 +34,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
-                <router-link 
+                <router-link class="dropdown-item"
                   :to="{ name: 'usuario' }"
                 >
                   Usuario
@@ -42,7 +42,7 @@
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link 
+                <router-link class="dropdown-item"
                   :to="{ name: 'institucioneducativa' }"
                 >
                   Institución Educativa

@@ -96,6 +96,15 @@ const listarInstitucionEducativa = function () {
     });
 };
 
+const consultarInstitucionEducativa = function (codigo) {
+  return fetch(`${url}/institucioneducativa/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const insertarInstitucionEducativa = function (institucionEducativa) {
   return fetch(`${url}/institucioneducativa`, {
     method: "POST",
@@ -119,4 +128,5 @@ export default {
   eliminarUsuario,
   listarInstitucionEducativa,
   insertarInstitucionEducativa,
+  consultarInstitucionEducativa,
 };
