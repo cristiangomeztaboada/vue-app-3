@@ -7,6 +7,8 @@ import UsuarioGrid from "@/views/usuario/UsuarioGrid.vue";
 import UsuarioFormulario from "@/views/usuario/UsuarioFormulario.vue";
 import InstitucionEducativaGrid from "@/views/institucionEducativa/InstitucionEducativaGrid.vue";
 import InstitucionEducativaFormulario from "@/views/institucionEducativa/InstitucionEducativaFormulario.vue";
+import TipoContratoGrid from "@/views/tipoContrato/TipoContratoGrid.vue";
+import TipoContratoFormulario from "@/views/tipoContrato/TipoContratoFormulario.vue";
 
 const routes = [
   {
@@ -57,6 +59,19 @@ const routes = [
     path: "/institucioneducativaformulario",
     name: "institucioneducativaformulario",
     component: InstitucionEducativaFormulario,
+  },
+  {
+    path: "/tipocontrato",
+    name: "tipocontrato",
+    component: TipoContratoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/tipocontratoformulario",
+    name: "tipocontratoformulario",
+    component: TipoContratoFormulario,
   },
 ];
 

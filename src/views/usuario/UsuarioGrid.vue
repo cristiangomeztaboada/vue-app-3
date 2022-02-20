@@ -25,7 +25,7 @@
           key-expr="codigo"
           :show-borders="true"
           :selection="{ mode: 'single' }"
-          @selection-changed="seleccionarUsuario"
+          @row-click="seleccionarUsuario"
           :showRowLines="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
@@ -91,7 +91,7 @@ export default {
     listar();
 
     const seleccionarUsuario = function (e) {
-      context.emit("seleccionarUsuario", e.selectedRowsData[0].codigo);
+      context.emit("seleccionarUsuario", e.data.codigo);
     };
 
     const eliminar = function (rowData) {

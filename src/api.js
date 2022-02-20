@@ -127,6 +127,46 @@ const eliminarInstitucionEducativa = function (codigo) {
     });
 };
 
+const listarTipoContrato = function () {
+  return fetch(`${url}/tipocontrato`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarTipoContrato = function (codigo) {
+  return fetch(`${url}/tipocontrato/${codigo}`, {
+    method: "DELETE",
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarTipoContrato = function (codigo) {
+  return fetch(`${url}/tipocontrato/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarTipoContrato = function (tipoContrato) {
+  return fetch(`${url}/tipocontrato`, {
+    method: "POST",
+    body: JSON.stringify(tipoContrato),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarMaestroGenerico,
   eliminarMaestroGenerico,
@@ -140,4 +180,8 @@ export default {
   insertarInstitucionEducativa,
   consultarInstitucionEducativa,
   eliminarInstitucionEducativa,
+  listarTipoContrato,
+  eliminarTipoContrato,
+  consultarTipoContrato,
+  insertarTipoContrato,
 };

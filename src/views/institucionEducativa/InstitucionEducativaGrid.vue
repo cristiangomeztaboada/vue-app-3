@@ -25,7 +25,7 @@
           key-expr="codigo"
           :show-borders="true"
           :selection="{ mode: 'single' }"
-          @selection-changed="seleccionarInstitucionEducativa"
+          @row-click="seleccionarInstitucionEducativa"
           :showRowLines="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
@@ -94,7 +94,7 @@ export default {
     const seleccionarInstitucionEducativa = function (e) {
       context.emit(
         "seleccionarInstitucionEducativa",
-        e.selectedRowsData[0].codigo
+        e.data.codigo
       );
     };
 

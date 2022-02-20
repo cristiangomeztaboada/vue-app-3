@@ -1,0 +1,124 @@
+<template>
+  <div class="row">
+    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="card-header">
+          <barra-botones
+            v-on:guardar="guardar"
+            v-on:irAtras="irAtras"
+            v-on:nuevo="nuevo"
+            v-on:eliminar="eliminar"
+          />
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Tipo Contrato</h5>
+          <label>Código</label>
+          <tipo-contrato-buscador
+            v-on:perderFoco="consultarTipoContrato"
+            v-bind:codigoPropiedad="codigo"
+          />
+          <label>Nombre</label>
+          <input
+            class="form-control"
+            v-model="nombre"
+            type="text"
+            id="nombre"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
+import TipoContratoBuscador from "./TipoContratoBuscador.vue";
+import { ref } from "vue";
+import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
+import api from "@/api.js";
+import { useRoute, useRouter } from "vue-router";
+
+export default {
+  name: "TipoContratoFormulario",
+  components: {
+    TipoContratoBuscador,
+    BarraBotones,
+    ComponenteAlerta,
+  },
+  setup() {
+    const mensajeAlerta = ref("");
+    const codigo = ref("");
+    const nombre = ref("");
+    const route = new useRoute();
+    const router = useRouter();
+
+    const consultarTipoContrato = function (c) {
+      api
+        .consultarTipoContrato(c)
+        .then((data) => {
+          codigo.value = data.codigo;
+          nombre.value = data.nombre;
+        })
+        .catch(function () {
+          nuevo();
+          codigo.value = c;
+        });
+    };
+
+    consultarTipoContrato(route.params.codigo);
+
+    const guardar = function () {
+      const tipoContrato = { codigo: codigo.value, nombre: nombre.value };
+      api
+        .insertarTipoContrato(tipoContrato)
+        .then((mensajeAlerta.value = "registro insertado con exito"))
+        .catch(function (e) {
+          mensajeAlerta.value = e;
+        });
+    };
+
+    const irAtras = function () {
+      router.push({
+        name: "tipocontrato",
+      });
+    };
+
+    const nuevo = function () {
+      codigo.value = "";
+      nombre.value = "";
+    };
+
+    const eliminar = function () {
+      if (window.confirm("Desea eliminar este registro?")) {
+        api
+          .eliminarTipoContrato(codigo.value)
+          .then(() =>
+            router.push({
+              name: "tipocontrato",
+            })
+          )
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
+      }
+    };
+
+    return {
+      mensajeAlerta,
+      codigo,
+      nombre,
+      guardar,
+      irAtras,
+      nuevo,
+      eliminar,
+      consultarTipoContrato,
+    };
+  },
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped></style>

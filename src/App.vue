@@ -48,6 +48,14 @@
                   Institución Educativa
                 </router-link>
               </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link class="dropdown-item"
+                  :to="{ name: 'tipocontrato' }"
+                >
+                  Tipo Contrato
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>
