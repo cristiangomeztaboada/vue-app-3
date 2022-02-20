@@ -117,6 +117,16 @@ const insertarInstitucionEducativa = function (institucionEducativa) {
     });
 };
 
+const eliminarInstitucionEducativa = function (codigo) {
+  return fetch(`${url}/institucioneducativa/${codigo}`, {
+    method: "DELETE",
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarMaestroGenerico,
   eliminarMaestroGenerico,
@@ -129,4 +139,5 @@ export default {
   listarInstitucionEducativa,
   insertarInstitucionEducativa,
   consultarInstitucionEducativa,
+  eliminarInstitucionEducativa,
 };

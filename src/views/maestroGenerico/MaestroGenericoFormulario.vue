@@ -4,7 +4,7 @@
   </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-      <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
         <div class="card-header">
           <barra-botones
             v-on:guardar="guardar"
@@ -15,16 +15,17 @@
         </div>
         <div class="card-body">
           <h5 class="card-title">MaestroGenerico</h5>
+          <label>Código</label>
           <maestro-generico-buscador
             v-on:perderFoco="consultarMaestroGenerico"
             v-bind:codigoPropiedad="codigo"
           />
+          <label>Nombre</label>
           <input
             class="form-control"
             v-model="nombre"
             type="text"
             id="nombre"
-            placeholder="Nombre"
           />
         </div>
       </div>

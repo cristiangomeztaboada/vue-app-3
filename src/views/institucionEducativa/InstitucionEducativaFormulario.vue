@@ -4,7 +4,7 @@
   </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-      <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
         <div class="card-header">
           <barra-botones
             v-on:guardar="guardar"
@@ -14,21 +14,23 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">InstitucionEducativa</h5>
+          <h5 class="card-title">Institucion Educativa</h5>
+          <label>Código</label>
           <institucion-educativa-buscador
             v-on:perderFoco="consultarInstitucionEducativa"
             v-bind:codigoPropiedad="codigo"
           />
+          <label>Nombre</label>
           <input
             class="form-control"
             v-model="nombre"
             type="text"
             id="nombre"
-            placeholder="Nombre"
           />
+          <label>Usuario</label>
           <usuario-buscador
             v-on:perderFoco="consultarUsuario"
-            v-bind:codigoPropiedad="codigo"
+            v-bind:codigoPropiedad="usuarioCodigo"
           />
         </div>
       </div>
@@ -57,6 +59,7 @@ export default {
     const mensajeAlerta = ref("");
     const codigo = ref("");
     const nombre = ref("");
+    const usuarioCodigo = ref("");
     const route = new useRoute();
     const router = useRouter();
 
@@ -66,6 +69,7 @@ export default {
         .then((data) => {
           codigo.value = data.codigo;
           nombre.value = data.nombre;
+          usuarioCodigo.value = data.usuarioCodigo;
         })
         .catch(function () {
           nuevo();
@@ -79,10 +83,12 @@ export default {
       const institucionEducativa = {
         codigo: codigo.value,
         nombre: nombre.value,
+        usuarioCodigo: usuarioCodigo.value,
       };
+
       api
         .insertarInstitucionEducativa(institucionEducativa)
-        .then((mensajeAlerta.value = "registro insertado con exito"))
+        .then(mensajeAlerta.value = "registro insertado con exito")
         .catch(function (e) {
           mensajeAlerta.value = e;
         });
@@ -97,6 +103,7 @@ export default {
     const nuevo = function () {
       codigo.value = "";
       nombre.value = "";
+      usuarioCodigo.value = "";
     };
 
     const eliminar = function () {
@@ -114,15 +121,29 @@ export default {
       }
     };
 
+    const consultarUsuario = function (c) {
+      api
+        .consultarUsuario(c)
+        .then((data) => {
+          usuarioCodigo.value = data.codigo;
+        })
+        .catch(function () {
+          nuevo();
+          codigo.value = c;
+        });
+    };
+
     return {
       mensajeAlerta,
       codigo,
       nombre,
+      usuarioCodigo,
       guardar,
       irAtras,
       nuevo,
       eliminar,
       consultarInstitucionEducativa,
+      consultarUsuario,
     };
   },
 };
