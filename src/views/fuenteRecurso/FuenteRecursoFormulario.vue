@@ -14,10 +14,10 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Institucion Educativa</h5>
+          <h5 class="card-title">Fuente Recurso</h5>
           <label>Código</label>
-          <institucion-educativa-buscador
-            v-on:perderFoco="consultarInstitucionEducativa"
+          <fuente-recurso-buscador
+            v-on:perderFoco="consultarFuenteRecurso"
             v-bind:codigoPropiedad="codigo"
           />
           <label>Nombre</label>
@@ -27,10 +27,10 @@
             type="text"
             id="nombre"
           />
-          <label>Usuario</label>
-          <usuario-buscador
-            v-on:perderFoco="consultarUsuario"
-            v-bind:codigoPropiedad="usuarioCodigo"
+          <label>Fuente Recurso Padre</label>
+          <fuente-recurso-padre-buscador
+            v-on:perderFocoPadre="consultarFuenteRecursoPadre"
+            v-bind:codigoPropiedad="fuenteRecursoCodigoPadre"
           />
         </div>
       </div>
@@ -40,36 +40,36 @@
 
 <script>
 import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
-import InstitucionEducativaBuscador from "./InstitucionEducativaBuscador.vue";
-import UsuarioBuscador from "@/views/usuario/UsuarioBuscador.vue";
+import FuenteRecursoBuscador from "./FuenteRecursoBuscador.vue";
+import FuenteRecursoPadreBuscador from "./FuenteRecursoPadreBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
-  name: "InstitucionEducativaFormulario",
+  name: "FuenteRecursoFormulario",
   components: {
-    InstitucionEducativaBuscador,
+    FuenteRecursoBuscador,
+    FuenteRecursoPadreBuscador,
     BarraBotones,
     ComponenteAlerta,
-    UsuarioBuscador,
   },
   setup() {
     const mensajeAlerta = ref("");
     const codigo = ref("");
     const nombre = ref("");
-    const usuarioCodigo = ref("");
+    const fuenteRecursoCodigoPadre = ref("");
     const route = new useRoute();
     const router = useRouter();
 
-    const consultarInstitucionEducativa = function (c) {
+    const consultarFuenteRecurso = function (c) {
       api
-        .consultarInstitucionEducativa(c)
+        .consultarFuenteRecurso(c)
         .then((data) => {
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          usuarioCodigo.value = data.usuarioCodigo;
+          fuenteRecursoCodigoPadre.value = data.fuenteRecursoCodigoPadre;
         })
         .catch(function () {
           nuevo();
@@ -77,18 +77,18 @@ export default {
         });
     };
 
-    consultarInstitucionEducativa(route.params.codigo);
+    consultarFuenteRecurso(route.params.codigo);
 
     const guardar = function () {
-      const institucionEducativa = {
+      const fuenteRecurso = {
         codigo: codigo.value,
         nombre: nombre.value,
-        usuarioCodigo: usuarioCodigo.value,
+        fuenteRecursoCodigoPadre: fuenteRecursoCodigoPadre.value,
       };
 
       api
-        .insertarInstitucionEducativa(institucionEducativa)
-        .then(mensajeAlerta.value = "registro insertado con exito")
+        .insertarFuenteRecurso(fuenteRecurso)
+        .then((mensajeAlerta.value = "registro insertado con exito"))
         .catch(function (e) {
           mensajeAlerta.value = e;
         });
@@ -96,23 +96,23 @@ export default {
 
     const irAtras = function () {
       router.push({
-        name: "institucioneducativa",
+        name: "fuenterecurso",
       });
     };
 
     const nuevo = function () {
       codigo.value = "";
       nombre.value = "";
-      usuarioCodigo.value = "";
+      fuenteRecursoCodigoPadre.value = "";
     };
 
     const eliminar = function () {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarInstitucionEducativa(codigo.value)
+          .eliminarFuenteRecurso(codigo.value)
           .then(() =>
             router.push({
-              name: "institucioneducativa",
+              name: "fuenterecurso",
             })
           )
           .catch(function (e) {
@@ -121,14 +121,14 @@ export default {
       }
     };
 
-    const consultarUsuario = function (c) {
+    const consultarFuenteRecursoPadre = function (c) {
       api
-        .consultarUsuario(c)
+        .consultarFuenteRecurso(c)
         .then((data) => {
-          usuarioCodigo.value = data.codigo;
+          fuenteRecursoCodigoPadre.value = data.codigo;
         })
         .catch(function () {
-          usuarioCodigo.value = "";
+          fuenteRecursoCodigoPadre.value = "";
         });
     };
 
@@ -136,13 +136,13 @@ export default {
       mensajeAlerta,
       codigo,
       nombre,
-      usuarioCodigo,
+      fuenteRecursoCodigoPadre,
       guardar,
       irAtras,
       nuevo,
       eliminar,
-      consultarInstitucionEducativa,
-      consultarUsuario,
+      consultarFuenteRecurso,
+      consultarFuenteRecursoPadre,
     };
   },
 };

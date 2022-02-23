@@ -14,10 +14,10 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Institucion Educativa</h5>
+          <h5 class="card-title">Personal Planta</h5>
           <label>Código</label>
-          <institucion-educativa-buscador
-            v-on:perderFoco="consultarInstitucionEducativa"
+          <personal-planta-buscador
+            v-on:perderFoco="consultarPersonalPlanta"
             v-bind:codigoPropiedad="codigo"
           />
           <label>Nombre</label>
@@ -27,10 +27,12 @@
             type="text"
             id="nombre"
           />
-          <label>Usuario</label>
-          <usuario-buscador
-            v-on:perderFoco="consultarUsuario"
-            v-bind:codigoPropiedad="usuarioCodigo"
+          <label>Cargo</label>
+          <input class="form-control" v-model="cargo" type="text" id="cargo" />
+          <label>Institución Educativa</label>
+          <institucion-educativa-buscador
+            v-on:perderFoco="consultarInstitucionEducativa"
+            v-bind:codigoPropiedad="institucionEducativaCodigo"
           />
         </div>
       </div>
@@ -40,36 +42,38 @@
 
 <script>
 import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
-import InstitucionEducativaBuscador from "./InstitucionEducativaBuscador.vue";
-import UsuarioBuscador from "@/views/usuario/UsuarioBuscador.vue";
+import PersonalPlantaBuscador from "./PersonalPlantaBuscador.vue";
+import InstitucionEducativaBuscador from "@/views/institucionEducativa/InstitucionEducativaBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
-  name: "InstitucionEducativaFormulario",
+  name: "PersonalPlantaFormulario",
   components: {
-    InstitucionEducativaBuscador,
+    PersonalPlantaBuscador,
     BarraBotones,
     ComponenteAlerta,
-    UsuarioBuscador,
+    InstitucionEducativaBuscador,
   },
   setup() {
     const mensajeAlerta = ref("");
     const codigo = ref("");
     const nombre = ref("");
-    const usuarioCodigo = ref("");
+    const cargo = ref("");
+    const institucionEducativaCodigo = ref("");
     const route = new useRoute();
     const router = useRouter();
 
-    const consultarInstitucionEducativa = function (c) {
+    const consultarPersonalPlanta = function (c) {
       api
-        .consultarInstitucionEducativa(c)
+        .consultarPersonalPlanta(c)
         .then((data) => {
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          usuarioCodigo.value = data.usuarioCodigo;
+          institucionEducativaCodigo.value = data.institucionEducativaCodigo;
+          cargo.value = data.cargo;
         })
         .catch(function () {
           nuevo();
@@ -77,18 +81,19 @@ export default {
         });
     };
 
-    consultarInstitucionEducativa(route.params.codigo);
+    consultarPersonalPlanta(route.params.codigo);
 
     const guardar = function () {
-      const institucionEducativa = {
+      const personalPlanta = {
         codigo: codigo.value,
         nombre: nombre.value,
-        usuarioCodigo: usuarioCodigo.value,
+        institucionEducativaCodigo: institucionEducativaCodigo.value,
+        cargo:cargo.value,
       };
 
       api
-        .insertarInstitucionEducativa(institucionEducativa)
-        .then(mensajeAlerta.value = "registro insertado con exito")
+        .insertarPersonalPlanta(personalPlanta)
+        .then((mensajeAlerta.value = "registro insertado con exito"))
         .catch(function (e) {
           mensajeAlerta.value = e;
         });
@@ -96,23 +101,24 @@ export default {
 
     const irAtras = function () {
       router.push({
-        name: "institucioneducativa",
+        name: "personalplanta",
       });
     };
 
     const nuevo = function () {
       codigo.value = "";
       nombre.value = "";
-      usuarioCodigo.value = "";
+      institucionEducativaCodigo.value = "";
+      cargo.value = "";
     };
 
     const eliminar = function () {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarInstitucionEducativa(codigo.value)
+          .eliminarPersonalPlanta(codigo.value)
           .then(() =>
             router.push({
-              name: "institucioneducativa",
+              name: "personalplanta",
             })
           )
           .catch(function (e) {
@@ -121,14 +127,14 @@ export default {
       }
     };
 
-    const consultarUsuario = function (c) {
+    const consultarInstitucionEducativa = function (c) {
       api
-        .consultarUsuario(c)
+        .consultarInstitucionEducativa(c)
         .then((data) => {
-          usuarioCodigo.value = data.codigo;
+          institucionEducativaCodigo.value = data.codigo;
         })
         .catch(function () {
-          usuarioCodigo.value = "";
+          institucionEducativaCodigo.value = "";
         });
     };
 
@@ -136,13 +142,14 @@ export default {
       mensajeAlerta,
       codigo,
       nombre,
-      usuarioCodigo,
+      cargo,
+      institucionEducativaCodigo,
       guardar,
       irAtras,
       nuevo,
       eliminar,
+      consultarPersonalPlanta,
       consultarInstitucionEducativa,
-      consultarUsuario,
     };
   },
 };

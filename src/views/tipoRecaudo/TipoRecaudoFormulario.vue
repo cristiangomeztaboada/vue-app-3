@@ -14,10 +14,10 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Institucion Educativa</h5>
+          <h5 class="card-title">Tipo Recaudo</h5>
           <label>Código</label>
-          <institucion-educativa-buscador
-            v-on:perderFoco="consultarInstitucionEducativa"
+          <tipo-recaudo-buscador
+            v-on:perderFoco="consultarTipoRecaudo"
             v-bind:codigoPropiedad="codigo"
           />
           <label>Nombre</label>
@@ -27,11 +27,6 @@
             type="text"
             id="nombre"
           />
-          <label>Usuario</label>
-          <usuario-buscador
-            v-on:perderFoco="consultarUsuario"
-            v-bind:codigoPropiedad="usuarioCodigo"
-          />
         </div>
       </div>
     </div>
@@ -40,36 +35,32 @@
 
 <script>
 import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
-import InstitucionEducativaBuscador from "./InstitucionEducativaBuscador.vue";
-import UsuarioBuscador from "@/views/usuario/UsuarioBuscador.vue";
+import TipoRecaudoBuscador from "./TipoRecaudoBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
-  name: "InstitucionEducativaFormulario",
+  name: "TipoRecaudoFormulario",
   components: {
-    InstitucionEducativaBuscador,
+    TipoRecaudoBuscador,
     BarraBotones,
     ComponenteAlerta,
-    UsuarioBuscador,
   },
   setup() {
     const mensajeAlerta = ref("");
     const codigo = ref("");
     const nombre = ref("");
-    const usuarioCodigo = ref("");
     const route = new useRoute();
     const router = useRouter();
 
-    const consultarInstitucionEducativa = function (c) {
+    const consultarTipoRecaudo = function (c) {
       api
-        .consultarInstitucionEducativa(c)
+        .consultarTipoRecaudo(c)
         .then((data) => {
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          usuarioCodigo.value = data.usuarioCodigo;
         })
         .catch(function () {
           nuevo();
@@ -77,18 +68,13 @@ export default {
         });
     };
 
-    consultarInstitucionEducativa(route.params.codigo);
+    consultarTipoRecaudo(route.params.codigo);
 
     const guardar = function () {
-      const institucionEducativa = {
-        codigo: codigo.value,
-        nombre: nombre.value,
-        usuarioCodigo: usuarioCodigo.value,
-      };
-
+      const tipoRecaudo = { codigo: codigo.value, nombre: nombre.value };
       api
-        .insertarInstitucionEducativa(institucionEducativa)
-        .then(mensajeAlerta.value = "registro insertado con exito")
+        .insertarTipoRecaudo(tipoRecaudo)
+        .then((mensajeAlerta.value = "registro insertado con exito"))
         .catch(function (e) {
           mensajeAlerta.value = e;
         });
@@ -96,23 +82,22 @@ export default {
 
     const irAtras = function () {
       router.push({
-        name: "institucioneducativa",
+        name: "tiporecaudo",
       });
     };
 
     const nuevo = function () {
       codigo.value = "";
       nombre.value = "";
-      usuarioCodigo.value = "";
     };
 
     const eliminar = function () {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarInstitucionEducativa(codigo.value)
+          .eliminarTipoRecaudo(codigo.value)
           .then(() =>
             router.push({
-              name: "institucioneducativa",
+              name: "tiporecaudo",
             })
           )
           .catch(function (e) {
@@ -121,28 +106,15 @@ export default {
       }
     };
 
-    const consultarUsuario = function (c) {
-      api
-        .consultarUsuario(c)
-        .then((data) => {
-          usuarioCodigo.value = data.codigo;
-        })
-        .catch(function () {
-          usuarioCodigo.value = "";
-        });
-    };
-
     return {
       mensajeAlerta,
       codigo,
       nombre,
-      usuarioCodigo,
       guardar,
       irAtras,
       nuevo,
       eliminar,
-      consultarInstitucionEducativa,
-      consultarUsuario,
+      consultarTipoRecaudo,
     };
   },
 };

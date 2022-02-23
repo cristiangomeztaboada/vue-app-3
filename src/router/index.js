@@ -9,6 +9,12 @@ import InstitucionEducativaGrid from "@/views/institucionEducativa/InstitucionEd
 import InstitucionEducativaFormulario from "@/views/institucionEducativa/InstitucionEducativaFormulario.vue";
 import TipoContratoGrid from "@/views/tipoContrato/TipoContratoGrid.vue";
 import TipoContratoFormulario from "@/views/tipoContrato/TipoContratoFormulario.vue";
+import TipoRecaudoGrid from "@/views/tipoRecaudo/TipoRecaudoGrid.vue";
+import TipoRecaudoFormulario from "@/views/tipoRecaudo/TipoRecaudoFormulario.vue";
+import PersonalPlantaGrid from "@/views/personalPlanta/PersonalPlantaGrid.vue";
+import PersonalPlantaFormulario from "@/views/personalPlanta/PersonalPlantaFormulario.vue";
+import FuenteRecursoGrid from "@/views/fuenteRecurso/FuenteRecursoGrid.vue";
+import FuenteRecursoFormulario from "@/views/fuenteRecurso/FuenteRecursoFormulario.vue";
 
 const routes = [
   {
@@ -72,6 +78,45 @@ const routes = [
     path: "/tipocontratoformulario",
     name: "tipocontratoformulario",
     component: TipoContratoFormulario,
+  },
+  {
+    path: "/tiporecaudo",
+    name: "tiporecaudo",
+    component: TipoRecaudoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/tiporecaudoformulario",
+    name: "tiporecaudoformulario",
+    component: TipoRecaudoFormulario,
+  },
+  {
+    path: "/personalplanta",
+    name: "personalplanta",
+    component: PersonalPlantaGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/personalplantaformulario",
+    name: "personalplantaformulario",
+    component: PersonalPlantaFormulario,
+  },
+  {
+    path: "/fuenterecurso",
+    name: "fuenterecurso",
+    component: FuenteRecursoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/fuenterecursoformulario",
+    name: "fuenterecursoformulario",
+    component: FuenteRecursoFormulario,
   },
 ];
 

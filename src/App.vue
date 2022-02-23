@@ -56,6 +56,30 @@
                   Tipo Contrato
                 </router-link>
               </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link class="dropdown-item"
+                  :to="{ name: 'tiporecaudo' }"
+                >
+                  Tipo Recaudo
+                </router-link>
+              </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link class="dropdown-item"
+                  :to="{ name: 'personalplanta' }"
+                >
+                  Personal Planta
+                </router-link>
+              </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link class="dropdown-item"
+                  :to="{ name: 'fuenterecurso' }"
+                >
+                  Fuente Recurso
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>
