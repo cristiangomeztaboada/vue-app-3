@@ -15,6 +15,8 @@ import PersonalPlantaGrid from "@/views/personalPlanta/PersonalPlantaGrid.vue";
 import PersonalPlantaFormulario from "@/views/personalPlanta/PersonalPlantaFormulario.vue";
 import FuenteRecursoGrid from "@/views/fuenteRecurso/FuenteRecursoGrid.vue";
 import FuenteRecursoFormulario from "@/views/fuenteRecurso/FuenteRecursoFormulario.vue";
+import RubroPresupuestoGrid from "@/views/rubroPresupuesto/RubroPresupuestoGrid.vue";
+import RubroPresupuestoFormulario from "@/views/rubroPresupuesto/RubroPresupuestoFormulario.vue";
 
 const routes = [
   {
@@ -117,6 +119,19 @@ const routes = [
     path: "/fuenterecursoformulario",
     name: "fuenterecursoformulario",
     component: FuenteRecursoFormulario,
+  },
+  {
+    path: "/rubropresupuesto",
+    name: "rubropresupuesto",
+    component: RubroPresupuestoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/rubropresupuestoformulario",
+    name: "rubropresupuestoformulario",
+    component: RubroPresupuestoFormulario,
   },
 ];
 

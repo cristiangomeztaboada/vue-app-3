@@ -287,6 +287,46 @@ const eliminarFuenteRecurso = function (codigo) {
     });
 };
 
+const listarRubroPresupuesto = function () {
+  return fetch(`${url}/rubropresupuesto`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarRubroPresupuesto = function (codigo) {
+  return fetch(`${url}/rubropresupuesto/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarRubroPresupuesto = function (rubroPresupuesto) {
+  return fetch(`${url}/rubropresupuesto`, {
+    method: "POST",
+    body: JSON.stringify(rubroPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarRubroPresupuesto = function (codigo) {
+  return fetch(`${url}/rubropresupuesto/${codigo}`, {
+    method: "DELETE",
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarMaestroGenerico,
   eliminarMaestroGenerico,
@@ -316,4 +356,8 @@ export default {
   consultarFuenteRecurso,
   insertarFuenteRecurso,
   eliminarFuenteRecurso,
+  listarRubroPresupuesto,
+  consultarRubroPresupuesto,
+  insertarRubroPresupuesto,
+  eliminarRubroPresupuesto,
 };

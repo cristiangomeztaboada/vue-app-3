@@ -80,6 +80,14 @@
                   Fuente Recurso
                 </router-link>
               </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link class="dropdown-item"
+                  :to="{ name: 'rubropresupuesto' }"
+                >
+                  Rubro Presupuesto
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>
