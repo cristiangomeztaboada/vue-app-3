@@ -1,9 +1,10 @@
 <template>
   <nav
     v-if="usuario ? true : false"
-    class="navbar navbar-expand-lg navbar-dark bg-primary"
+    class="navbar navbar-expand-lg navbar-dark bg-danger"
   >
     <div class="container-fluid">
+      <img src="@/assets/logo.png" />
       <a class="navbar-brand" href="#">PRESTIGE</a>
       <button
         class="navbar-toggler"
@@ -34,15 +35,14 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
-                <router-link class="dropdown-item"
-                  :to="{ name: 'usuario' }"
-                >
+                <router-link class="dropdown-item" :to="{ name: 'usuario' }">
                   Usuario
                 </router-link>
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link class="dropdown-item"
+                <router-link
+                  class="dropdown-item"
                   :to="{ name: 'institucioneducativa' }"
                 >
                   Institución Educativa
@@ -50,7 +50,8 @@
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link class="dropdown-item"
+                <router-link
+                  class="dropdown-item"
                   :to="{ name: 'tipocontrato' }"
                 >
                   Tipo Contrato
@@ -58,7 +59,8 @@
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link class="dropdown-item"
+                <router-link
+                  class="dropdown-item"
                   :to="{ name: 'tiporecaudo' }"
                 >
                   Tipo Recaudo
@@ -66,15 +68,8 @@
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link class="dropdown-item"
-                  :to="{ name: 'personalplanta' }"
-                >
-                  Personal Planta
-                </router-link>
-              </li>
-              <div class="dropdown-divider"></div>
-              <li>
-                <router-link class="dropdown-item"
+                <router-link
+                  class="dropdown-item"
                   :to="{ name: 'fuenterecurso' }"
                 >
                   Fuente Recurso
@@ -82,10 +77,42 @@
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link class="dropdown-item"
+                <router-link
+                  class="dropdown-item"
                   :to="{ name: 'rubropresupuesto' }"
                 >
                   Rubro Presupuesto
+                </router-link>
+              </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'tipoidentificacion' }"
+                >
+                  Tipo Identificación
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Maestro
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'personalplanta' }"
+                >
+                  Personal Planta
                 </router-link>
               </li>
             </ul>
@@ -100,6 +127,7 @@
     </div>
   </nav>
   <div class="row">
+    <br />
     <router-view />
   </div>
 </template>

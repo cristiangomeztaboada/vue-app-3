@@ -17,6 +17,8 @@ import FuenteRecursoGrid from "@/views/fuenteRecurso/FuenteRecursoGrid.vue";
 import FuenteRecursoFormulario from "@/views/fuenteRecurso/FuenteRecursoFormulario.vue";
 import RubroPresupuestoGrid from "@/views/rubroPresupuesto/RubroPresupuestoGrid.vue";
 import RubroPresupuestoFormulario from "@/views/rubroPresupuesto/RubroPresupuestoFormulario.vue";
+import TipoIdentificacionGrid from "@/views/tipoIdentificacion/TipoIdentificacionGrid.vue";
+import TipoIdentificacionFormulario from "@/views/tipoIdentificacion/TipoIdentificacionFormulario.vue";
 
 const routes = [
   {
@@ -132,6 +134,19 @@ const routes = [
     path: "/rubropresupuestoformulario",
     name: "rubropresupuestoformulario",
     component: RubroPresupuestoFormulario,
+  },
+  {
+    path: "/tipoidentificacion",
+    name: "tipoidentificacion",
+    component: TipoIdentificacionGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/tipoidentificacionformulario",
+    name: "tipoidentificacionformulario",
+    component: TipoIdentificacionFormulario,
   },
 ];
 

@@ -327,6 +327,46 @@ const eliminarRubroPresupuesto = function (codigo) {
     });
 };
 
+const listarTipoIdentificacion = function () {
+  return fetch(`${url}/tipoidentificacion`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarTipoIdentificacion = function (codigo) {
+  return fetch(`${url}/tipoidentificacion/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarTipoIdentificacion = function (codigo) {
+  return fetch(`${url}/tipoidentificacion/${codigo}`, {
+    method: "DELETE",
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarTipoIdentificacion = function (rubroPresupuesto) {
+  return fetch(`${url}/tipoidentificacion`, {
+    method: "POST",
+    body: JSON.stringify(rubroPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarMaestroGenerico,
   eliminarMaestroGenerico,
@@ -360,4 +400,8 @@ export default {
   consultarRubroPresupuesto,
   insertarRubroPresupuesto,
   eliminarRubroPresupuesto,
+  listarTipoIdentificacion,
+  consultarTipoIdentificacion,
+  eliminarTipoIdentificacion,
+  insertarTipoIdentificacion,
 };
