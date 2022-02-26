@@ -5,7 +5,7 @@
   >
     <div class="container-fluid">
       <img src="@/assets/logo.png" />
-      <a class="navbar-brand" href="#">PRESTIGE</a>
+      <a class="navbar-brand" href="#">SED</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -20,7 +20,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li
-            v-if="usuario == 'admin' ? true : false"
+            v-if="usuario == '01' ? true : false"
             class="nav-item dropdown"
           >
             <a
