@@ -14,14 +14,14 @@
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#modalMaestroGenerico"
+            data-bs-target="#modalTercero"
           >
             🔎
           </button>
         </div>
       </div>
     </div>
-    <div class="modal" id="modalMaestroGenerico" tabindex="-1">
+    <div class="modal" id="modalTercero" tabindex="-1">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -34,10 +34,10 @@
             ></button>
           </div>
           <div class="modal-body">
-            <maestro-generico-grid
+            <tercero-grid
               v-bind:mostrarColumnaBotones="false"
-              v-on:seleccionarMaestroGenerico="
-                recibirMaestroGenericoSeleccionado
+              v-on:seleccionarTercero="
+                recibirTerceroSeleccionado
               "
             />
           </div>
@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import MaestroGenericoGrid from "@/views/maestroGenerico/MaestroGenericoGrid.vue";
+import TerceroGrid from "@/views/tercero/TerceroGrid.vue";
 import $ from "jquery";
 import { ref, watch } from "vue";
 
 export default {
-  name: "MaestroGenericoBuscador",
+  name: "TerceroBuscador",
   components: {
-    MaestroGenericoGrid,
+    TerceroGrid,
   },
   props: {
     codigoPropiedad: String,
@@ -70,20 +70,20 @@ export default {
       }
     );
 
-    const recibirMaestroGenericoSeleccionado = function (c) {
-      $("#modalMaestroGenerico").modal("hide");
+    const recibirTerceroSeleccionado = function (c) {
+      $("#modalTercero").modal("hide");
       codigo.value = c;
       perderFoco();
     };
 
     const perderFoco = function () {
-      $("#modalMaestroGenerico").modal("hide");
+      $("#modalTercero").modal("hide");
       context.emit("perderFoco", codigo.value);
     };
 
     return {
       codigo,
-      recibirMaestroGenericoSeleccionado,
+      recibirTerceroSeleccionado,
       perderFoco,
     };
   },

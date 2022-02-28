@@ -14,10 +14,15 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">MaestroGenerico</h5>
+          <h5 class="card-title">Tercero</h5>
+          <label>Tipo Identificacion</label>
+          <tipo-identificacion-buscador
+            v-on:perderFoco="consultarTipoIdentificacion"
+            v-bind:codigoPropiedad="tipoIdentificacionCodigo"
+          />
           <label>Código</label>
-          <maestro-generico-buscador
-            v-on:perderFoco="consultarMaestroGenerico"
+          <tercero-buscador
+            v-on:perderFoco="consultarTercero"
             v-bind:codigoPropiedad="codigo"
           />
           <label>Nombre</label>
@@ -35,45 +40,71 @@
 
 <script>
 import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
-import MaestroGenericoBuscador from "./MaestroGenericoBuscador.vue";
+import TerceroBuscador from "./TerceroBuscador.vue";
+import TipoIdentificacionBuscador from "@/views/tipoIdentificacion/TipoIdentificacionBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
-  name: "MaestroGenericoFormulario",
+  name: "TerceroFormulario",
   components: {
-    MaestroGenericoBuscador,
+    TerceroBuscador,
     BarraBotones,
     ComponenteAlerta,
+    TipoIdentificacionBuscador,
   },
   setup() {
     const mensajeAlerta = ref("");
     const codigo = ref("");
     const nombre = ref("");
+    const tipoIdentificacionCodigo = ref("");
     const route = new useRoute();
     const router = useRouter();
 
-    const consultarMaestroGenerico = function (c) {
+    const consultarTercero = function (c) {
+      const ti = tipoIdentificacionCodigo.value;
       api
-        .consultarMaestroGenerico(c)
+        .consultarTercero(c, tipoIdentificacionCodigo.value)
         .then((data) => {
           codigo.value = data.codigo;
           nombre.value = data.nombre;
+          tipoIdentificacionCodigo.value = data.tipoIdentificacionCodigo;
         })
         .catch(function () {
           nuevo();
           codigo.value = c;
+          tipoIdentificacionCodigo.value = ti;
         });
     };
 
-    consultarMaestroGenerico(route.params.codigo);
+    const consultarTercero2 = function (c, ti) {
+      api
+        .consultarTercero(c, ti)
+        .then((data) => {
+          codigo.value = data.codigo;
+          nombre.value = data.nombre;
+          tipoIdentificacionCodigo.value = data.tipoIdentificacionCodigo;
+        })
+        .catch(function () {
+          nuevo();
+          codigo.value = c;
+          tipoIdentificacionCodigo.value = ti;
+        });
+    };
+
+    consultarTercero2(route.params.codigo, route.params.tipoIdentificacionCodigo);
 
     const guardar = function () {
-      const maestroGenerico = { codigo: codigo.value, nombre: nombre.value };
+      const tercero = {
+        codigo: codigo.value,
+        nombre: nombre.value,
+        tipoIdentificacionCodigo: tipoIdentificacionCodigo.value,
+      };
+
       api
-        .insertarMaestroGenerico(maestroGenerico)
+        .insertarTercero(tercero)
         .then((mensajeAlerta.value = "registro insertado con exito"))
         .catch(function (e) {
           mensajeAlerta.value = e;
@@ -82,22 +113,23 @@ export default {
 
     const irAtras = function () {
       router.push({
-        name: "maestrogenerico",
+        name: "tercero",
       });
     };
 
     const nuevo = function () {
       codigo.value = "";
       nombre.value = "";
+      tipoIdentificacionCodigo.value = "";
     };
 
     const eliminar = function () {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarMaestroGenerico(codigo.value)
+          .eliminarTercero(codigo.value, tipoIdentificacionCodigo.value)
           .then(() =>
             router.push({
-              name: "maestrogenerico",
+              name: "tercero",
             })
           )
           .catch(function (e) {
@@ -106,15 +138,28 @@ export default {
       }
     };
 
+    const consultarTipoIdentificacion = function (c) {
+      api
+        .consultarTipoIdentificacion(c)
+        .then((data) => {
+          tipoIdentificacionCodigo.value = data.codigo;
+        })
+        .catch(function () {
+          tipoIdentificacionCodigo.value = "";
+        });
+    };
+
     return {
       mensajeAlerta,
       codigo,
       nombre,
+      tipoIdentificacionCodigo,
       guardar,
       irAtras,
       nuevo,
       eliminar,
-      consultarMaestroGenerico,
+      consultarTercero,
+      consultarTipoIdentificacion,
     };
   },
 };

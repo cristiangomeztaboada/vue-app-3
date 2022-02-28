@@ -5,9 +5,9 @@
   <div class="row d-flex justify-content-center">
     <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="row">
+        <div class="row">          
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
-            <h1 class="display-6">MaestroGenerico</h1>
+            <h1 class="display-6">Tercero</h1>
           </div>
           <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
             <button
@@ -25,13 +25,14 @@
           key-expr="codigo"
           :show-borders="true"
           :selection="{ mode: 'single' }"
-          @row-click="seleccionarMaestroGenerico"
+          @row-click="seleccionarTercero"
           :showRowLines="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
+          <DxColumn data-field="tipoIdentificacionCodigo" />
           <DxColumn data-field="codigo" />
-          <DxColumn data-field="nombre" />
+          <DxColumn data-field="nombre" />          
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
@@ -74,14 +75,14 @@ export default {
 
     const nuevo = function () {
       router.push({
-        name: "maestrogenericoformulario",
+        name: "terceroformulario",
         params: { codigo: "" },
       });
     };
 
     const listar = function () {
       api
-        .listarMaestroGenerico()
+        .listarTercero()
         .then((data) => (dataSource.value = data))
         .catch(function (e) {
           mensajeAlerta.value = e;
@@ -90,14 +91,17 @@ export default {
 
     listar();
 
-    const seleccionarMaestroGenerico = function (e) {
-      context.emit("seleccionarMaestroGenerico", e.data.codigo);
+    const seleccionarTercero = function (e) {
+      context.emit(
+        "seleccionarTercero",
+        e.data.codigo
+      );
     };
 
     const eliminar = function (rowData) {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarMaestroGenerico(rowData.row.values[0])
+          .eliminarTercero(rowData.row.values[1], rowData.row.values[0])
           .then(() => listar())
           .catch(function (e) {
             mensajeAlerta.value = e;
@@ -107,15 +111,15 @@ export default {
 
     const editar = function (rowData) {
       router.push({
-        name: "maestrogenericoformulario",
-        params: { codigo: rowData.row.values[0] },
+        name: "terceroformulario",
+        params: {codigo: rowData.row.values[1], tipoIdentificacionCodigo:rowData.row.values[0]},
       });
     };
 
     return {
       mensajeAlerta,
       dataSource,
-      seleccionarMaestroGenerico,
+      seleccionarTercero,
       eliminar,
       editar,
       nuevo,

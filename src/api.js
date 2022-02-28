@@ -1,5 +1,5 @@
-//const url = "http://localhost:3000"; //Express
-const url = "http://127.0.0.1:8000"; //Rest Framework
+const url = "http://localhost:3000"; //Express
+//const url = "http://127.0.0.1:8000"; //Django Rest Framework
 
 const manejarError = function (res) {
   if (!res.ok) {
@@ -8,47 +8,8 @@ const manejarError = function (res) {
   return res;
 };
 
-const insertarMaestroGenerico = function (maestroGenerico) {
-  return fetch(`${url}/maestrogenerico`, {
-    method: "POST",
-    body: JSON.stringify(maestroGenerico),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
-    .then(manejarError)    
-    .catch(function (e) {
-      throw e;
-    });
-};
-
-const consultarMaestroGenerico = function (codigo) {
-  return fetch(`${url}/maestrogenerico/${codigo}`, { method: "GET" })
-    .then(manejarError)
-    .then((res) => res.json())
-    .catch(function (e) {
-      throw e;
-    });
-};
-
-const listarMaestroGenerico = function () {
-  return fetch(`${url}/maestrogenerico`, { method: "GET" })
-    .then(manejarError)
-    .then((res) => res.json())
-    .catch(function (e) {
-      throw e;
-    });
-};
-
-const eliminarMaestroGenerico = function (codigo) {
-  return fetch(`${url}/maestrogenerico/${codigo}`, {
-    method: "DELETE",
-  })
-    .then(manejarError)
-    .catch(function (e) {
-      throw e;
-    });
-};
-
 const listarUsuario = function () {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -58,6 +19,7 @@ const listarUsuario = function () {
 };
 
 const consultarUsuario = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -67,7 +29,8 @@ const consultarUsuario = function (codigo) {
 };
 
 const insertarUsuario = function (usuario) {
-  return fetch(`${url}/usuario`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/usuario/`, {
     method: "POST",
     body: JSON.stringify(usuario),
     headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -79,6 +42,7 @@ const insertarUsuario = function (usuario) {
 };
 
 const eliminarUsuario = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario/${codigo}`, {
     method: "DELETE",
   })
@@ -368,11 +332,47 @@ const insertarTipoIdentificacion = function (rubroPresupuesto) {
     });
 };
 
+const listarTercero = function () {
+  return fetch(`${url}/tercero`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarTercero = function (codigo, tipoIdentificacionCodigo) {
+  return fetch(`${url}/tercero/${codigo}/${tipoIdentificacionCodigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarTercero = function (tercero) {
+  return fetch(`${url}/tercero`, {
+    method: "POST",
+    body: JSON.stringify(tercero),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarTercero = function (codigo, tipoIdentificacionCodigo) {
+  return fetch(`${url}/tercero/${codigo}/${tipoIdentificacionCodigo}`, {
+    method: "DELETE",
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
-  listarMaestroGenerico,
-  eliminarMaestroGenerico,
-  consultarMaestroGenerico,
-  insertarMaestroGenerico,
   listarUsuario,
   consultarUsuario,
   insertarUsuario,
@@ -405,4 +405,8 @@ export default {
   consultarTipoIdentificacion,
   eliminarTipoIdentificacion,
   insertarTipoIdentificacion,
+  listarTercero,
+  consultarTercero,
+  insertarTercero,
+  eliminarTercero,
 };

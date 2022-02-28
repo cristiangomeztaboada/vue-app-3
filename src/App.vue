@@ -1,6 +1,6 @@
 <template>
   <nav
-    v-if="usuario ? true : false"
+    
     class="navbar navbar-expand-lg navbar-dark bg-danger"
   >
     <div class="container-fluid">
@@ -17,10 +17,12 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div 
+      v-if="usuario ? true : false"
+      class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li
-            v-if="usuario == '01' ? true : false"
+            v-if="usuario == 'admin' ? true : false"
             class="nav-item dropdown"
           >
             <a
@@ -113,6 +115,15 @@
                   :to="{ name: 'personalplanta' }"
                 >
                   Personal Planta
+                </router-link>
+              </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'tercero' }"
+                >
+                  Tercero
                 </router-link>
               </li>
             </ul>

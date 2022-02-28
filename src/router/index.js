@@ -1,8 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import VistaPrincipal from "@/views/VistaPrincipal.vue";
 import VistaLogin from "@/views/VistaLogin.vue";
-import MaestroGenericoGrid from "@/views/maestroGenerico/MaestroGenericoGrid.vue";
-import MaestroGenericoFormulario from "@/views/maestroGenerico/MaestroGenericoFormulario.vue";
 import UsuarioGrid from "@/views/usuario/UsuarioGrid.vue";
 import UsuarioFormulario from "@/views/usuario/UsuarioFormulario.vue";
 import InstitucionEducativaGrid from "@/views/institucionEducativa/InstitucionEducativaGrid.vue";
@@ -19,6 +17,8 @@ import RubroPresupuestoGrid from "@/views/rubroPresupuesto/RubroPresupuestoGrid.
 import RubroPresupuestoFormulario from "@/views/rubroPresupuesto/RubroPresupuestoFormulario.vue";
 import TipoIdentificacionGrid from "@/views/tipoIdentificacion/TipoIdentificacionGrid.vue";
 import TipoIdentificacionFormulario from "@/views/tipoIdentificacion/TipoIdentificacionFormulario.vue";
+import TerceroGrid from "@/views/tercero/TerceroGrid.vue";
+import TerceroFormulario from "@/views/tercero/TerceroFormulario.vue";
 
 const routes = [
   {
@@ -30,19 +30,6 @@ const routes = [
     path: "/principal",
     name: "principal",
     component: VistaPrincipal,
-  },
-  {
-    path: "/maestrogenerico",
-    name: "maestrogenerico",
-    component: MaestroGenericoGrid,
-    props: {
-      mostrarColumnaBotones: true,
-    },
-  },
-  {
-    path: "/maestrogenericoformulario",
-    name: "maestrogenericoformulario",
-    component: MaestroGenericoFormulario,
   },
   {
     path: "/usuario",
@@ -147,6 +134,19 @@ const routes = [
     path: "/tipoidentificacionformulario",
     name: "tipoidentificacionformulario",
     component: TipoIdentificacionFormulario,
+  },
+  {
+    path: "/tercero",
+    name: "tercero",
+    component: TerceroGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/terceroformulario",
+    name: "terceroformulario",
+    component: TerceroFormulario,
   },
 ];
 
