@@ -32,7 +32,7 @@
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
           <DxColumn data-field="codigo" />
           <DxColumn data-field="nombre" />
-          <DxColumn data-field="usuarioCodigo" />
+          <DxColumn data-field="usuarioid.codigo" caption="Usuario Codigo"/>
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
@@ -83,7 +83,7 @@ export default {
     const listar = function () {
       api
         .listarInstitucionEducativa()
-        .then((data) => (dataSource.value = data))
+        .then((data) => {dataSource.value = data})
         .catch(function (e) {
           mensajeAlerta.value = e;
         });

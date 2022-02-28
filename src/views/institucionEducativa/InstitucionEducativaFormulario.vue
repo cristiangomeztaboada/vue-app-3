@@ -14,7 +14,12 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Institucion Educativa</h5>
+          <h5 v-if="esNuevo" class="card-title">
+            Insertar Institución Educativa
+          </h5>
+          <h5 v-if="!esNuevo" class="card-title">
+            Actualizar Institución Educativa
+          </h5>
           <label>Código</label>
           <institucion-educativa-buscador
             v-on:perderFoco="consultarInstitucionEducativa"
@@ -57,6 +62,7 @@ export default {
   },
   setup() {
     const mensajeAlerta = ref("");
+    const esNuevo = ref(false);
     const codigo = ref("");
     const nombre = ref("");
     const usuarioCodigo = ref("");
@@ -64,12 +70,16 @@ export default {
     const router = useRouter();
 
     const consultarInstitucionEducativa = function (c) {
+      esNuevo.value = true;
       api
         .consultarInstitucionEducativa(c)
         .then((data) => {
+          if (data.codigo) {
+            esNuevo.value = false;
+          }
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          usuarioCodigo.value = data.usuarioCodigo;
+          usuarioCodigo.value = data.usuarioid.codigo;
         })
         .catch(function () {
           nuevo();
@@ -83,15 +93,24 @@ export default {
       const institucionEducativa = {
         codigo: codigo.value,
         nombre: nombre.value,
-        usuarioCodigo: usuarioCodigo.value,
+        usuarioid: { codigo: usuarioCodigo.value },
       };
 
-      api
-        .insertarInstitucionEducativa(institucionEducativa)
-        .then(mensajeAlerta.value = "registro insertado con exito")
-        .catch(function (e) {
-          mensajeAlerta.value = e;
-        });
+      if (esNuevo.value) {
+        api
+          .insertarInstitucionEducativa(institucionEducativa)
+          .then((mensajeAlerta.value = "registro insertado con exito"))
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
+      } else {
+        api
+          .actualizarInstitucionEducativa(institucionEducativa)
+          .then((mensajeAlerta.value = "registro actualizado con exito"))
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
+      }
     };
 
     const irAtras = function () {
@@ -101,6 +120,7 @@ export default {
     };
 
     const nuevo = function () {
+      esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
       usuarioCodigo.value = "";
@@ -134,6 +154,7 @@ export default {
 
     return {
       mensajeAlerta,
+      esNuevo,
       codigo,
       nombre,
       usuarioCodigo,

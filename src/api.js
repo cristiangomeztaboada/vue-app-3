@@ -41,6 +41,19 @@ const insertarUsuario = function (usuario) {
     });
 };
 
+const actualizarUsuario = function (usuario) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/usuario/${usuario.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(usuario),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const eliminarUsuario = function (codigo) {
   const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario/${codigo}`, {
@@ -53,6 +66,7 @@ const eliminarUsuario = function (codigo) {
 };
 
 const listarInstitucionEducativa = function () {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -62,6 +76,7 @@ const listarInstitucionEducativa = function () {
 };
 
 const consultarInstitucionEducativa = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -71,7 +86,8 @@ const consultarInstitucionEducativa = function (codigo) {
 };
 
 const insertarInstitucionEducativa = function (institucionEducativa) {
-  return fetch(`${url}/institucioneducativa`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/institucioneducativa/`, {
     method: "POST",
     body: JSON.stringify(institucionEducativa),
     headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -82,7 +98,21 @@ const insertarInstitucionEducativa = function (institucionEducativa) {
     });
 };
 
+const actualizarInstitucionEducativa = function (institucionEducativa) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/institucioneducativa/${institucionEducativa.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(institucionEducativa),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const eliminarInstitucionEducativa = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/${codigo}`, {
     method: "DELETE",
   })
@@ -376,9 +406,11 @@ export default {
   listarUsuario,
   consultarUsuario,
   insertarUsuario,
+  actualizarUsuario,
   eliminarUsuario,
   listarInstitucionEducativa,
   insertarInstitucionEducativa,
+  actualizarInstitucionEducativa,
   consultarInstitucionEducativa,
   eliminarInstitucionEducativa,
   listarTipoContrato,

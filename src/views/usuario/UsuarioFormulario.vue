@@ -14,7 +14,8 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Usuario</h5>
+          <h5 v-if="esNuevo" class="card-title">Insertar Usuario</h5>
+          <h5 v-if="!esNuevo" class="card-title">Actualizar Usuario</h5>
           <label>Código</label>
           <usuario-buscador
             v-on:perderFoco="consultarUsuario"
@@ -57,6 +58,7 @@ export default {
   },
   setup() {
     const mensajeAlerta = ref("");
+    const esNuevo = ref(false);
     const codigo = ref("");
     const nombre = ref("");
     const clave = ref("");
@@ -64,15 +66,19 @@ export default {
     const router = useRouter();
 
     const consultarUsuario = function (c) {
+      esNuevo.value = true;
       api
         .consultarUsuario(c)
         .then((data) => {
+          if (data.codigo) {
+            esNuevo.value = false;
+          }
           codigo.value = data.codigo;
           nombre.value = data.nombre;
           clave.value = data.clave;
         })
         .catch(function () {
-          nuevo();
+          nuevo();          
           codigo.value = c;
         });
     };
@@ -85,12 +91,22 @@ export default {
         nombre: nombre.value,
         clave: clave.value,
       };
-      api
+      if(esNuevo.value){
+        api
         .insertarUsuario(usuario)
         .then((mensajeAlerta.value = "registro insertado con exito"))
         .catch(function (e) {
           mensajeAlerta.value = e;
         });
+      }else{
+        api
+        .actualizarUsuario(usuario)
+        .then((mensajeAlerta.value = "registro actualizado con exito"))
+        .catch(function (e) {
+          mensajeAlerta.value = e;
+        });
+      }
+      
     };
 
     const irAtras = function () {
@@ -100,6 +116,7 @@ export default {
     };
 
     const nuevo = function () {
+      esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
       clave.value = "";
@@ -122,6 +139,7 @@ export default {
 
     return {
       mensajeAlerta,
+      esNuevo,
       codigo,
       nombre,
       clave,
