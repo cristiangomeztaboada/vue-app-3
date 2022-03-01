@@ -14,27 +14,22 @@
           />
         </div>
         <div class="card-body">
-          <h5 v-if="esNuevo" class="card-title">Insertar Usuario</h5>
-          <h5 v-if="!esNuevo" class="card-title">Actualizar Usuario</h5>
+          <h5 v-if="esNuevo" class="card-title">Insertar Periodo</h5>
+          <h5 v-if="!esNuevo" class="card-title">Actualizar Periodo</h5>
           <label>Código</label>
-          <usuario-buscador
-            v-on:perderFoco="consultarUsuario"
+          <periodo-buscador
+            v-on:perderFoco="consultarPeriodo"
             v-bind:codigoPropiedad="codigo"
           />
-          <label>Nombre</label>
-          <input
-            class="form-control"
-            v-model="nombre"
-            type="text"
-            id="nombre"
-          />
-          <label>Clave</label>
-          <input
-            class="form-control"
-            v-model="clave"
-            type="password"
-            id="clave"
-          />
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="activo"
+              v-model="activo"
+            />
+            <label class="form-check-label" for="activo"> Activo </label>
+          </div>
         </div>
       </div>
     </div>
@@ -43,39 +38,40 @@
 
 <script>
 import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
-import UsuarioBuscador from "./UsuarioBuscador.vue";
+import PeriodoBuscador from "./PeriodoBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
-  name: "UsuarioFormulario",
+  name: "PeriodoFormulario",
   components: {
-    UsuarioBuscador,
+    PeriodoBuscador,
     BarraBotones,
     ComponenteAlerta,
   },
   setup() {
     const mensajeAlerta = ref("");
-    const esNuevo = ref(false);
-    const codigo = ref("");
-    const nombre = ref("");
-    const clave = ref("");
+    const esNuevo = ref(true);
+    const codigo = ref(0);
+    const activo = ref(false);
     const route = new useRoute();
     const router = useRouter();
 
-    const consultarUsuario = function (c) {
-      esNuevo.value = true;
+    const consultarPeriodo = function (c) {
       api
-        .consultarUsuario(c)
+        .consultarPeriodo(c)
         .then((data) => {
           if (data.codigo) {
             esNuevo.value = false;
           }
           codigo.value = data.codigo;
-          nombre.value = data.nombre;
-          clave.value = data.clave;
+          if (data.activo == 1) {
+            activo.value = true;
+          } else {
+            activo.value = false;
+          }
         })
         .catch(function () {
           nuevo();
@@ -83,54 +79,42 @@ export default {
         });
     };
 
-    consultarUsuario(route.params.codigo);
+    consultarPeriodo(route.params.codigo);
 
     const guardar = function () {
-      const usuario = {
-        codigo: codigo.value,
-        nombre: nombre.value,
-        clave: clave.value,
-      };
-      if (esNuevo.value) {
-        api
-          .insertarUsuario(usuario)
-          .then((mensajeAlerta.value = "registro insertado con exito"))
-          .catch(function (e) {
-            mensajeAlerta.value = e;
-          });
-      } else {
-        api
-          .actualizarUsuario(usuario)
-          .then((mensajeAlerta.value = "registro actualizado con exito"))
-          .catch(function (e) {
-            mensajeAlerta.value = e;
-          });
-      }
+      const periodo = { codigo: Number(codigo.value), activo: Number(activo.value) };
+      api
+        .insertarPeriodo(periodo)
+        .then((mensajeAlerta.value = "registro insertado con exito"))
+        .catch(function (e) {
+          mensajeAlerta.value = e;
+        });
     };
 
     const irAtras = function () {
       router.push({
-        name: "usuario",
+        name: "periodo",
       });
     };
 
     const nuevo = function () {
       esNuevo.value = true;
       codigo.value = "";
-      nombre.value = "";
-      clave.value = "";
+      activo.value = "";
     };
 
     const eliminar = function () {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarUsuario(codigo.value)
+          .eliminarPeriodo(codigo.value)
           .then(() =>
             router.push({
-              name: "usuario",
+              name: "periodo",
             })
           )
-          .catch(() => (mensajeAlerta.value = "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
       }
     };
 
@@ -138,13 +122,12 @@ export default {
       mensajeAlerta,
       esNuevo,
       codigo,
-      nombre,
-      clave,
+      activo,
       guardar,
       irAtras,
       nuevo,
       eliminar,
-      consultarUsuario,
+      consultarPeriodo,
     };
   },
 };

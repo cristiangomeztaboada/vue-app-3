@@ -7,7 +7,7 @@
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
         <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
-            <h1 class="display-6">Usuario</h1>
+            <h1 class="display-6">Periodo</h1>
           </div>
           <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
             <button
@@ -25,13 +25,13 @@
           key-expr="codigo"
           :show-borders="true"
           :selection="{ mode: 'single' }"
-          @row-click="seleccionarUsuario"
+          @row-click="seleccionarPeriodo"
           :showRowLines="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
           <DxColumn data-field="codigo" />
-          <DxColumn data-field="nombre" />
+          <DxColumn data-field="activo" data-type="boolean" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
@@ -74,14 +74,14 @@ export default {
 
     const nuevo = function () {
       router.push({
-        name: "usuarioformulario",
+        name: "periodoformulario",
         params: { codigo: "" },
       });
     };
 
     const listar = function () {
       api
-        .listarUsuario()
+        .listarPeriodo()
         .then((data) => (dataSource.value = data))
         .catch(function (e) {
           mensajeAlerta.value = e;
@@ -90,22 +90,24 @@ export default {
 
     listar();
 
-    const seleccionarUsuario = function (e) {
-      context.emit("seleccionarUsuario", e.data.codigo);
+    const seleccionarPeriodo = function (e) {
+      context.emit("seleccionarPeriodo", e.data.codigo);
     };
 
     const eliminar = function (rowData) {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarUsuario(rowData.row.values[0])
+          .eliminarPeriodo(rowData.row.values[0])
           .then(() => listar())
-          .catch(() => (mensajeAlerta.value = "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
       }
     };
 
     const editar = function (rowData) {
       router.push({
-        name: "usuarioformulario",
+        name: "periodoformulario",
         params: { codigo: rowData.row.values[0] },
       });
     };
@@ -113,7 +115,7 @@ export default {
     return {
       mensajeAlerta,
       dataSource,
-      seleccionarUsuario,
+      seleccionarPeriodo,
       eliminar,
       editar,
       nuevo,

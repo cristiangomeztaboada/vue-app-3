@@ -402,6 +402,46 @@ const eliminarTercero = function (codigo, tipoIdentificacionCodigo) {
     });
 };
 
+const listarPeriodo = function () {
+  return fetch(`${url}/periodo`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarPeriodo = function (codigo) {
+  return fetch(`${url}/periodo/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarPeriodo = function (codigo) {
+  return fetch(`${url}/periodo/${codigo}`, {
+    method: "DELETE",
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarPeriodo = function (periodo) {
+  return fetch(`${url}/periodo`, {
+    method: "POST",
+    body: JSON.stringify(periodo),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -441,4 +481,8 @@ export default {
   consultarTercero,
   insertarTercero,
   eliminarTercero,
+  listarPeriodo,
+  consultarPeriodo,
+  eliminarPeriodo,
+  insertarPeriodo,
 };

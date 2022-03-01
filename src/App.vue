@@ -1,11 +1,11 @@
 <template>
-  <nav
-    
-    class="navbar navbar-expand-lg navbar-dark bg-danger"
-  >
+  <div align="center">
+    <img src="@/assets/logo2.png" />
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
     <div class="container-fluid">
-      <img src="@/assets/logo.png" />
-      <a class="navbar-brand" href="#">SED</a>
+      <a class="navbar-brand" href="#"></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -17,9 +17,11 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div 
-      v-if="usuario ? true : false"
-      class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div
+        v-if="usuario ? true : false"
+        class="collapse navbar-collapse"
+        id="navbarSupportedContent"
+      >
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li
             v-if="usuario == 'admin' ? true : false"
@@ -95,6 +97,15 @@
                   Tipo Identificación
                 </router-link>
               </li>
+              <div class="dropdown-divider"></div>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'periodo' }"
+                >
+                  Periodo
+                </router-link>
+              </li>
             </ul>
           </li>
           <li class="nav-item dropdown">
@@ -119,10 +130,7 @@
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: 'tercero' }"
-                >
+                <router-link class="dropdown-item" :to="{ name: 'tercero' }">
                   Tercero
                 </router-link>
               </li>
@@ -140,6 +148,9 @@
   <div class="row">
     <br />
     <router-view />
+  </div>
+  <div class="footer p-3 mb-2 bg-light text-dark">
+    <p class="text-secondary">©<b>PRESTIGE</b> - Sistema de control y gestión presupuestal</p>
   </div>
 </template>
 
@@ -175,6 +186,13 @@ export default {
 </script>
 
 <style>
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
 /*
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

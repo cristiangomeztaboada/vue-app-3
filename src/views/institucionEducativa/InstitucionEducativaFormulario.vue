@@ -62,7 +62,7 @@ export default {
   },
   setup() {
     const mensajeAlerta = ref("");
-    const esNuevo = ref(false);
+    const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const usuarioCodigo = ref("");
@@ -107,9 +107,11 @@ export default {
         api
           .actualizarInstitucionEducativa(institucionEducativa)
           .then((mensajeAlerta.value = "registro actualizado con exito"))
-          .catch(function (e) {
-            mensajeAlerta.value = e;
-          });
+          .catch(
+            () =>
+              (mensajeAlerta.value =
+                "Ingrese un usuario válido que no este asociado a otra institución educativa")
+          );
       }
     };
 
@@ -135,9 +137,7 @@ export default {
               name: "institucioneducativa",
             })
           )
-          .catch(function (e) {
-            mensajeAlerta.value = e;
-          });
+          .catch((e) => (mensajeAlerta.value = e));
       }
     };
 

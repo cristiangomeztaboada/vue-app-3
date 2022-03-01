@@ -19,6 +19,8 @@ import TipoIdentificacionGrid from "@/views/tipoIdentificacion/TipoIdentificacio
 import TipoIdentificacionFormulario from "@/views/tipoIdentificacion/TipoIdentificacionFormulario.vue";
 import TerceroGrid from "@/views/tercero/TerceroGrid.vue";
 import TerceroFormulario from "@/views/tercero/TerceroFormulario.vue";
+import PeriodoGrid from "@/views/periodo/PeriodoGrid.vue";
+import PeriodoFormulario from "@/views/periodo/PeriodoFormulario.vue";
 
 const routes = [
   {
@@ -147,6 +149,19 @@ const routes = [
     path: "/terceroformulario",
     name: "terceroformulario",
     component: TerceroFormulario,
+  },
+  {
+    path: "/periodo",
+    name: "periodo",
+    component: PeriodoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/periodoformulario",
+    name: "periodoformulario",
+    component: PeriodoFormulario,
   },
 ];
 
