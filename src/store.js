@@ -10,6 +10,9 @@ const store = createStore({
   mutations: {
     login(state) {
       state.usuario = sessionStorage.getItem("usuario");
+      state.usuarionombre = sessionStorage.getItem("usuarionombre");
+      state.institucioneducativa = sessionStorage.getItem("institucioneducativa");
+      state.institucioneducativanombre = sessionStorage.getItem("institucioneducativanombre");
     },
     logout(state) {
       sessionStorage.clear();

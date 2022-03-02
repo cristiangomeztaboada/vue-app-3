@@ -66,10 +66,32 @@ export default {
           .then((data) => {
             if (codigo.value == data.codigo && clave.value == data.clave) {
               sessionStorage.setItem("usuario", codigo.value);
-              store.commit("login");
-              router.push({ name: "principal" });
-            }else{
-              mensajeAlerta.value = "ingrese un usuario y clave correcta";  
+              sessionStorage.setItem("usuarionombre", codigo.value);
+
+              api
+                .consultarInstitucionEducativaPorUsuario(codigo.value)
+                .then((data) => {
+                  sessionStorage.setItem("institucioneducativa", data.codigo);
+                  sessionStorage.setItem(
+                    "institucioneducativanombre",
+                    data.nombre
+                  );
+
+                  store.commit("login");
+                  router.push({ name: "principal" });
+                })
+                .catch(
+                  () =>
+                    (mensajeAlerta.value =
+                      "El usuario no tiene una institución educativa asignada, póngase en contacto con el administrador del sistema")
+                );
+
+              if (codigo.value == "admin") {
+                store.commit("login");
+                router.push({ name: "principal" });
+              }
+            } else {
+              mensajeAlerta.value = "ingrese un usuario y clave correcta";
             }
           })
           .catch(function (e) {

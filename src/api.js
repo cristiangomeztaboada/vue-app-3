@@ -85,6 +85,16 @@ const consultarInstitucionEducativa = function (codigo) {
     });
 };
 
+const consultarInstitucionEducativaPorUsuario = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/institucioneducativausuario/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const insertarInstitucionEducativa = function (institucionEducativa) {
   const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/`, {
@@ -452,6 +462,7 @@ export default {
   insertarInstitucionEducativa,
   actualizarInstitucionEducativa,
   consultarInstitucionEducativa,
+  consultarInstitucionEducativaPorUsuario,
   eliminarInstitucionEducativa,
   listarTipoContrato,
   eliminarTipoContrato,

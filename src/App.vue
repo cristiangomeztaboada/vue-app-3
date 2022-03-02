@@ -139,7 +139,7 @@
         </ul>
         <form class="d-flex">
           <button v-on:click="salir" type="button" class="btn btn-warning">
-            [ {{ usuario }} ] Salir
+            [ {{ usuarionombre }} - {{institucioneducativanombre}} ] Salir
           </button>
         </form>
       </div>
@@ -172,6 +172,14 @@ export default {
       return store.state.usuario;
     });
 
+    const usuarionombre = computed(() => {
+      return store.state.usuarionombre;
+    });
+
+    const institucioneducativanombre = computed(() => {
+      return store.state.institucioneducativanombre;
+    });
+
     const salir = function () {
       store.commit("logout");
       router.push({ name: "login" });
@@ -179,6 +187,8 @@ export default {
 
     return {
       usuario,
+      usuarionombre,
+      institucioneducativanombre,
       salir,
     };
   },
