@@ -58,7 +58,7 @@ export default {
   },
   setup() {
     const mensajeAlerta = ref("");
-    const esNuevo = ref(false);
+    const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const clave = ref("");

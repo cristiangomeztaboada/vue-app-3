@@ -133,6 +133,7 @@ const eliminarInstitucionEducativa = function (codigo) {
 };
 
 const listarTipoContrato = function () {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -142,6 +143,7 @@ const listarTipoContrato = function () {
 };
 
 const eliminarTipoContrato = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato/${codigo}`, {
     method: "DELETE",
   })
@@ -152,6 +154,7 @@ const eliminarTipoContrato = function (codigo) {
 };
 
 const consultarTipoContrato = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -161,7 +164,8 @@ const consultarTipoContrato = function (codigo) {
 };
 
 const insertarTipoContrato = function (tipoContrato) {
-  return fetch(`${url}/tipocontrato`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tipocontrato/`, {
     method: "POST",
     body: JSON.stringify(tipoContrato),
     headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -172,7 +176,21 @@ const insertarTipoContrato = function (tipoContrato) {
     });
 };
 
+const actualizarTipoContrato = function (tipoContrato) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tipocontrato/${tipoContrato.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(tipoContrato),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const listarTipoRecaudo = function () {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tiporecaudo`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -182,7 +200,8 @@ const listarTipoRecaudo = function () {
 };
 
 const insertarTipoRecaudo = function (tipoRecaudo) {
-  return fetch(`${url}/tiporecaudo`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tiporecaudo/`, {
     method: "POST",
     body: JSON.stringify(tipoRecaudo),
     headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -193,7 +212,21 @@ const insertarTipoRecaudo = function (tipoRecaudo) {
     });
 };
 
+const actualizarTipoRecaudo = function (tipoRecaudo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tiporecaudo/${tipoRecaudo.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(tipoRecaudo),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const consultarTipoRecaudo = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tiporecaudo/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -203,7 +236,8 @@ const consultarTipoRecaudo = function (codigo) {
 };
 
 const eliminarTipoRecaudo = function (codigo) {
-  return fetch(`${url}/tiporecaudo/${codigo}`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tiporecaudo/${codigo}/`, {
     method: "DELETE",
   })
     .then(manejarError)
@@ -468,9 +502,11 @@ export default {
   eliminarTipoContrato,
   consultarTipoContrato,
   insertarTipoContrato,
+  actualizarTipoContrato,
   listarTipoRecaudo,
   consultarTipoRecaudo,
   insertarTipoRecaudo,
+  actualizarTipoRecaudo,
   eliminarTipoRecaudo,
   listarPersonalPlanta,
   consultarPersonalPlanta,

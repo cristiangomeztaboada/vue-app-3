@@ -14,7 +14,8 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Tipo Contrato</h5>
+          <h5 v-if="esNuevo" class="card-title">Insertar Tipo Contrato</h5>
+          <h5 v-if="!esNuevo" class="card-title">Actualizar Tipo Contrato</h5>
           <label>Código</label>
           <tipo-contrato-buscador
             v-on:perderFoco="consultarTipoContrato"
@@ -50,15 +51,20 @@ export default {
   },
   setup() {
     const mensajeAlerta = ref("");
+    const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const route = new useRoute();
     const router = useRouter();
 
     const consultarTipoContrato = function (c) {
+      esNuevo.value = true;
       api
         .consultarTipoContrato(c)
         .then((data) => {
+          if (data.codigo) {
+            esNuevo.value = false;
+          }
           codigo.value = data.codigo;
           nombre.value = data.nombre;
         })
@@ -72,12 +78,22 @@ export default {
 
     const guardar = function () {
       const tipoContrato = { codigo: codigo.value, nombre: nombre.value };
-      api
-        .insertarTipoContrato(tipoContrato)
-        .then((mensajeAlerta.value = "registro insertado con exito"))
-        .catch(function (e) {
-          mensajeAlerta.value = e;
-        });
+
+      if (esNuevo.value) {
+        api
+          .insertarTipoContrato(tipoContrato)
+          .then((mensajeAlerta.value = "registro insertado con exito"))
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
+      } else {
+        api
+          .actualizarTipoContrato(tipoContrato)
+          .then((mensajeAlerta.value = "registro actualizado con exito"))
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
+      }
     };
 
     const irAtras = function () {
@@ -87,6 +103,7 @@ export default {
     };
 
     const nuevo = function () {
+      esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
     };
@@ -108,6 +125,7 @@ export default {
 
     return {
       mensajeAlerta,
+      esNuevo,
       codigo,
       nombre,
       guardar,
