@@ -1,6 +1,9 @@
 <template>
-  <div v-show="mensajeAlerta?true:false" class="alert alert-warning" role="alert">
-    {{mensajeAlerta}}
+<div v-show="informacion?true:false" class="alert alert-primary" role="alert">
+    {{informacion}}
+  </div>
+  <div v-show="error?true:false" class="alert alert-danger" role="alert">
+    {{error}}
   </div>
 </template>
 
@@ -9,7 +12,8 @@ export default {
   name: "ComponenteAlerta",
   components: {},
   props: {
-    mensajeAlerta:String,
+    informacion: String,
+    error: String,
   },
   setup() {},
 };

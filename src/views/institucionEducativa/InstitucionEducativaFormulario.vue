@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
       <div class="card shadow-lg p-3 mb-5 bg-white rounded">
@@ -44,30 +41,29 @@
 </template>
 
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import InstitucionEducativaBuscador from "./InstitucionEducativaBuscador.vue";
 import UsuarioBuscador from "@/views/usuario/UsuarioBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "InstitucionEducativaFormulario",
   components: {
     InstitucionEducativaBuscador,
     BarraBotones,
-    ComponenteAlerta,
     UsuarioBuscador,
   },
   setup() {
-    const mensajeAlerta = ref("");
     const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const usuarioCodigo = ref("");
     const route = new useRoute();
     const router = useRouter();
+    const store = useStore();
 
     const consultarInstitucionEducativa = function (c) {
       esNuevo.value = true;
@@ -90,6 +86,7 @@ export default {
     consultarInstitucionEducativa(route.params.codigo);
 
     const guardar = function () {
+      store.commit("ocultarAlerta");
       const institucionEducativa = {
         codigo: codigo.value,
         nombre: nombre.value,
@@ -99,29 +96,36 @@ export default {
       if (esNuevo.value) {
         api
           .insertarInstitucionEducativa(institucionEducativa)
-          .then((mensajeAlerta.value = "registro insertado con exito"))
+          .then(
+            store.commit("mostrarInformacion", "registro insertado con exito")
+          )
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       } else {
         api
           .actualizarInstitucionEducativa(institucionEducativa)
-          .then((mensajeAlerta.value = "registro actualizado con exito"))
-          .catch(
-            () =>
-              (mensajeAlerta.value =
-                "Ingrese un usuario válido que no este asociado a otra institución educativa")
-          );
+          .then(
+            store.commit("mostrarInformacion", "registro actualizado con exito")
+          )
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Ingrese un usuario válido que no este asociado a otra institución educativa"
+            );
+          });
       }
     };
 
     const irAtras = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "institucioneducativa",
       });
     };
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
@@ -129,6 +133,7 @@ export default {
     };
 
     const eliminar = function () {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarInstitucionEducativa(codigo.value)
@@ -137,11 +142,12 @@ export default {
               name: "institucioneducativa",
             })
           )
-          .catch((e) => (mensajeAlerta.value = e));
+          .catch((e) => store.commit("mostrarError", e));
       }
     };
 
     const consultarUsuario = function (c) {
+      store.commit("ocultarAlerta");
       api
         .consultarUsuario(c)
         .then((data) => {
@@ -153,7 +159,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       esNuevo,
       codigo,
       nombre,

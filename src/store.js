@@ -18,6 +18,16 @@ const store = createStore({
       sessionStorage.clear();
       state.usuario = "";
     },
+    mostrarInformacion(state, mensaje) {
+      state.informacion = mensaje;
+    },
+    mostrarError(state, mensaje) {
+      state.error = mensaje;
+    },
+    ocultarAlerta(state) {
+      state.informacion = "";
+      state.error = "";
+    },
   },
 });
 

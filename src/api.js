@@ -87,7 +87,7 @@ const consultarInstitucionEducativa = function (codigo) {
 
 const consultarInstitucionEducativaPorUsuario = function (codigo) {
   const url = "http://127.0.0.1:8000"; //Django Rest Framework
-  return fetch(`${url}/institucioneducativausuario/${codigo}`, { method: "GET" })
+  return fetch(`${url}/institucioneducativa/usuario/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -246,8 +246,9 @@ const eliminarTipoRecaudo = function (codigo) {
     });
 };
 
-const listarPersonalPlanta = function () {
-  return fetch(`${url}/personalplanta`, { method: "GET" })
+const listarPersonalPlanta = function (institucionEducativaCodigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/personalplanta/institucioneducativa/${institucionEducativaCodigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -256,6 +257,7 @@ const listarPersonalPlanta = function () {
 };
 
 const consultarPersonalPlanta = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/personalplanta/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -265,7 +267,8 @@ const consultarPersonalPlanta = function (codigo) {
 };
 
 const insertarPersonalPlanta = function (personalPlanta) {
-  return fetch(`${url}/personalplanta`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/personalplanta/`, {
     method: "POST",
     body: JSON.stringify(personalPlanta),
     headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -276,7 +279,21 @@ const insertarPersonalPlanta = function (personalPlanta) {
     });
 };
 
+const actualizarPersonalPlanta = function (personalPlanta) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/personalplanta/${personalPlanta.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(personalPlanta),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const eliminarPersonalPlanta = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/personalplanta/${codigo}`, {
     method: "DELETE",
   })
@@ -486,6 +503,24 @@ const insertarPeriodo = function (periodo) {
     });
 };
 
+const listarProyeccionPresupuesto = function () {
+  return fetch(`${url}/proyeccionpresupuesto`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarProyeccionPresupuesto = function (codigo) {
+  return fetch(`${url}/proyeccionpresupuesto/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -511,6 +546,7 @@ export default {
   listarPersonalPlanta,
   consultarPersonalPlanta,
   insertarPersonalPlanta,
+  actualizarPersonalPlanta,
   eliminarPersonalPlanta,
   listarFuenteRecurso,
   consultarFuenteRecurso,
@@ -532,4 +568,6 @@ export default {
   consultarPeriodo,
   eliminarPeriodo,
   insertarPeriodo,
+  listarProyeccionPresupuesto,
+  consultarProyeccionPresupuesto,
 };

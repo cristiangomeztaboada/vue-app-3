@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
       <div class="card shadow-lg p-3 mb-5 bg-white rounded">
@@ -39,31 +36,31 @@
 </template>
 
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import TerceroBuscador from "./TerceroBuscador.vue";
 import TipoIdentificacionBuscador from "@/views/tipoIdentificacion/TipoIdentificacionBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "TerceroFormulario",
   components: {
     TerceroBuscador,
     BarraBotones,
-    ComponenteAlerta,
     TipoIdentificacionBuscador,
   },
   setup() {
-    const mensajeAlerta = ref("");
     const codigo = ref("");
     const nombre = ref("");
     const tipoIdentificacionCodigo = ref("");
     const route = new useRoute();
     const router = useRouter();
+    const store = useStore();
 
     const consultarTercero = function (c) {
+      store.commit("ocultarAlerta");
       const ti = tipoIdentificacionCodigo.value;
       api
         .consultarTercero(c, tipoIdentificacionCodigo.value)
@@ -80,6 +77,7 @@ export default {
     };
 
     const consultarTercero2 = function (c, ti) {
+      store.commit("ocultarAlerta");
       api
         .consultarTercero(c, ti)
         .then((data) => {
@@ -97,6 +95,7 @@ export default {
     consultarTercero2(route.params.codigo, route.params.tipoIdentificacionCodigo);
 
     const guardar = function () {
+      store.commit("ocultarAlerta");
       const tercero = {
         codigo: codigo.value,
         nombre: nombre.value,
@@ -105,25 +104,28 @@ export default {
 
       api
         .insertarTercero(tercero)
-        .then((mensajeAlerta.value = "registro insertado con exito"))
+        .then(store.commit("mostrarInformacion", "registro insertado con exito"))
         .catch(function (e) {
-          mensajeAlerta.value = e;
+          store.commit("mostrarError", e);
         });
     };
 
     const irAtras = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "tercero",
       });
     };
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       codigo.value = "";
       nombre.value = "";
       tipoIdentificacionCodigo.value = "";
     };
 
     const eliminar = function () {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarTercero(codigo.value, tipoIdentificacionCodigo.value)
@@ -133,12 +135,13 @@ export default {
             })
           )
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       }
     };
 
     const consultarTipoIdentificacion = function (c) {
+      store.commit("ocultarAlerta");
       api
         .consultarTipoIdentificacion(c)
         .then((data) => {
@@ -150,7 +153,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       codigo,
       nombre,
       tipoIdentificacionCodigo,

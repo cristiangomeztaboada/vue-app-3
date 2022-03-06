@@ -32,7 +32,7 @@
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
           <DxColumn data-field="codigo" />
           <DxColumn data-field="nombre" />
-          <DxColumn data-field="institucionEducativaCodigo" />
+          <DxColumn data-field="institucioneducativaid.codigo" caption="Institución Educativa" />
           <DxColumn data-field="cargo" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
@@ -56,6 +56,7 @@ import {
 import api from "@/api.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   props: {
@@ -73,6 +74,7 @@ export default {
     const dataSource = ref([]);
     const mensajeAlerta = ref("");
     const router = useRouter();
+    const store = useStore();
 
     const nuevo = function () {
       router.push({
@@ -83,11 +85,9 @@ export default {
 
     const listar = function () {
       api
-        .listarPersonalPlanta()
-        .then((data) => (dataSource.value = data))
-        .catch(function (e) {
-          mensajeAlerta.value = e;
-        });
+        .listarPersonalPlanta(store.state.institucioneducativa)
+        .then((data) => {dataSource.value = data})
+        .catch(()=> {});
     };
 
     listar();

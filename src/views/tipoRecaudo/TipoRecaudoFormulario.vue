@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
       <div class="card shadow-lg p-3 mb-5 bg-white rounded">
@@ -35,29 +32,29 @@
 </template>
 
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import TipoRecaudoBuscador from "./TipoRecaudoBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "TipoRecaudoFormulario",
   components: {
     TipoRecaudoBuscador,
     BarraBotones,
-    ComponenteAlerta,
   },
   setup() {
-    const mensajeAlerta = ref("");
     const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const route = new useRoute();
     const router = useRouter();
+    const store = useStore();
 
     const consultarTipoRecaudo = function (c) {
+      store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
         .consultarTipoRecaudo(c)
@@ -77,38 +74,42 @@ export default {
     consultarTipoRecaudo(route.params.codigo);
 
     const guardar = function () {
+      store.commit("ocultarAlerta");
       const tipoRecaudo = { codigo: codigo.value, nombre: nombre.value };
 
       if (esNuevo.value) {
         api
           .insertarTipoRecaudo(tipoRecaudo)
-          .then((mensajeAlerta.value = "registro insertado con exito"))
+          .then(store.commit("mostrarInformacion", "registro insertado con exito"))
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       } else {
         api
           .actualizarTipoRecaudo(tipoRecaudo)
-          .then((mensajeAlerta.value = "registro actualizado con exito"))
+          .then(store.commit("mostrarInformacion", "registro actualizado con exito"))
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       }
     };
 
     const irAtras = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "tiporecaudo",
       });
     };
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
     };
 
     const eliminar = function () {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarTipoRecaudo(codigo.value)
@@ -118,13 +119,12 @@ export default {
             })
           )
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       }
     };
 
     return {
-      mensajeAlerta,
       esNuevo,
       codigo,
       nombre,

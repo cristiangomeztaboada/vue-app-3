@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
       <div class="card shadow-lg p-3 mb-5 bg-white rounded">
@@ -42,30 +39,30 @@
 </template>
 
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import UsuarioBuscador from "./UsuarioBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "UsuarioFormulario",
   components: {
     UsuarioBuscador,
     BarraBotones,
-    ComponenteAlerta,
   },
   setup() {
-    const mensajeAlerta = ref("");
     const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const clave = ref("");
     const route = new useRoute();
     const router = useRouter();
+    const store = useStore();
 
     const consultarUsuario = function (c) {
+      store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
         .consultarUsuario(c)
@@ -86,6 +83,7 @@ export default {
     consultarUsuario(route.params.codigo);
 
     const guardar = function () {
+      store.commit("ocultarAlerta");
       const usuario = {
         codigo: codigo.value,
         nombre: nombre.value,
@@ -94,27 +92,29 @@ export default {
       if (esNuevo.value) {
         api
           .insertarUsuario(usuario)
-          .then((mensajeAlerta.value = "registro insertado con exito"))
+          .then(store.commit("mostrarInformacion", "registro insertado con exito"))
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       } else {
         api
           .actualizarUsuario(usuario)
-          .then((mensajeAlerta.value = "registro actualizado con exito"))
+          .then(store.commit("mostrarInformacion", "registro actualizado con exito"))
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       }
     };
 
     const irAtras = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "usuario",
       });
     };
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
@@ -122,6 +122,7 @@ export default {
     };
 
     const eliminar = function () {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarUsuario(codigo.value)
@@ -130,12 +131,12 @@ export default {
               name: "usuario",
             })
           )
-          .catch(() => (mensajeAlerta.value = "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
+          .catch(() => store.commit("mostrarInformacion", "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
+          
       }
     };
 
     return {
-      mensajeAlerta,
       esNuevo,
       codigo,
       nombre,

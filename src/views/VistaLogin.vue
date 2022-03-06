@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row justify-content-md-center align-items-center">
     <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
@@ -39,7 +36,6 @@
 </template>
 
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -47,11 +43,8 @@ import api from "@/api.js";
 
 export default {
   name: "VistaLogin",
-  components: {
-    ComponenteAlerta,
-  },
+  components: {},
   setup() {
-    const mensajeAlerta = ref("");
     const router = useRouter();
     const store = useStore();
 
@@ -60,7 +53,6 @@ export default {
 
     const ingresar = function () {
       try {
-        mensajeAlerta.value = "";
         api
           .consultarUsuario(codigo.value)
           .then((data) => {
@@ -80,22 +72,24 @@ export default {
                   store.commit("login");
                   router.push({ name: "principal" });
                 })
-                .catch(
-                  () =>
-                    (mensajeAlerta.value =
-                      "El usuario no tiene una institución educativa asignada, póngase en contacto con el administrador del sistema")
-                );
+                .catch(() => {
+                  store.commit("mostrarError", "El usuario no tiene una institución educativa asignada, póngase en contacto con el administrador del sistema");
+                  if (codigo.value == "admin") {
+                    store.commit("ocultarAlerta");
+                  }
+                });
 
               if (codigo.value == "admin") {
                 store.commit("login");
                 router.push({ name: "principal" });
+                store.commit("ocultarAlerta");
               }
             } else {
-              mensajeAlerta.value = "ingrese un usuario y clave correcta";
+              store.commit("mostrarError", "ingrese un usuario y clave correcta");
             }
           })
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       } catch (e) {
         console.log(e);
@@ -119,7 +113,6 @@ export default {
       codigo,
       clave,
       ingresar,
-      mensajeAlerta,
       ingresarAutomaticamente,
     };
   },

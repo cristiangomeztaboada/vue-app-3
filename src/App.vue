@@ -99,10 +99,7 @@
               </li>
               <div class="dropdown-divider"></div>
               <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: 'periodo' }"
-                >
+                <router-link class="dropdown-item" :to="{ name: 'periodo' }">
                   Periodo
                 </router-link>
               </li>
@@ -136,21 +133,48 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Presupuesto
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'proyeccionpresupuesto' }"
+                >
+                  Proyección Presupuesto
+                </router-link>
+              </li>
+            </ul>
+          </li>
         </ul>
         <form class="d-flex">
           <button v-on:click="salir" type="button" class="btn btn-warning">
-            [ {{ usuarionombre }} - {{institucioneducativanombre}} ] Salir
+            [ {{ usuarionombre }} - {{ institucioneducativanombre }} ] Salir
           </button>
         </form>
       </div>
     </div>
   </nav>
   <div class="row">
+    <componente-alerta v-bind:informacion="informacion" v-bind:error="error" />
+  </div>
+  <div class="row">
     <br />
     <router-view />
-  </div>
+  </div>  
   <div class="footer p-3 mb-2 bg-light text-dark">
-    <p class="text-secondary">©<b>PRESTIGE</b> - Sistema de control y gestión presupuestal</p>
+    <p class="text-secondary">
+      ©<b>PRESTIGE</b> - Sistema de control y gestión presupuestal
+    </p>
   </div>
 </template>
 
@@ -158,10 +182,11 @@
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 import { useStore } from "vuex";
+import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 
 export default {
   name: "App",
-  components: {},
+  components: { ComponenteAlerta },
   setup() {
     const router = useRouter();
     const store = useStore();
@@ -180,6 +205,14 @@ export default {
       return store.state.institucioneducativanombre;
     });
 
+    const informacion = computed(() => {
+      return store.state.informacion;
+    });
+
+    const error = computed(() => {
+      return store.state.error;
+    });
+
     const salir = function () {
       store.commit("logout");
       router.push({ name: "login" });
@@ -190,6 +223,9 @@ export default {
       usuarionombre,
       institucioneducativanombre,
       salir,
+      informacion,
+      error,
+      ComponenteAlerta,
     };
   },
 };
