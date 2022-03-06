@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import VistaPrincipal from "@/views/VistaPrincipal.vue";
 import VistaLogin from "@/views/VistaLogin.vue";
+import VistaCambiarClave from "@/views/VistaCambiarClave.vue";
 import UsuarioGrid from "@/views/usuario/UsuarioGrid.vue";
 import UsuarioFormulario from "@/views/usuario/UsuarioFormulario.vue";
 import InstitucionEducativaGrid from "@/views/institucionEducativa/InstitucionEducativaGrid.vue";
@@ -21,6 +22,8 @@ import TerceroGrid from "@/views/tercero/TerceroGrid.vue";
 import TerceroFormulario from "@/views/tercero/TerceroFormulario.vue";
 import PeriodoGrid from "@/views/periodo/PeriodoGrid.vue";
 import PeriodoFormulario from "@/views/periodo/PeriodoFormulario.vue";
+import ProyeccionPresupuestoGrid from "@/views/proyeccionPresupuesto/ProyeccionPresupuestoGrid.vue";
+import ProyeccionPresupuestoFormulario from "@/views/proyeccionPresupuesto/ProyeccionPresupuestoFormulario.vue";
 
 const routes = [
   {
@@ -32,6 +35,11 @@ const routes = [
     path: "/principal",
     name: "principal",
     component: VistaPrincipal,
+  },
+  {
+    path: "/cambiarclave",
+    name: "cambiarclave",
+    component: VistaCambiarClave,
   },
   {
     path: "/usuario",
@@ -162,6 +170,19 @@ const routes = [
     path: "/periodoformulario",
     name: "periodoformulario",
     component: PeriodoFormulario,
+  },
+  {
+    path: "/proyeccionpresupuesto",
+    name: "proyeccionpresupuesto",
+    component: ProyeccionPresupuestoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/proyeccionpresupuestoformulario",
+    name: "proyeccionpresupuestoformulario",
+    component: ProyeccionPresupuestoFormulario,
   },
 ];
 

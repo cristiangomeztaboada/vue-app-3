@@ -3,7 +3,7 @@
     <img src="@/assets/logo2.png" />
   </div>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"></a>
       <button
@@ -105,7 +105,10 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
+          <li
+            v-if="usuario == 'admin' ? false : true"
+            class="nav-item dropdown"
+          >
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -133,7 +136,10 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
+          <li
+            v-if="usuario == 'admin' ? false : true"
+            class="nav-item dropdown"
+          >
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -156,10 +162,38 @@
             </ul>
           </li>
         </ul>
+
         <form class="d-flex">
-          <button v-on:click="salir" type="button" class="btn btn-warning">
-            [ {{ usuarionombre }} - {{ institucioneducativanombre }} ] Salir
-          </button>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ usuarionombre }} - {{ institucioneducativanombre }}👤
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <router-link
+                    class="dropdown-item"
+                    :to="{ name: 'cambiarclave' }"
+                  >
+                    Cambiar mi clave
+                  </router-link>
+                </li>
+                <div class="dropdown-divider"></div>
+                <li>
+                  <a v-on:click="salir" class="dropdown-item" href="#"
+                    >Cerrar sesión🚪</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
         </form>
       </div>
     </div>
@@ -170,7 +204,7 @@
   <div class="row">
     <br />
     <router-view />
-  </div>  
+  </div>
   <div class="footer p-3 mb-2 bg-light text-dark">
     <p class="text-secondary">
       ©<b>PRESTIGE</b> - Sistema de control y gestión presupuestal

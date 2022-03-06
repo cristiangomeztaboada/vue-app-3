@@ -51,6 +51,8 @@ export default {
     const codigo = ref("");
     const clave = ref("");
 
+    store.commit("ocultarAlerta");
+
     const ingresar = function () {
       try {
         api
