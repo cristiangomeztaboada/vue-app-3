@@ -7,7 +7,7 @@
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
         <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
-            <h1 class="display-6">Tipo Identificacion</h1>
+            <h1 class="display-6">Tipo Identificación</h1>
           </div>
           <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
             <button

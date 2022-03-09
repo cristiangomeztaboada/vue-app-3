@@ -384,6 +384,7 @@ const eliminarRubroPresupuesto = function (codigo) {
 };
 
 const listarTipoIdentificacion = function () {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -393,6 +394,7 @@ const listarTipoIdentificacion = function () {
 };
 
 const consultarTipoIdentificacion = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -402,6 +404,7 @@ const consultarTipoIdentificacion = function (codigo) {
 };
 
 const eliminarTipoIdentificacion = function (codigo) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion/${codigo}`, {
     method: "DELETE",
   })
@@ -411,10 +414,24 @@ const eliminarTipoIdentificacion = function (codigo) {
     });
 };
 
-const insertarTipoIdentificacion = function (rubroPresupuesto) {
-  return fetch(`${url}/tipoidentificacion`, {
+const insertarTipoIdentificacion = function (tipoIdentificacion) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tipoidentificacion/`, {
     method: "POST",
-    body: JSON.stringify(rubroPresupuesto),
+    body: JSON.stringify(tipoIdentificacion),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const actualizarTipoIdentificacion = function (tipoIdentificacion) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tipoidentificacion/${tipoIdentificacion.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(tipoIdentificacion),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
     .then(manejarError)    
@@ -424,6 +441,7 @@ const insertarTipoIdentificacion = function (rubroPresupuesto) {
 };
 
 const listarTercero = function () {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tercero`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -433,7 +451,8 @@ const listarTercero = function () {
 };
 
 const consultarTercero = function (codigo, tipoIdentificacionCodigo) {
-  return fetch(`${url}/tercero/${codigo}/${tipoIdentificacionCodigo}`, { method: "GET" })
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tercero/tipoidentificacion/?codigo=${codigo}&tipoidentificacion=${tipoIdentificacionCodigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -442,7 +461,8 @@ const consultarTercero = function (codigo, tipoIdentificacionCodigo) {
 };
 
 const insertarTercero = function (tercero) {
-  return fetch(`${url}/tercero`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tercero/`, {
     method: "POST",
     body: JSON.stringify(tercero),
     headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -453,8 +473,22 @@ const insertarTercero = function (tercero) {
     });
 };
 
+const actualizarTercero = function (tercero) {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tercero/${tercero.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(tercero),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const eliminarTercero = function (codigo, tipoIdentificacionCodigo) {
-  return fetch(`${url}/tercero/${codigo}/${tipoIdentificacionCodigo}`, {
+  const url = "http://127.0.0.1:8000"; //Django Rest Framework
+  return fetch(`${url}/tercero/tipoidentificacion/?codigo=${codigo}&tipoidentificacion=${tipoIdentificacionCodigo}`, {
     method: "DELETE",
   })
     .then(manejarError)
@@ -560,9 +594,11 @@ export default {
   consultarTipoIdentificacion,
   eliminarTipoIdentificacion,
   insertarTipoIdentificacion,
+  actualizarTipoIdentificacion,
   listarTercero,
   consultarTercero,
   insertarTercero,
+  actualizarTercero,
   eliminarTercero,
   listarPeriodo,
   consultarPeriodo,

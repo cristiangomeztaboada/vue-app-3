@@ -20,9 +20,11 @@ const store = createStore({
     },
     mostrarInformacion(state, mensaje) {
       state.informacion = mensaje;
+      state.error = "";      
     },
-    mostrarError(state, mensaje) {
+    mostrarError(state, mensaje) {      
       state.error = mensaje;
+      state.informacion = "";
     },
     ocultarAlerta(state) {
       state.informacion = "";

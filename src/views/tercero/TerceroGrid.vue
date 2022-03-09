@@ -30,7 +30,7 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="tipoIdentificacionCodigo" />
+          <DxColumn data-field="tipoidentificacionid.codigo" caption="Tipo Identificación Codigo"/>
           <DxColumn data-field="codigo" />
           <DxColumn data-field="nombre" />          
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">

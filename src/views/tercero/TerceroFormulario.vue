@@ -11,7 +11,8 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Tercero</h5>
+          <h5 v-if="esNuevo" class="card-title">Insertar Tercero</h5>
+          <h5 v-if="!esNuevo" class="card-title">Actualizar Tercero</h5>
           <label>Tipo Identificacion</label>
           <tipo-identificacion-buscador
             v-on:perderFoco="consultarTipoIdentificacion"
@@ -52,6 +53,7 @@ export default {
     TipoIdentificacionBuscador,
   },
   setup() {
+    const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const tipoIdentificacionCodigo = ref("");
@@ -61,13 +63,17 @@ export default {
 
     const consultarTercero = function (c) {
       store.commit("ocultarAlerta");
+      esNuevo.value = true;
       const ti = tipoIdentificacionCodigo.value;
       api
         .consultarTercero(c, tipoIdentificacionCodigo.value)
         .then((data) => {
+          if (data.codigo && data.tipoidentificacionid.codigo) {
+            esNuevo.value = false;
+          }
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          tipoIdentificacionCodigo.value = data.tipoIdentificacionCodigo;
+          tipoIdentificacionCodigo.value = data.tipoidentificacionid.codigo;
         })
         .catch(function () {
           nuevo();
@@ -81,9 +87,13 @@ export default {
       api
         .consultarTercero(c, ti)
         .then((data) => {
+          if (data.codigo && data.tipoidentificacionid.codigo) {
+            esNuevo.value = false;
+          }
+          console.log(data);
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          tipoIdentificacionCodigo.value = data.tipoIdentificacionCodigo;
+          tipoIdentificacionCodigo.value = data.tipoidentificacionid.codigo;
         })
         .catch(function () {
           nuevo();
@@ -92,22 +102,38 @@ export default {
         });
     };
 
-    consultarTercero2(route.params.codigo, route.params.tipoIdentificacionCodigo);
+    consultarTercero2(
+      route.params.codigo,
+      route.params.tipoIdentificacionCodigo
+    );
 
     const guardar = function () {
       store.commit("ocultarAlerta");
       const tercero = {
         codigo: codigo.value,
         nombre: nombre.value,
-        tipoIdentificacionCodigo: tipoIdentificacionCodigo.value,
+        tipoidentificacionid: { codigo: tipoIdentificacionCodigo.value },
       };
 
-      api
-        .insertarTercero(tercero)
-        .then(store.commit("mostrarInformacion", "registro insertado con exito"))
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+      if (esNuevo.value) {
+        api
+          .insertarTercero(tercero)
+          .then(
+            store.commit("mostrarInformacion", "registro insertado con exito")
+          )
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      } else {
+        api
+          .actualizarTercero(tercero)
+          .then(
+            store.commit("mostrarInformacion", "registro actualizado con exito")
+          )
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      }
     };
 
     const irAtras = function () {
@@ -119,6 +145,7 @@ export default {
 
     const nuevo = function () {
       store.commit("ocultarAlerta");
+      esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
       tipoIdentificacionCodigo.value = "";
@@ -153,6 +180,7 @@ export default {
     };
 
     return {
+      esNuevo,
       codigo,
       nombre,
       tipoIdentificacionCodigo,

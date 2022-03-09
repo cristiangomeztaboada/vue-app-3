@@ -11,7 +11,12 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Tipo Identificacion</h5>
+          <h5 v-if="esNuevo" class="card-title">
+            Insertar Tipo Identificación
+          </h5>
+          <h5 v-if="!esNuevo" class="card-title">
+            Actualizar Tipo Identificación
+          </h5>
           <label>Código</label>
           <tipo-identificacion-buscador
             v-on:perderFoco="consultarTipoIdentificacion"
@@ -45,6 +50,7 @@ export default {
     BarraBotones,
   },
   setup() {
+    const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const route = new useRoute();
@@ -53,11 +59,15 @@ export default {
 
     const consultarTipoIdentificacion = function (c) {
       store.commit("ocultarAlerta");
+      esNuevo.value = true;
       api
         .consultarTipoIdentificacion(c)
         .then((data) => {
+          if (data.codigo) {
+            esNuevo.value = false;
+          }
           codigo.value = data.codigo;
-          nombre.value = data.nombre;
+          nombre.value = data.nombre;          
         })
         .catch(function () {
           nuevo();
@@ -70,12 +80,26 @@ export default {
     const guardar = function () {
       store.commit("ocultarAlerta");
       const tipoIdentificacion = { codigo: codigo.value, nombre: nombre.value };
-      api
-        .insertarTipoIdentificacion(tipoIdentificacion)
-        .then(store.commit("mostrarInformacion", "registro insertado con exito"))
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+
+      if (esNuevo.value) {
+        api
+          .insertarTipoIdentificacion(tipoIdentificacion)
+          .then(
+            store.commit("mostrarInformacion", "registro insertado con exito")
+          )
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      } else {
+        api
+          .actualizarTipoIdentificacion(tipoIdentificacion)
+          .then(
+            store.commit("mostrarInformacion", "registro actualizado con exito")
+          )
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      }
     };
 
     const irAtras = function () {
@@ -87,6 +111,7 @@ export default {
 
     const nuevo = function () {
       store.commit("ocultarAlerta");
+      esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
     };
@@ -108,6 +133,7 @@ export default {
     };
 
     return {
+      esNuevo,
       codigo,
       nombre,
       guardar,
