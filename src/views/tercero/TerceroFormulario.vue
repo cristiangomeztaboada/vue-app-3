@@ -14,9 +14,12 @@
           <h5 v-if="esNuevo" class="card-title">Insertar Tercero</h5>
           <h5 v-if="!esNuevo" class="card-title">Actualizar Tercero</h5>
           <label>Tipo Identificacion</label>
-          <tipo-identificacion-buscador
-            v-on:perderFoco="consultarTipoIdentificacion"
-            v-bind:codigoPropiedad="tipoIdentificacionCodigo"
+          
+          <DxSelectBox
+            :items="tiposIdentificacion"
+            display-expr="nombre"
+            value-expr="codigo"
+            v-model="tipoIdentificacionCodigo"
           />
           <label>Código</label>
           <tercero-buscador
@@ -38,7 +41,9 @@
 
 <script>
 import TerceroBuscador from "./TerceroBuscador.vue";
-import TipoIdentificacionBuscador from "@/views/tipoIdentificacion/TipoIdentificacionBuscador.vue";
+//import TipoIdentificacionBuscador from "@/views/tipoIdentificacion/TipoIdentificacionBuscador.vue";
+import DxSelectBox from "devextreme-vue/select-box";
+//import ArrayStore from "devextreme/data/array_store";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
@@ -50,7 +55,8 @@ export default {
   components: {
     TerceroBuscador,
     BarraBotones,
-    TipoIdentificacionBuscador,
+    DxSelectBox,
+    //TipoIdentificacionBuscador,
   },
   setup() {
     const esNuevo = ref(true);
@@ -60,6 +66,20 @@ export default {
     const route = new useRoute();
     const router = useRouter();
     const store = useStore();
+    const tiposIdentificacion = ref([]);
+
+    const listarTipoIdentificacion = function () {
+      api
+        .listarTipoIdentificacion()
+        .then((data) => {
+          tiposIdentificacion.value = data;
+        })
+        .catch(function (e) {
+          store.commit("mostrarError", e);
+        });
+    };
+
+    listarTipoIdentificacion();
 
     const consultarTercero = function (c) {
       store.commit("ocultarAlerta");
@@ -90,7 +110,6 @@ export default {
           if (data.codigo && data.tipoidentificacionid.codigo) {
             esNuevo.value = false;
           }
-          console.log(data);
           codigo.value = data.codigo;
           nombre.value = data.nombre;
           tipoIdentificacionCodigo.value = data.tipoidentificacionid.codigo;
@@ -184,6 +203,7 @@ export default {
       codigo,
       nombre,
       tipoIdentificacionCodigo,
+      tiposIdentificacion,
       guardar,
       irAtras,
       nuevo,
