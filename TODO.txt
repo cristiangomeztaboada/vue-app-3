@@ -1,2 +1,2 @@
 -Tercero
---Tipo Identificacion Combo
+--Tipo Identificacion Combo [Resuelto]
