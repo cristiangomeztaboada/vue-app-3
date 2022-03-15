@@ -54,6 +54,7 @@ export default {
     store.commit("ocultarAlerta");
 
     const ingresar = function () {
+      store.commit("ocultarAlerta");
       try {
         api
           .consultarUsuario(codigo.value)
@@ -90,8 +91,8 @@ export default {
               store.commit("mostrarError", "ingrese un usuario y clave correcta");
             }
           })
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(()=> {
+            store.commit("mostrarError", "ingrese un usuario y clave correcta");
           });
       } catch (e) {
         console.log(e);

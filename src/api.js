@@ -1,5 +1,5 @@
-const url = "http://localhost:3000"; //Express
-//const url = "http://127.0.0.1:8000"; //Django Rest Framework
+//const url = "http://localhost:3000"; //Express
+const url = "http://127.0.0.1:8000"; //Django Rest Framework
 
 const manejarError = function (res) {
   if (!res.ok) {
@@ -9,7 +9,6 @@ const manejarError = function (res) {
 };
 
 const listarUsuario = function () {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -19,7 +18,6 @@ const listarUsuario = function () {
 };
 
 const consultarUsuario = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -29,7 +27,6 @@ const consultarUsuario = function (codigo) {
 };
 
 const insertarUsuario = function (usuario) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario/`, {
     method: "POST",
     body: JSON.stringify(usuario),
@@ -42,7 +39,6 @@ const insertarUsuario = function (usuario) {
 };
 
 const actualizarUsuario = function (usuario) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario/${usuario.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(usuario),
@@ -55,7 +51,6 @@ const actualizarUsuario = function (usuario) {
 };
 
 const eliminarUsuario = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/usuario/${codigo}`, {
     method: "DELETE",
   })
@@ -66,7 +61,6 @@ const eliminarUsuario = function (codigo) {
 };
 
 const listarInstitucionEducativa = function () {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -76,7 +70,6 @@ const listarInstitucionEducativa = function () {
 };
 
 const consultarInstitucionEducativa = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -86,7 +79,6 @@ const consultarInstitucionEducativa = function (codigo) {
 };
 
 const consultarInstitucionEducativaPorUsuario = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/usuario/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -96,7 +88,6 @@ const consultarInstitucionEducativaPorUsuario = function (codigo) {
 };
 
 const insertarInstitucionEducativa = function (institucionEducativa) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/`, {
     method: "POST",
     body: JSON.stringify(institucionEducativa),
@@ -109,7 +100,6 @@ const insertarInstitucionEducativa = function (institucionEducativa) {
 };
 
 const actualizarInstitucionEducativa = function (institucionEducativa) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/${institucionEducativa.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(institucionEducativa),
@@ -122,7 +112,6 @@ const actualizarInstitucionEducativa = function (institucionEducativa) {
 };
 
 const eliminarInstitucionEducativa = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/institucioneducativa/${codigo}`, {
     method: "DELETE",
   })
@@ -133,7 +122,6 @@ const eliminarInstitucionEducativa = function (codigo) {
 };
 
 const listarTipoContrato = function () {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -143,7 +131,6 @@ const listarTipoContrato = function () {
 };
 
 const eliminarTipoContrato = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato/${codigo}`, {
     method: "DELETE",
   })
@@ -154,7 +141,6 @@ const eliminarTipoContrato = function (codigo) {
 };
 
 const consultarTipoContrato = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -164,7 +150,6 @@ const consultarTipoContrato = function (codigo) {
 };
 
 const insertarTipoContrato = function (tipoContrato) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato/`, {
     method: "POST",
     body: JSON.stringify(tipoContrato),
@@ -177,7 +162,6 @@ const insertarTipoContrato = function (tipoContrato) {
 };
 
 const actualizarTipoContrato = function (tipoContrato) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipocontrato/${tipoContrato.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tipoContrato),
@@ -190,7 +174,6 @@ const actualizarTipoContrato = function (tipoContrato) {
 };
 
 const listarTipoRecaudo = function () {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tiporecaudo`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -200,7 +183,6 @@ const listarTipoRecaudo = function () {
 };
 
 const insertarTipoRecaudo = function (tipoRecaudo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tiporecaudo/`, {
     method: "POST",
     body: JSON.stringify(tipoRecaudo),
@@ -213,7 +195,6 @@ const insertarTipoRecaudo = function (tipoRecaudo) {
 };
 
 const actualizarTipoRecaudo = function (tipoRecaudo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tiporecaudo/${tipoRecaudo.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tipoRecaudo),
@@ -226,7 +207,6 @@ const actualizarTipoRecaudo = function (tipoRecaudo) {
 };
 
 const consultarTipoRecaudo = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tiporecaudo/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -236,7 +216,6 @@ const consultarTipoRecaudo = function (codigo) {
 };
 
 const eliminarTipoRecaudo = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tiporecaudo/${codigo}/`, {
     method: "DELETE",
   })
@@ -247,7 +226,6 @@ const eliminarTipoRecaudo = function (codigo) {
 };
 
 const listarPersonalPlanta = function (institucionEducativaCodigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/personalplanta/institucioneducativa/${institucionEducativaCodigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -257,7 +235,6 @@ const listarPersonalPlanta = function (institucionEducativaCodigo) {
 };
 
 const consultarPersonalPlanta = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/personalplanta/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -267,7 +244,6 @@ const consultarPersonalPlanta = function (codigo) {
 };
 
 const insertarPersonalPlanta = function (personalPlanta) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/personalplanta/`, {
     method: "POST",
     body: JSON.stringify(personalPlanta),
@@ -280,7 +256,6 @@ const insertarPersonalPlanta = function (personalPlanta) {
 };
 
 const actualizarPersonalPlanta = function (personalPlanta) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/personalplanta/${personalPlanta.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(personalPlanta),
@@ -293,7 +268,6 @@ const actualizarPersonalPlanta = function (personalPlanta) {
 };
 
 const eliminarPersonalPlanta = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/personalplanta/${codigo}`, {
     method: "DELETE",
   })
@@ -322,8 +296,20 @@ const consultarFuenteRecurso = function (codigo) {
 };
 
 const insertarFuenteRecurso = function (fuenteRecurso) {
-  return fetch(`${url}/fuenterecurso`, {
+  return fetch(`${url}/fuenterecurso/`, {
     method: "POST",
+    body: JSON.stringify(fuenteRecurso),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const actualizarFuenteRecurso = function (fuenteRecurso) {
+  return fetch(`${url}/fuenterecurso/${fuenteRecurso.codigo}/`, {
+    method: "PUT",
     body: JSON.stringify(fuenteRecurso),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
@@ -344,7 +330,7 @@ const eliminarFuenteRecurso = function (codigo) {
 };
 
 const listarRubroPresupuesto = function () {
-  return fetch(`${url}/rubropresupuesto`, { method: "GET" })
+  return fetch(`${url}/rubropresupuestal`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -353,7 +339,7 @@ const listarRubroPresupuesto = function () {
 };
 
 const consultarRubroPresupuesto = function (codigo) {
-  return fetch(`${url}/rubropresupuesto/${codigo}`, { method: "GET" })
+  return fetch(`${url}/rubropresupuestal/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -361,8 +347,8 @@ const consultarRubroPresupuesto = function (codigo) {
     });
 };
 
-const insertarRubroPresupuesto = function (rubroPresupuesto) {
-  return fetch(`${url}/rubropresupuesto`, {
+const insertarRubroPresupuesto = function (rubroPresupuesto) {  
+  return fetch(`${url}/rubropresupuestal/`, {
     method: "POST",
     body: JSON.stringify(rubroPresupuesto),
     headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -373,8 +359,20 @@ const insertarRubroPresupuesto = function (rubroPresupuesto) {
     });
 };
 
+const actualizarRubroPresupuesto = function (rubroPresupuesto) {
+  return fetch(`${url}/rubropresupuestal/${rubroPresupuesto.codigo}/`, {
+    method: "PUT",
+    body: JSON.stringify(rubroPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const eliminarRubroPresupuesto = function (codigo) {
-  return fetch(`${url}/rubropresupuesto/${codigo}`, {
+  return fetch(`${url}/rubropresupuestal/${codigo}`, {
     method: "DELETE",
   })
     .then(manejarError)
@@ -384,7 +382,6 @@ const eliminarRubroPresupuesto = function (codigo) {
 };
 
 const listarTipoIdentificacion = function () {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -394,7 +391,6 @@ const listarTipoIdentificacion = function () {
 };
 
 const consultarTipoIdentificacion = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -404,7 +400,6 @@ const consultarTipoIdentificacion = function (codigo) {
 };
 
 const eliminarTipoIdentificacion = function (codigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion/${codigo}`, {
     method: "DELETE",
   })
@@ -415,7 +410,6 @@ const eliminarTipoIdentificacion = function (codigo) {
 };
 
 const insertarTipoIdentificacion = function (tipoIdentificacion) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion/`, {
     method: "POST",
     body: JSON.stringify(tipoIdentificacion),
@@ -428,7 +422,6 @@ const insertarTipoIdentificacion = function (tipoIdentificacion) {
 };
 
 const actualizarTipoIdentificacion = function (tipoIdentificacion) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tipoidentificacion/${tipoIdentificacion.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tipoIdentificacion),
@@ -441,7 +434,6 @@ const actualizarTipoIdentificacion = function (tipoIdentificacion) {
 };
 
 const listarTercero = function () {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tercero`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -451,7 +443,6 @@ const listarTercero = function () {
 };
 
 const consultarTercero = function (codigo, tipoIdentificacionCodigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tercero/tipoidentificacion/?codigo=${codigo}&tipoidentificacion=${tipoIdentificacionCodigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
@@ -461,7 +452,6 @@ const consultarTercero = function (codigo, tipoIdentificacionCodigo) {
 };
 
 const insertarTercero = function (tercero) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tercero/`, {
     method: "POST",
     body: JSON.stringify(tercero),
@@ -474,7 +464,6 @@ const insertarTercero = function (tercero) {
 };
 
 const actualizarTercero = function (tercero) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tercero/${tercero.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tercero),
@@ -487,7 +476,6 @@ const actualizarTercero = function (tercero) {
 };
 
 const eliminarTercero = function (codigo, tipoIdentificacionCodigo) {
-  const url = "http://127.0.0.1:8000"; //Django Rest Framework
   return fetch(`${url}/tercero/tipoidentificacion/?codigo=${codigo}&tipoidentificacion=${tipoIdentificacionCodigo}`, {
     method: "DELETE",
   })
@@ -585,10 +573,12 @@ export default {
   listarFuenteRecurso,
   consultarFuenteRecurso,
   insertarFuenteRecurso,
+  actualizarFuenteRecurso,
   eliminarFuenteRecurso,
   listarRubroPresupuesto,
   consultarRubroPresupuesto,
   insertarRubroPresupuesto,
+  actualizarRubroPresupuesto,
   eliminarRubroPresupuesto,
   listarTipoIdentificacion,
   consultarTipoIdentificacion,

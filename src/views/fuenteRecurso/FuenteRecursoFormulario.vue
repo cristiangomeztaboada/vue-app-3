@@ -11,7 +11,14 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Fuente Recurso</h5>
+          <h5 v-if="esNuevo" class="card-title">Insertar Fuente Recurso</h5>
+          <h5 v-if="!esNuevo" class="card-title">Actualizar Fuente Recurso</h5>
+
+          <label>Fuente Recurso Padre</label>
+          <fuente-recurso-padre-buscador
+            v-on:perderFocoPadre="consultarFuenteRecursoPadre"
+            v-bind:codigoPropiedad="fuenteRecursoCodigoPadre"
+          />
           <label>Código</label>
           <fuente-recurso-buscador
             v-on:perderFoco="consultarFuenteRecurso"
@@ -23,11 +30,6 @@
             v-model="nombre"
             type="text"
             id="nombre"
-          />
-          <label>Fuente Recurso Padre</label>
-          <fuente-recurso-padre-buscador
-            v-on:perderFocoPadre="consultarFuenteRecursoPadre"
-            v-bind:codigoPropiedad="fuenteRecursoCodigoPadre"
           />
         </div>
       </div>
@@ -52,6 +54,7 @@ export default {
     BarraBotones,
   },
   setup() {
+    const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const fuenteRecursoCodigoPadre = ref("");
@@ -60,16 +63,22 @@ export default {
     const store = useStore();
 
     const consultarFuenteRecurso = function (c) {
+      esNuevo.value = true;
       store.commit("ocultarAlerta");
       api
         .consultarFuenteRecurso(c)
         .then((data) => {
+          if (data.codigo) {
+            esNuevo.value = false;
+          }
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          fuenteRecursoCodigoPadre.value = data.fuenteRecursoCodigoPadre;
+          fuenteRecursoCodigoPadre.value = data.idpadre.codigo;
         })
         .catch(function () {
+          let p = fuenteRecursoCodigoPadre.value;
           nuevo();
+          fuenteRecursoCodigoPadre.value = p;
           codigo.value = c;
         });
     };
@@ -81,17 +90,32 @@ export default {
       const fuenteRecurso = {
         codigo: codigo.value,
         nombre: nombre.value,
-        fuenteRecursoCodigoPadre: fuenteRecursoCodigoPadre.value,
+        idpadre: { codigo: fuenteRecursoCodigoPadre.value },
       };
 
-      api
-        .insertarFuenteRecurso(fuenteRecurso)
-        .then(() => {
-          store.commit("mostrarInformacion", "registro insertado con exito");
-        })
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+      if (!fuenteRecursoCodigoPadre.value) {
+        delete fuenteRecurso["idpadre"];
+      }
+
+      if (esNuevo.value) {
+        api
+          .insertarFuenteRecurso(fuenteRecurso)
+          .then(() => {
+            store.commit("mostrarInformacion", "registro insertado con exito");
+          })
+          .catch(()=> {
+            store.commit("mostrarError", "Solo puede existir una fuente de recurso raiz");
+          });
+      } else {
+        api
+          .actualizarFuenteRecurso(fuenteRecurso)
+          .then(() => {
+            store.commit("mostrarInformacion", "registro actualizado con exito");
+          })
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      }
     };
 
     const irAtras = function () {
@@ -101,8 +125,9 @@ export default {
       });
     };
 
-    const nuevo = function () {
+    const nuevo = function () {      
       store.commit("ocultarAlerta");
+      esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
       fuenteRecursoCodigoPadre.value = "";
@@ -137,6 +162,7 @@ export default {
     };
 
     return {
+      esNuevo,
       codigo,
       nombre,
       fuenteRecursoCodigoPadre,

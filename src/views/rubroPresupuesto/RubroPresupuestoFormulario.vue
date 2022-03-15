@@ -11,7 +11,16 @@
           />
         </div>
         <div class="card-body">
-          <h5 class="card-title">Rubro Prespuesto</h5>
+          <h5 v-if="esNuevo" class="card-title">Insertar Rubro Prespuesto</h5>
+          <h5 v-if="!esNuevo" class="card-title">
+            Actualizar Rubro Prespuesto
+          </h5>
+
+          <label>Rubro Presupuesto Padre</label>
+          <rubro-presupuesto-padre-buscador
+            v-on:perderFocoPadre="consultarRubroPresupuestoPadre"
+            v-bind:codigoPropiedad="rubroPresupuestoCodigoPadre"
+          />
           <label>Código</label>
           <rubro-presupuesto-buscador
             v-on:perderFoco="consultarRubroPresupuesto"
@@ -23,11 +32,6 @@
             v-model="nombre"
             type="text"
             id="nombre"
-          />
-          <label>Rubro Presupuesto Padre</label>
-          <rubro-presupuesto-padre-buscador
-            v-on:perderFocoPadre="consultarRubroPresupuestoPadre"
-            v-bind:codigoPropiedad="rubroPresupuestoCodigoPadre"
           />
         </div>
       </div>
@@ -52,6 +56,7 @@ export default {
     BarraBotones,
   },
   setup() {
+    const esNuevo = ref(true);
     const codigo = ref("");
     const nombre = ref("");
     const rubroPresupuestoCodigoPadre = ref("");
@@ -60,15 +65,21 @@ export default {
     const store = useStore();
 
     const consultarRubroPresupuesto = function (c) {
+      esNuevo.value = true;
       api
         .consultarRubroPresupuesto(c)
         .then((data) => {
+          if (data.codigo) {
+            esNuevo.value = false;
+          }
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          rubroPresupuestoCodigoPadre.value = data.rubroPresupuestoCodigoPadre;
+          rubroPresupuestoCodigoPadre.value = data.idpadre.codigo;
         })
         .catch(function () {
+          let p = rubroPresupuestoCodigoPadre.value;
           nuevo();
+          rubroPresupuestoCodigoPadre.value = p;
           codigo.value = c;
         });
     };
@@ -80,15 +91,32 @@ export default {
       const rubroPresupuesto = {
         codigo: codigo.value,
         nombre: nombre.value,
-        rubroPresupuestoCodigoPadre: rubroPresupuestoCodigoPadre.value,
+        idpadre: { codigo: rubroPresupuestoCodigoPadre.value },
       };
-console.log(rubroPresupuesto);
-      api
-        .insertarRubroPresupuesto(rubroPresupuesto)
-        .then(store.commit("mostrarInformacion", "registro insertado con exito"))
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+
+      if (!rubroPresupuestoCodigoPadre.value){
+        delete rubroPresupuesto['idpadre'];
+      }
+
+      if (esNuevo.value) {
+        api
+          .insertarRubroPresupuesto(rubroPresupuesto)
+          .then(
+            store.commit("mostrarInformacion", "registro insertado con exito")
+          )
+          .catch(()=> {
+            store.commit("mostrarError", "Solo puede exixtir un rubro presupuesto raiz");
+          });
+      } else {
+        api
+          .actualizarRubroPresupuesto(rubroPresupuesto)
+          .then(
+            store.commit("mostrarInformacion", "registro actualizado con exito")
+          )
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      }
     };
 
     const irAtras = function () {
@@ -100,6 +128,7 @@ console.log(rubroPresupuesto);
 
     const nuevo = function () {
       store.commit("ocultarAlerta");
+      esNuevo.value = true;
       codigo.value = "";
       nombre.value = "";
       rubroPresupuestoCodigoPadre.value = "";
@@ -126,7 +155,6 @@ console.log(rubroPresupuesto);
       api
         .consultarRubroPresupuesto(c)
         .then((data) => {
-          console.log(data);
           rubroPresupuestoCodigoPadre.value = data.codigo;
         })
         .catch(function () {
@@ -135,6 +163,7 @@ console.log(rubroPresupuesto);
     };
 
     return {
+      esNuevo,
       codigo,
       nombre,
       rubroPresupuestoCodigoPadre,

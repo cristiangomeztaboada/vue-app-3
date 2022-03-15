@@ -30,7 +30,7 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="rubroPresupuestoCodigoPadre" />
+          <DxColumn data-field="idpadre.codigo" caption="Código Padre" />
           <DxColumn data-field="codigo" />
           <DxColumn data-field="nombre" />          
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
@@ -101,7 +101,7 @@ export default {
     const eliminar = function (rowData) {
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarRubroPresupuesto(rowData.row.values[0])
+          .eliminarRubroPresupuesto(rowData.row.values[1])
           .then(() => listar())
           .catch(function (e) {
             mensajeAlerta.value = e;

@@ -99,8 +99,8 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro insertado con exito")
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(()=> {
+            store.commit("mostrarError", "Ingrese un usuario válido que no este asociado a otra institución educativa");
           });
       } else {
         api
