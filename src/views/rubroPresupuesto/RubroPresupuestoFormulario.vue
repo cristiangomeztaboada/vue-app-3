@@ -113,8 +113,8 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro actualizado con exito")
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch( ()=> {
+            store.commit("mostrarError", "Ingrese un código padre válido");
           });
       }
     };

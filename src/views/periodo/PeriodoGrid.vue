@@ -30,7 +30,7 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="codigo" />
+          <DxColumn data-field="codigo" :sort-index="0" sort-order="desc" />
           <DxColumn data-field="activo" data-type="boolean" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />

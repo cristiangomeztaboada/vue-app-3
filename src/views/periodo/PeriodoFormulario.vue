@@ -80,13 +80,30 @@ export default {
 
     const guardar = function () {
       store.commit("ocultarAlerta");
-      const periodo = { codigo: Number(codigo.value), activo: Number(activo.value) };
-      api
-        .insertarPeriodo(periodo)
-        .then(store.commit("mostrarInformacion", "registro insertado con exito"))
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+      const periodo = {
+        codigo: Number(codigo.value),
+        activo: Number(activo.value),
+      };
+
+      if (esNuevo.value) {
+        api
+          .insertarPeriodo(periodo)
+          .then(
+            store.commit("mostrarInformacion", "registro insertado con exito")
+          )
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      } else {
+        api
+          .actualizarPeriodo(periodo)
+          .then(
+            store.commit("mostrarInformacion", "registro actualizado con exito")
+          )
+          .catch(function (e) {
+            store.commit("mostrarError", e);
+          });
+      }
     };
 
     const irAtras = function () {

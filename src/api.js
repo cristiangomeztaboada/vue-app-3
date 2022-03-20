@@ -514,8 +514,20 @@ const eliminarPeriodo = function (codigo) {
 };
 
 const insertarPeriodo = function (periodo) {
-  return fetch(`${url}/periodo`, {
+  return fetch(`${url}/periodo/`, {
     method: "POST",
+    body: JSON.stringify(periodo),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)    
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const actualizarPeriodo = function (periodo) {
+  return fetch(`${url}/periodo/${periodo.codigo}/`, {
+    method: "PUT",
     body: JSON.stringify(periodo),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
@@ -594,6 +606,7 @@ export default {
   consultarPeriodo,
   eliminarPeriodo,
   insertarPeriodo,
+  actualizarPeriodo,
   listarProyeccionPresupuesto,
   consultarProyeccionPresupuesto,
 };

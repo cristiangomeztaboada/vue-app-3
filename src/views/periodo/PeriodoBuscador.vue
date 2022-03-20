@@ -3,6 +3,8 @@
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
       <div class="input-group mb-3">
         <input
+          min="2022"
+          max="9999"
           class="form-control"
           v-model="codigo"
           type="number"
@@ -36,9 +38,7 @@
           <div class="modal-body">
             <periodo-grid
               v-bind:mostrarColumnaBotones="false"
-              v-on:seleccionarPeriodo="
-                recibirPeriodoSeleccionado
-              "
+              v-on:seleccionarPeriodo="recibirPeriodoSeleccionado"
             />
           </div>
         </div>
