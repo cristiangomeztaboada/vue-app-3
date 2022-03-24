@@ -154,7 +154,7 @@
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: 'proyeccionpresupuesto' }"
+                  :to="{ name: 'proyeccionpresupuestoformulario' }"
                 >
                   Proyección Presupuesto
                 </router-link>

@@ -1,16 +1,36 @@
 <template>
   <ul class="nav nav-pills card-header-pills">
-    <li class="nav-item">
-      <button type="button" class="btn btn-outline-primary"  v-on:click="irAtras">⬅️</button>
+    <li v-if="ocultarBotonAtras ? false : true" li class="nav-item">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        v-on:click="irAtras"
+      >
+        ⬅️
+      </button>
     </li>
     <li class="nav-item">
-      <button type="button" class="btn btn-outline-primary" v-on:click="guardar">💾</button>
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        v-on:click="guardar"
+      >
+        💾
+      </button>
+    </li>
+    <li v-if="ocultarBotonNuevo ? false : true" class="nav-item">
+      <button type="button" class="btn btn-outline-primary" v-on:click="nuevo">
+        ➕
+      </button>
     </li>
     <li class="nav-item">
-      <button type="button" class="btn btn-outline-primary" v-on:click="nuevo">➕</button>
-    </li>
-    <li class="nav-item">
-      <button type="button" class="btn btn-outline-primary" v-on:click="eliminar">🗑️</button>
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        v-on:click="eliminar"
+      >
+        🗑️
+      </button>
     </li>
   </ul>
 </template>
@@ -19,29 +39,33 @@
 export default {
   name: "BarraBotones",
   components: {},
+  props: {
+    ocultarBotonAtras: Boolean,
+    ocultarBotonNuevo: Boolean,
+  },
   setup(props, context) {
-      const guardar = function (){
-        context.emit("guardar");
-      }
+    const guardar = function () {
+      context.emit("guardar");
+    };
 
-      const irAtras = function (){
-        context.emit("irAtras");
-      }
+    const irAtras = function () {
+      context.emit("irAtras");
+    };
 
-      const nuevo = function (){
-        context.emit("nuevo");
-      }
+    const nuevo = function () {
+      context.emit("nuevo");
+    };
 
-      const eliminar = function (){
-        context.emit("eliminar");
-      }
+    const eliminar = function () {
+      context.emit("eliminar");
+    };
 
-      return {
-        guardar,
-        irAtras,
-        nuevo,
-        eliminar,
-      }
+    return {
+      guardar,
+      irAtras,
+      nuevo,
+      eliminar,
+    };
   },
 };
 </script>

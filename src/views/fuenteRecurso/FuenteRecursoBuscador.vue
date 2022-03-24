@@ -36,6 +36,7 @@
           <div class="modal-body">
             <fuente-recurso-grid
               v-bind:mostrarColumnaBotones="false"
+              v-bind:soloDetalle=soloDetalle
               v-on:seleccionarFuenteRecurso="
                 recibirFuenteRecursoSeleccionado
               "
@@ -59,6 +60,7 @@ export default {
   },
   props: {
     codigoPropiedad: String,
+    soloDetalle: Boolean,
   },
   setup(props, context) {
     const codigo = ref("");

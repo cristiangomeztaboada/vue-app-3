@@ -14,14 +14,14 @@
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#modalRubroPresupuesto"
+            data-bs-target="#modalProyeccionPresupuesto"
           >
             🔎
           </button>
         </div>
       </div>
     </div>
-    <div class="modal" id="modalRubroPresupuesto" tabindex="-1">
+    <div class="modal" id="modalProyeccionPresupuesto" tabindex="-1">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -34,11 +34,10 @@
             ></button>
           </div>
           <div class="modal-body">
-            <rubro-presupuesto-grid
+            <proyeccion-presupuesto-grid
               v-bind:mostrarColumnaBotones="false"
-              v-bind:soloDetalle=soloDetalle
-              v-on:seleccionarRubroPresupuesto="
-                recibirRubroPresupuestoSeleccionado
+              v-on:seleccionarProyeccionPresupuesto="
+                recibirProyeccionPresupuestoSeleccionado
               "
             />
           </div>
@@ -49,18 +48,17 @@
 </template>
 
 <script>
-import RubroPresupuestoGrid from "@/views/rubroPresupuesto/RubroPresupuestoGrid.vue";
+import ProyeccionPresupuestoGrid from "@/views/proyeccionPresupuesto/ProyeccionPresupuestoGrid.vue";
 import $ from "jquery";
 import { ref, watch } from "vue";
 
 export default {
-  name: "RubroPresupuestoBuscador",
+  name: "ProyeccionPresupuestoBuscador",
   components: {
-    RubroPresupuestoGrid,
+    ProyeccionPresupuestoGrid,
   },
   props: {
     codigoPropiedad: String,
-    soloDetalle: Boolean
   },
   setup(props, context) {
     const codigo = ref("");
@@ -72,20 +70,20 @@ export default {
       }
     );
 
-    const recibirRubroPresupuestoSeleccionado = function (c) {
-      $("#modalRubroPresupuesto").modal("hide");
+    const recibirProyeccionPresupuestoSeleccionado = function (c) {
+      $("#modalProyeccionPresupuesto").modal("hide");
       codigo.value = c;
       perderFoco();
     };
 
     const perderFoco = function () {
-      $("#modalRubroPresupuesto").modal("hide");
+      $("#modalProyeccionPresupuesto").modal("hide");
       context.emit("perderFoco", codigo.value);
     };
 
     return {
       codigo,
-      recibirRubroPresupuestoSeleccionado,
+      recibirProyeccionPresupuestoSeleccionado,
       perderFoco,
     };
   },

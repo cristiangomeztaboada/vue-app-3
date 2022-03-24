@@ -5,7 +5,7 @@
   <div class="row d-flex justify-content-center">
     <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="row">          
+        <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
             <h1 class="display-6">Fuente Recurso</h1>
           </div>
@@ -30,9 +30,9 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="idpadre.codigo" caption="Código Padre"/>
+          <DxColumn data-field="idpadre.codigo" caption="Código Padre" />
           <DxColumn data-field="codigo" />
-          <DxColumn data-field="nombre" />          
+          <DxColumn data-field="nombre" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
@@ -59,6 +59,7 @@ import { useRouter } from "vue-router";
 export default {
   props: {
     mostrarColumnaBotones: Boolean,
+    soloDetalle: Boolean,
   },
   components: {
     DxDataGrid,
@@ -81,21 +82,27 @@ export default {
     };
 
     const listar = function () {
-      api
-        .listarFuenteRecurso()
-        .then((data) => (dataSource.value = data))
-        .catch(function (e) {
-          mensajeAlerta.value = e;
-        });
+      if (props.soloDetalle) {
+        api
+          .listarFuenteRecursoDetalle()
+          .then((data) => (dataSource.value = data))
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
+      } else {
+        api
+          .listarFuenteRecurso()
+          .then((data) => (dataSource.value = data))
+          .catch(function (e) {
+            mensajeAlerta.value = e;
+          });
+      }
     };
 
     listar();
 
     const seleccionarFuenteRecurso = function (e) {
-      context.emit(
-        "seleccionarFuenteRecurso",
-        e.data.codigo
-      );
+      context.emit("seleccionarFuenteRecurso", e.data.codigo);
     };
 
     const eliminar = function (rowData) {
