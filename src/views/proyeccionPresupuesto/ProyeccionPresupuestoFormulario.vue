@@ -242,9 +242,12 @@ export default {
           });
       } else {
         api
-          .insertarProyeccionPresupuesto(proyeccionPresupuesto)
+          .actualizarProyeccionPresupuesto(proyeccionPresupuesto)
           .then(() => {
-            store.commit("mostrarInformacion", "registro insertado con exito");
+            store.commit(
+              "mostrarInformacion",
+              "registro actualizado con exito"
+            );
           })
           .catch((e) => {
             store.commit("mostrarError", e);
@@ -274,6 +277,9 @@ export default {
         .then(() => {
           store.commit("mostrarInformacion", "registro insertado con exito");
           consultarProyeccionPresupuesto();
+          fuenteRecursoCodigo.value = "";
+          rubroPresupuestoCodigo.value = "";
+          valor.value = 0;
         })
         .catch(() => {
           store.commit(
@@ -320,22 +326,22 @@ export default {
       }
     };
 
-    const eliminarProyeccionPresupuestoDetalle = function () {
+    const eliminarProyeccionPresupuestoDetalle = function (rowData) {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
-        /*
         api
-          .eliminarProyeccionPresupuesto(
+          .eliminarProyeccionPresupuestoDetalle(
             periodoCodigo.value,
-            institucionEducativaCodigo.value
+            institucionEducativaCodigo.value,
+            rowData.row.values[0],
+            rowData.row.values[2]
           )
           .then(() => {
-            nuevo();
+            consultarProyeccionPresupuesto();
           })
           .catch((e) => {
             store.commit("mostrarError", e);
           });
-          */
       }
     };
 

@@ -104,7 +104,11 @@ export default {
             store.commit("mostrarInformacion", "registro insertado con exito");
           })
           .catch(()=> {
-            store.commit("mostrarError", "Solo puede existir una fuente de recurso raiz");
+            if(fuenteRecursoCodigoPadre.value){
+              store.commit("mostrarError", "Si la fuente de recurso esta asociado a una proyección presupuestal, no puede crearle hijos");
+            }else{
+              store.commit("mostrarError", "Solo puede existir una fuente de recurso raiz");
+            }            
           });
       } else {
         api

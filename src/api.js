@@ -616,13 +616,42 @@ const insertarProyeccionPresupuesto = function (proyeccionPresupuesto) {
     });
 };
 
+const actualizarProyeccionPresupuesto = function (proyeccionPresupuesto) {
+  return fetch(
+    `${url}/proyeccionpresupuestalcabecera/?codigoperiodo=${proyeccionPresupuesto.periodoid.codigo}&codigoinstitucioneducativa=${proyeccionPresupuesto.institucioneducativaid.codigo}`,
+  {
+    method: "PUT",
+    body: JSON.stringify(proyeccionPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const insertarProyeccionPresupuestoDetalle = function (proyeccionPresupuestoDetalle) {
-  console.log(proyeccionPresupuestoDetalle)
   return fetch(`${url}/proyeccionpresupuestaldetalle/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuestoDetalle),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarProyeccionPresupuestoDetalle = function (
+  periodoCodigo,
+  institucionEducativaCodigo,
+  fuenteRecursoCodigo,
+  rubroPresupuestoCodigo,
+) {
+  return fetch(
+    `${url}/proyeccionpresupuestaldetalle/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    { method: "DELETE" }
+  )
     .then(manejarError)
     .catch(function (e) {
       throw e;
@@ -687,5 +716,7 @@ export default {
   consultarProyeccionPresupuesto,
   eliminarProyeccionPresupuesto,
   insertarProyeccionPresupuesto,
+  actualizarProyeccionPresupuesto,
   insertarProyeccionPresupuestoDetalle,
+  eliminarProyeccionPresupuestoDetalle,
 };

@@ -94,8 +94,8 @@ export default {
         idpadre: { codigo: rubroPresupuestoCodigoPadre.value },
       };
 
-      if (!rubroPresupuestoCodigoPadre.value){
-        delete rubroPresupuesto['idpadre'];
+      if (!rubroPresupuestoCodigoPadre.value) {
+        delete rubroPresupuesto["idpadre"];
       }
 
       if (esNuevo.value) {
@@ -104,8 +104,18 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro insertado con exito")
           )
-          .catch(()=> {
-            store.commit("mostrarError", "Solo puede exixtir un rubro presupuesto raiz");
+          .catch(() => {
+            if (rubroPresupuestoCodigoPadre.value) {
+              store.commit(
+                "mostrarError",
+                "Si el rubro presupuesto esta asociado a una proyección presupuestal, no puede crearle hijos"
+              );
+            } else {
+              store.commit(
+                "mostrarError",
+                "Solo puede exixtir un rubro presupuesto raiz"
+              );
+            }
           });
       } else {
         api
@@ -113,7 +123,7 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro actualizado con exito")
           )
-          .catch( ()=> {
+          .catch(() => {
             store.commit("mostrarError", "Ingrese un código padre válido");
           });
       }
