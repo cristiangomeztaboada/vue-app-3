@@ -123,7 +123,7 @@ export default {
     listar();
 
     const seleccionarIngresoPresupuesto = function (e) {
-      context.emit("seleccionarIngresoPresupuesto", e.data.codigo);
+      context.emit("seleccionarIngresoPresupuesto", e.data.consecutivo);
     };
 
     const eliminar = function (rowData) {

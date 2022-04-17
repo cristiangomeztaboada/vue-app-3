@@ -18,26 +18,33 @@
             Actualizar Ingreso Presupuesto
           </h5>
 
-          <label>Institución Educativa</label>
-          <input
-            v-model="institucionEducativaCodigo"
-            class="form-control"
-            type="text"
-            readonly
-          />
-          <label>Consecutivo</label>
-          <input
-            v-model="consecutivo"
-            class="form-control"
-            type="text"
-            readonly
-          />
-          <!--
-          <personal-planta-buscador
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Institución Educativa Código</label>
+              <input
+                v-model="institucionEducativaCodigo"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Institución Educativa Nombre</label>
+              <input
+                v-model="institucionEducativaNombre"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
+          </div>
+
+          <label>Consecutivo</label>          
+          <ingreso-presupuesto-buscador
             v-on:perderFoco="consultarIngresoPresupuesto"
-            v-bind:codigoPropiedad="codigo"
+            v-bind:codigoPropiedad="consecutivo"
           />
-          -->
+
           <label>Fecha</label>
           <input class="form-control" v-model="fecha" type="date" id="fecha" />
 
@@ -74,7 +81,7 @@
 </template>
 
 <script>
-//import IngresoPresupuestoBuscador from "./IngresoPresupuestoBuscador.vue";
+import IngresoPresupuestoBuscador from "./IngresoPresupuestoBuscador.vue";
 import TerceroBuscador from "@/views/tercero/TerceroBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
@@ -86,7 +93,7 @@ import DxSelectBox from "devextreme-vue/select-box";
 export default {
   name: "IngresoPresupuestoFormulario",
   components: {
-    //IngresoPresupuestoBuscador,
+    IngresoPresupuestoBuscador,
     TerceroBuscador,
     BarraBotones,
     DxSelectBox,
@@ -94,6 +101,7 @@ export default {
   setup() {
     const esNuevo = ref(true);
     const institucionEducativaCodigo = ref("");
+    const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
     const fecha = ref("");
     const fechaProyeccionRecaudo = ref("");
@@ -105,6 +113,8 @@ export default {
     const route = new useRoute();
     const router = useRouter();
     const store = useStore();
+
+    institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
     const listarTipoIdentificacion = function () {
       api
@@ -238,6 +248,7 @@ export default {
     return {
       esNuevo,
       institucionEducativaCodigo,
+      institucionEducativaNombre,
       consecutivo,
       fecha,
       fechaProyeccionRecaudo,

@@ -14,14 +14,14 @@
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#modalPersonalPlanta"
+            data-bs-target="#modalIngresoPresupuesto"
           >
             🔎
           </button>
         </div>
       </div>
     </div>
-    <div class="modal" id="modalPersonalPlanta" tabindex="-1">
+    <div class="modal" id="modalIngresoPresupuesto" tabindex="-1">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -34,10 +34,10 @@
             ></button>
           </div>
           <div class="modal-body">
-            <personal-planta-grid
+            <ingreso-presupuesto-grid
               v-bind:mostrarColumnaBotones="false"
-              v-on:seleccionarPersonalPlanta="
-                recibirPersonalPlantaSeleccionado
+              v-on:seleccionarIngresoPresupuesto="
+                recibirIngresoPresupuestoSeleccionado
               "
             />
           </div>
@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import PersonalPlantaGrid from "@/views/personalPlanta/PersonalPlantaGrid.vue";
+import IngresoPresupuestoGrid from "@/views/ingresoPresupuesto/IngresoPresupuestoGrid.vue";
 import $ from "jquery";
 import { ref, watch } from "vue";
 
 export default {
-  name: "PersonalPlantaBuscador",
+  name: "IngresoPresupuestoBuscador",
   components: {
-    PersonalPlantaGrid,
+    IngresoPresupuestoGrid,
   },
   props: {
     codigoPropiedad: String,
@@ -70,20 +70,20 @@ export default {
       }
     );
 
-    const recibirPersonalPlantaSeleccionado = function (c) {
-      $("#modalPersonalPlanta").modal("hide");
+    const recibirIngresoPresupuestoSeleccionado = function (c) {
+      $("#modalIngresoPresupuesto").modal("hide");
       codigo.value = c;
       perderFoco();
     };
 
     const perderFoco = function () {
-      $("#modalPersonalPlanta").modal("hide");
+      $("#modalIngresoPresupuesto").modal("hide");
       context.emit("perderFoco", codigo.value);
     };
 
     return {
       codigo,
-      recibirPersonalPlantaSeleccionado,
+      recibirIngresoPresupuestoSeleccionado,
       perderFoco,
     };
   },
