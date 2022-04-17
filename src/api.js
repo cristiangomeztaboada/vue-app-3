@@ -619,18 +619,21 @@ const insertarProyeccionPresupuesto = function (proyeccionPresupuesto) {
 const actualizarProyeccionPresupuesto = function (proyeccionPresupuesto) {
   return fetch(
     `${url}/proyeccionpresupuestalcabecera/?codigoperiodo=${proyeccionPresupuesto.periodoid.codigo}&codigoinstitucioneducativa=${proyeccionPresupuesto.institucioneducativaid.codigo}`,
-  {
-    method: "PUT",
-    body: JSON.stringify(proyeccionPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
+    {
+      method: "PUT",
+      body: JSON.stringify(proyeccionPresupuesto),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    }
+  )
     .then(manejarError)
     .catch(function (e) {
       throw e;
     });
 };
 
-const insertarProyeccionPresupuestoDetalle = function (proyeccionPresupuestoDetalle) {
+const insertarProyeccionPresupuestoDetalle = function (
+  proyeccionPresupuestoDetalle
+) {
   return fetch(`${url}/proyeccionpresupuestaldetalle/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuestoDetalle),
@@ -646,13 +649,43 @@ const eliminarProyeccionPresupuestoDetalle = function (
   periodoCodigo,
   institucionEducativaCodigo,
   fuenteRecursoCodigo,
-  rubroPresupuestoCodigo,
+  rubroPresupuestoCodigo
 ) {
   return fetch(
     `${url}/proyeccionpresupuestaldetalle/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
     { method: "DELETE" }
   )
     .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const listarIngresoPresupuesto = function (
+  institucionEducativaCodigo,
+  periodoCodigo
+) {
+  return fetch(
+    `${url}/ingresopresupuestal/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarIngresoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {  
+  return fetch(
+    `${url}/ingresopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
     .catch(function (e) {
       throw e;
     });
@@ -719,4 +752,6 @@ export default {
   actualizarProyeccionPresupuesto,
   insertarProyeccionPresupuestoDetalle,
   eliminarProyeccionPresupuestoDetalle,
+  listarIngresoPresupuesto,
+  consultarIngresoPresupuesto,
 };

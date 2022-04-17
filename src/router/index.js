@@ -24,6 +24,8 @@ import PeriodoGrid from "@/views/periodo/PeriodoGrid.vue";
 import PeriodoFormulario from "@/views/periodo/PeriodoFormulario.vue";
 import ProyeccionPresupuestoGrid from "@/views/proyeccionPresupuesto/ProyeccionPresupuestoGrid.vue";
 import ProyeccionPresupuestoFormulario from "@/views/proyeccionPresupuesto/ProyeccionPresupuestoFormulario.vue";
+import IngresoPresupuestoGrid from "@/views/ingresoPresupuesto/IngresoPresupuestoGrid.vue";
+import IngresoPresupuestoFormulario from "@/views/ingresoPresupuesto/IngresoPresupuestoFormulario.vue";
 
 const routes = [
   {
@@ -183,6 +185,19 @@ const routes = [
     path: "/proyeccionpresupuestoformulario",
     name: "proyeccionpresupuestoformulario",
     component: ProyeccionPresupuestoFormulario,
+  },
+  {
+    path: "/ingresopresupuesto",
+    name: "ingresopresupuesto",
+    component: IngresoPresupuestoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/ingresopresupuestoformulario",
+    name: "ingresopresupuestoformulario",
+    component: IngresoPresupuestoFormulario,
   },
 ];
 
