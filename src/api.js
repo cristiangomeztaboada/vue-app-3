@@ -291,6 +291,15 @@ const listarFuenteRecurso = function () {
     });
 };
 
+const listarFuenteRecursoProyeccion = function (institucionEducativaCodigo) {
+  return fetch(`${url}/fuenterecurso/proyeccion/${institucionEducativaCodigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const listarFuenteRecursoDetalle = function () {
   return fetch(`${url}/fuenterecurso/detalle/final/`, { method: "GET" })
     .then(manejarError)
@@ -302,6 +311,15 @@ const listarFuenteRecursoDetalle = function () {
 
 const consultarFuenteRecurso = function (codigo) {
   return fetch(`${url}/fuenterecurso/${codigo}`, { method: "GET" })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarFuenteRecursoSaldo = function (institucionEducativaCodigo, fuenteRecursoCodigo) {
+  return fetch(`${url}/fuenterecurso/fuenterecursoporingreso/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -691,6 +709,35 @@ const consultarIngresoPresupuesto = function (
     });
 };
 
+const insertarIngresoPresupuesto = function (
+  proyeccionPresupuestoDetalle
+) {
+  return fetch(`${url}/ingresopresupuestal/`, {
+    method: "POST",
+    body: JSON.stringify(proyeccionPresupuestoDetalle),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarIngresoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/ingresopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -719,8 +766,10 @@ export default {
   actualizarPersonalPlanta,
   eliminarPersonalPlanta,
   listarFuenteRecurso,
+  listarFuenteRecursoProyeccion,
   listarFuenteRecursoDetalle,
   consultarFuenteRecurso,
+  consultarFuenteRecursoSaldo,
   insertarFuenteRecurso,
   actualizarFuenteRecurso,
   eliminarFuenteRecurso,
@@ -754,4 +803,6 @@ export default {
   eliminarProyeccionPresupuestoDetalle,
   listarIngresoPresupuesto,
   consultarIngresoPresupuesto,
+  insertarIngresoPresupuesto,
+  eliminarIngresoPresupuesto,
 };

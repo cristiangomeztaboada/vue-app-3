@@ -5,7 +5,7 @@
         <input
           class="form-control"
           v-model="codigo"
-          type="text"
+          type="number"
           id="codigo"
           v-on:blur="perderFoco"
         />
@@ -58,10 +58,10 @@ export default {
     IngresoPresupuestoGrid,
   },
   props: {
-    codigoPropiedad: String,
+    codigoPropiedad: Number,
   },
   setup(props, context) {
-    const codigo = ref("");
+    const codigo = ref(0);
 
     watch(
       () => props.codigoPropiedad,

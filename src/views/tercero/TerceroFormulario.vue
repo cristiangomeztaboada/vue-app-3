@@ -41,9 +41,7 @@
 
 <script>
 import TerceroBuscador from "./TerceroBuscador.vue";
-//import TipoIdentificacionBuscador from "@/views/tipoIdentificacion/TipoIdentificacionBuscador.vue";
 import DxSelectBox from "devextreme-vue/select-box";
-//import ArrayStore from "devextreme/data/array_store";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";

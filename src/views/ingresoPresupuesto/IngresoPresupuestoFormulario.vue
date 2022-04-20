@@ -8,6 +8,7 @@
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
             v-on:eliminar="eliminar"
+            v-bind:ocultarBotonGuardar="!esNuevo"
           />
         </div>
         <div class="card-body">
@@ -39,15 +40,25 @@
             </div>
           </div>
 
-          <label>Consecutivo</label>          
-          <ingreso-presupuesto-buscador
-            v-on:perderFoco="consultarIngresoPresupuesto"
-            v-bind:codigoPropiedad="consecutivo"
-          />
-
-          <label>Fecha</label>
-          <input class="form-control" v-model="fecha" type="date" id="fecha" />
-
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Consecutivo</label>
+              <ingreso-presupuesto-buscador
+                v-on:perderFoco="consultarIngresoPresupuesto"
+                v-bind:codigoPropiedad="consecutivo"
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Fecha</label>
+              <input
+                class="form-control"
+                v-model="fecha"
+                type="date"
+                id="fecha"
+                readonly
+              />
+            </div>
+          </div>
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Tipo Identificación</label>
@@ -67,13 +78,45 @@
             </div>
           </div>
 
-          <label>Fecha Proyección Recaudo</label>
-          <input
-            class="form-control"
-            v-model="fechaProyeccionRecaudo"
-            type="date"
-            id="fechaProyeccionRecaudo"
-          />
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Fecha Proyección Recaudo</label>
+              <input
+                class="form-control"
+                v-model="fechaProyeccionRecaudo"
+                type="date"
+                id="fechaProyeccionRecaudo"
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Observación</label>
+              <input v-model="observacion" class="form-control" type="text" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Fuente Recurso</label>
+              <DxSelectBox
+                :items="fuentesRecursos"
+                display-expr="nombre"
+                value-expr="codigo"
+                v-model="fuenteRecursoCodigo"
+                @value-changed="fuenteRecursoCodigoCambio"
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Saldo</label>
+              <DxNumberBox
+                v-model="fuenteRecursoSaldo"
+                format="$ #,##0.##"
+                :read-only="true"
+              />
+            </div>
+          </div>
+
+          <label>Valor</label>
+          <DxNumberBox v-model="valor" format="$ #,##0.##" />
         </div>
       </div>
     </div>
@@ -89,6 +132,7 @@ import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import DxSelectBox from "devextreme-vue/select-box";
+import DxNumberBox from "devextreme-vue/number-box";
 
 export default {
   name: "IngresoPresupuestoFormulario",
@@ -97,6 +141,7 @@ export default {
     TerceroBuscador,
     BarraBotones,
     DxSelectBox,
+    DxNumberBox,
   },
   setup() {
     const esNuevo = ref(true);
@@ -109,6 +154,10 @@ export default {
     const terceroCodigo = ref("");
     const fuenteRecursoCodigo = ref("");
     const tiposIdentificacion = ref([]);
+    const observacion = ref("");
+    const valor = ref(0);
+    const fuentesRecursos = ref([]);
+    const fuenteRecursoSaldo = ref(0);
 
     const route = new useRoute();
     const router = useRouter();
@@ -129,15 +178,38 @@ export default {
 
     listarTipoIdentificacion();
 
+    const fuenteRecursoCodigoCambio = function (e) {
+      api
+        .consultarFuenteRecursoSaldo(store.state.institucioneducativa, e.value)
+        .then((data) => {
+          fuenteRecursoSaldo.value = data;
+        })
+        .catch(() => {});
+    };
+
+    const listarFuentesRecursos = function () {
+      api
+        .listarFuenteRecursoProyeccion(store.state.institucioneducativa)
+        .then((data) => {
+          fuentesRecursos.value = data;
+        })
+        .catch(function (e) {
+          store.commit("mostrarError", e);
+        });
+    };
+
+    listarFuentesRecursos();
+
     const consultarIngresoPresupuesto = function (c) {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
         .consultarIngresoPresupuesto(store.state.institucioneducativa, c)
         .then((data) => {
-          if (data.codigo) {
+          if (data.consecutivo) {
             esNuevo.value = false;
           }
+
           institucionEducativaCodigo.value = store.state.institucioneducativa;
           consecutivo.value = data.consecutivo;
           fecha.value = data.fecha.substring(0, 10);
@@ -148,6 +220,9 @@ export default {
           terceroCodigo.value = data.terceroid.codigo;
           tipoIdentificacionCodigo.value =
             data.terceroid.tipoidentificacionid.codigo;
+          fuenteRecursoCodigo.value = data.fuenterecursoid.codigo;
+          observacion.value = data.observacion;
+          valor.value = Number(data.valor);
         })
         .catch(function () {
           nuevo();
@@ -163,26 +238,68 @@ export default {
         institucioneducativaid: { codigo: institucionEducativaCodigo.value },
         consecutivo: consecutivo.value,
         fecha: fecha.value,
-        terceroCodigo: terceroCodigo.value,
+        fechaproyeccionrecaudo: fechaProyeccionRecaudo.value,
+        terceroid: {
+          codigo: terceroCodigo.value,
+          tipoidentificacion: tipoIdentificacionCodigo.value,
+        },
+        fuenterecursoid: {
+          codigo: fuenteRecursoCodigo.value,
+        },
+        valor: valor.value,
+        observacion: observacion.value,
       };
 
       if (esNuevo.value) {
         api
           .insertarIngresoPresupuesto(ingresoPresupuesto)
-          .then(
-            store.commit("mostrarInformacion", "registro insertado con exito")
-          )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
-          });
-      } else {
-        api
-          .actualizarIngresoPresupuesto(ingresoPresupuesto)
-          .then(
-            store.commit("mostrarInformacion", "registro actualizado con exito")
-          )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .then((data) => {
+            consultarIngresoPresupuesto(data.consecutivo);
+            fuenteRecursoCodigoCambio({value:fuenteRecursoCodigo.value});
+            store.commit("mostrarInformacion", "registro insertado con exito");
+          })
+          .catch((e) => {
+            let isValidDate = Date.parse(ingresoPresupuesto.fecha);
+            if (isNaN(isValidDate)) {
+              store.commit("mostrarError", "ingrese una fecha válida");
+            }
+
+            isValidDate = Date.parse(ingresoPresupuesto.fechaproyeccionrecaudo);
+            if (isNaN(isValidDate)) {
+              store.commit(
+                "mostrarError",
+                "ingrese una fecha proyección recaudo válida"
+              );
+            }
+
+            if (!ingresoPresupuesto.terceroid.codigo) {
+              store.commit("mostrarError", "ingrese un tercero válido");
+            }
+
+            if (!ingresoPresupuesto.fuenterecursoid.codigo) {
+              store.commit(
+                "mostrarError",
+                "ingrese una fuente de recurso válida"
+              );
+            }
+
+            if (!ingresoPresupuesto.observacion) {
+              store.commit("mostrarError", "ingrese una observación válida");
+            }
+
+            if (
+              !ingresoPresupuesto.valor ||
+              Math.sign(ingresoPresupuesto.valor) != 1
+            ) {
+              store.commit("mostrarError", "ingrese un valor válido");
+            }
+
+            if (e) {
+              store.commit(
+                "mostrarError",
+                "El valor ingresado supera el saldo pendiente"
+              );
+            }
           });
       }
     };
@@ -196,18 +313,33 @@ export default {
 
     const nuevo = function () {
       store.commit("ocultarAlerta");
+
+      let hoy = new Date();
+      let fullFechaActual = `${hoy.getFullYear()}-${(hoy.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${hoy.getDate().toString().padStart(2, "0")}`;
+
       esNuevo.value = true;
       institucionEducativaCodigo.value = store.state.institucioneducativa;
-      consecutivo.value = "";
-      fecha.value = "";
+      consecutivo.value = 0;
+      fecha.value = fullFechaActual;
       terceroCodigo.value = "";
+      tipoIdentificacionCodigo.value = "";
+      fechaProyeccionRecaudo.value = "";
+      observacion.value = "";
+      fuenteRecursoCodigo.value = "";
+      valor.value = 0;
+      fuenteRecursoSaldo.value = 0;
     };
 
     const eliminar = function () {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarIngresoPresupuesto(consecutivo.value)
+          .eliminarIngresoPresupuesto(
+            store.state.institucioneducativa,
+            consecutivo.value
+          )
           .then(() =>
             router.push({
               name: "ingresopresupuesto",
@@ -236,9 +368,6 @@ export default {
       api
         .consultarTercero(c, tipoIdentificacionCodigo.value)
         .then((data) => {
-          if (data.codigo && data.tipoidentificacionid.codigo) {
-            esNuevo.value = false;
-          }
           terceroCodigo.value = data.codigo;
           tipoIdentificacionCodigo.value = data.tipoidentificacionid.codigo;
         })
@@ -256,6 +385,10 @@ export default {
       terceroCodigo,
       fuenteRecursoCodigo,
       tiposIdentificacion,
+      observacion,
+      valor,
+      fuentesRecursos,
+      fuenteRecursoSaldo,
       guardar,
       irAtras,
       nuevo,
@@ -263,6 +396,7 @@ export default {
       consultarIngresoPresupuesto,
       consultarInstitucionEducativa,
       consultarTercero,
+      fuenteRecursoCodigoCambio,
     };
   },
 };

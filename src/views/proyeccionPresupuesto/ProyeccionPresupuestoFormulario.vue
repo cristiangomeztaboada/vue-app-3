@@ -69,12 +69,7 @@
                 </div>
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                   <label>Valor</label>
-                  <input
-                    class="form-control"
-                    v-model="valor"
-                    type="number"
-                    id="valor"
-                  />
+                  <DxNumberBox v-model="valor" format="$ #,##0.##" />
                 </div>
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                   <br />
@@ -156,6 +151,7 @@ import {
 } from "devextreme-vue/data-grid";
 import FuenteRecursoBuscador from "@/views/fuenteRecurso/FuenteRecursoBuscador.vue";
 import RubroPresupuestoBuscador from "@/views/rubroPresupuesto/RubroPresupuestoBuscador.vue";
+import DxNumberBox from "devextreme-vue/number-box";
 
 export default {
   name: "ProyeccionPresupuestoFormulario",
@@ -168,6 +164,7 @@ export default {
     DxEditing,
     FuenteRecursoBuscador,
     RubroPresupuestoBuscador,
+    DxNumberBox,
   },
   setup() {
     const esNuevo = ref(true);
@@ -339,8 +336,8 @@ export default {
           .then(() => {
             consultarProyeccionPresupuesto();
           })
-          .catch((e) => {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit("mostrarError", "Existen documentos de ingreso presupuestal con esta fuente asociada");
           });
       }
     };

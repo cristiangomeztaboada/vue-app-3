@@ -9,7 +9,7 @@
         ⬅️
       </button>
     </li>
-    <li class="nav-item">
+    <li v-if="ocultarBotonGuardar ? false : true" class="nav-item">
       <button
         type="button"
         class="btn btn-outline-primary"
@@ -42,6 +42,7 @@ export default {
   props: {
     ocultarBotonAtras: Boolean,
     ocultarBotonNuevo: Boolean,
+    ocultarBotonGuardar: Boolean,
   },
   setup(props, context) {
     const guardar = function () {

@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
@@ -34,7 +31,11 @@
             data-field="institucioneducativaid.nombre"
             caption="Institución Educativa"
           />
-          <DxColumn data-field="consecutivo" :sort-index="0" sort-order="desc" />
+          <DxColumn
+            data-field="consecutivo"
+            :sort-index="0"
+            sort-order="desc"
+          />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
           <DxColumn data-field="terceroid.nombre" caption="Tercero" />
           <DxColumn
@@ -46,7 +47,12 @@
             caption="Fuente Recurso Nombre"
           />
           <DxColumn data-field="observacion" />
-          <DxColumn data-field="valor" />
+          <DxColumn
+            data-field="valor"
+            data-type="number"
+            format="currency"
+            alignment="right"
+          />
           <DxColumn
             data-field="fechaproyeccionrecaudo"
             caption="Fecha Proyección Recaudo"
@@ -65,7 +71,6 @@
   </div>
 </template>
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import {
   DxDataGrid,
   DxSearchPanel,
@@ -88,7 +93,6 @@ export default {
     DxColumn,
     DxButton,
     DxEditing,
-    ComponenteAlerta,
   },
   setup(props, context) {
     const dataSource = ref([]);
@@ -97,6 +101,7 @@ export default {
     const store = useStore();
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "ingresopresupuestoformulario",
         params: { codigo: "" },
@@ -104,6 +109,7 @@ export default {
     };
 
     const listar = function () {
+      store.commit("ocultarAlerta");
       api
         .listarPeriodoActivos()
         .then((data) => {
@@ -123,21 +129,27 @@ export default {
     listar();
 
     const seleccionarIngresoPresupuesto = function (e) {
+      store.commit("ocultarAlerta");
       context.emit("seleccionarIngresoPresupuesto", e.data.consecutivo);
     };
 
     const eliminar = function (rowData) {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarIngresoPresupuesto(rowData.row.values[0])
+          .eliminarIngresoPresupuesto(
+            store.state.institucioneducativa,
+            rowData.row.values[1]
+          )
           .then(() => listar())
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       }
     };
 
     const editar = function (rowData) {
+      store.commit("ocultarAlerta");
       router.push({
         name: "ingresopresupuestoformulario",
         params: { codigo: rowData.row.values[1] },

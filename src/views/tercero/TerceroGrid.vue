@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
@@ -44,7 +41,6 @@
   </div>
 </template>
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import {
   DxDataGrid,
   DxSearchPanel,
@@ -55,6 +51,7 @@ import {
 import api from "@/api.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   props: {
@@ -66,14 +63,15 @@ export default {
     DxColumn,
     DxButton,
     DxEditing,
-    ComponenteAlerta,
   },
   setup(props, context) {
     const dataSource = ref([]);
     const mensajeAlerta = ref("");
     const router = useRouter();
+    const store = useStore();
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "terceroformulario",
         params: { codigo: "" },
@@ -81,17 +79,19 @@ export default {
     };
 
     const listar = function () {
+      store.commit("ocultarAlerta");
       api
         .listarTercero()
         .then((data) => (dataSource.value = data))
         .catch(function (e) {
-          mensajeAlerta.value = e;
+          store.commit("mostrarError", e);
         });
     };
 
     listar();
 
     const seleccionarTercero = function (e) {
+      store.commit("ocultarAlerta");
       context.emit(
         "seleccionarTercero",
         e.data.codigo
@@ -99,17 +99,19 @@ export default {
     };
 
     const eliminar = function (rowData) {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarTercero(rowData.row.values[1], rowData.row.values[0])
           .then(() => listar())
           .catch(function (e) {
-            mensajeAlerta.value = e;
+            store.commit("mostrarError", e);
           });
       }
     };
 
     const editar = function (rowData) {
+      store.commit("ocultarAlerta");
       router.push({
         name: "terceroformulario",
         params: {codigo: rowData.row.values[1], tipoIdentificacionCodigo:rowData.row.values[0]},
