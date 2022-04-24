@@ -167,6 +167,14 @@
                   Ingreso Presupuesto
                 </router-link>
               </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'recaudopresupuesto' }"
+                >
+                  Recaudo Presupuesto
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>

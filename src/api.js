@@ -709,12 +709,27 @@ const consultarIngresoPresupuesto = function (
     });
 };
 
+const consultarIngresoPresupuestoSaldo = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {  
+  return fetch(
+    `${url}/ingresopresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const insertarIngresoPresupuesto = function (
-  proyeccionPresupuestoDetalle
+  ingresoPresupuestoDetalle
 ) {
   return fetch(`${url}/ingresopresupuestal/`, {
     method: "POST",
-    body: JSON.stringify(proyeccionPresupuestoDetalle),
+    body: JSON.stringify(ingresoPresupuestoDetalle),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
     .then(manejarError)
@@ -733,6 +748,64 @@ const eliminarIngresoPresupuesto = function (
     { method: "DELETE" }
   )
     .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const listarRecaudoPresupuesto = function (
+  institucionEducativaCodigo
+) {
+  return fetch(
+    `${url}/recaudopresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarRecaudoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {  
+  return fetch(
+    `${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarRecaudoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarRecaudoPresupuesto = function (
+  recaudoPresupuestoDetalle
+) {
+  return fetch(`${url}/recaudopresupuestal/`, {
+    method: "POST",
+    body: JSON.stringify(recaudoPresupuestoDetalle),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
     .catch(function (e) {
       throw e;
     });
@@ -803,6 +876,11 @@ export default {
   eliminarProyeccionPresupuestoDetalle,
   listarIngresoPresupuesto,
   consultarIngresoPresupuesto,
+  consultarIngresoPresupuestoSaldo,
   insertarIngresoPresupuesto,
   eliminarIngresoPresupuesto,
+  listarRecaudoPresupuesto,
+  consultarRecaudoPresupuesto,
+  eliminarRecaudoPresupuesto,
+  insertarRecaudoPresupuesto,
 };

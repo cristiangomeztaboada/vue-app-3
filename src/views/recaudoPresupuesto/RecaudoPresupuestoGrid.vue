@@ -4,7 +4,7 @@
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
         <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
-            <h1 class="display-6">Ingreso Presupuesto</h1>
+            <h1 class="display-6">Recaudo Presupuesto</h1>
           </div>
           <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
             <button
@@ -22,7 +22,7 @@
           key-expr="id"
           :show-borders="true"
           :selection="{ mode: 'single' }"
-          @row-click="seleccionarIngresoPresupuesto"
+          @row-click="seleccionarRecaudoPresupuesto"
           :showRowLines="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
@@ -37,14 +37,14 @@
             sort-order="desc"
           />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
-          <DxColumn data-field="terceroid.nombre" caption="Tercero" />
+          <DxColumn data-field="ingresopresupuestalid.consecutivo" caption="Ingreso Presupuesto" />
           <DxColumn
-            data-field="fuenterecursoid.codigo"
-            caption="Fuente Recurso Código"
+            data-field="tiporecaudoid.nombre"
+            caption="Tipo Recaudo"
           />
           <DxColumn
-            data-field="fuenterecursoid.nombre"
-            caption="Fuente Recurso Nombre"
+            data-field="documentorecaudo"
+            caption="Documento Recaudo"
           />
           <DxColumn data-field="observacion" />
           <DxColumn
@@ -52,12 +52,6 @@
             data-type="number"
             format="currency"
             alignment="right"
-          />
-          <DxColumn
-            data-field="fechaproyeccionrecaudo"
-            caption="Fecha Proyección Recaudo"
-            data-type="date"
-            format="yyyy/MM/dd"
           />
 
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
@@ -103,7 +97,7 @@ export default {
     const nuevo = function () {
       store.commit("ocultarAlerta");
       router.push({
-        name: "ingresopresupuestoformulario",
+        name: "recaudopresupuestoformulario",
         params: { codigo: "" },
       });
     };
@@ -111,42 +105,33 @@ export default {
     const listar = function () {
       store.commit("ocultarAlerta");
       api
-        .listarPeriodoActivos()
+        .listarRecaudoPresupuesto(
+          store.state.institucioneducativa
+        )
         .then((data) => {
-          api
-            .listarIngresoPresupuesto(
-              store.state.institucioneducativa,
-              data[0].codigo
-            )
-            .then((data) => {
-              dataSource.value = data;
-            })
-            .catch(() => {});
+          dataSource.value = data;
         })
         .catch(() => {});
     };
 
     listar();
 
-    const seleccionarIngresoPresupuesto = function (e) {
+    const seleccionarRecaudoPresupuesto = function (e) {
       store.commit("ocultarAlerta");
-      context.emit("seleccionarIngresoPresupuesto", e.data.consecutivo);
+      context.emit("seleccionarRecaudoPresupuesto", e.data.consecutivo);
     };
 
     const eliminar = function (rowData) {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarIngresoPresupuesto(
+          .eliminarRecaudoPresupuesto(
             store.state.institucioneducativa,
             rowData.row.values[1]
           )
           .then(() => listar())
-          .catch(() => {
-            store.commit(
-              "mostrarError",
-              "Existen documentos de recaudo presupuestal relacionados"
-            );
+          .catch(function (e) {
+            store.commit("mostrarError", e);
           });
       }
     };
@@ -154,7 +139,7 @@ export default {
     const editar = function (rowData) {
       store.commit("ocultarAlerta");
       router.push({
-        name: "ingresopresupuestoformulario",
+        name: "recaudopresupuestoformulario",
         params: { codigo: rowData.row.values[1] },
       });
     };
@@ -162,7 +147,7 @@ export default {
     return {
       mensajeAlerta,
       dataSource,
-      seleccionarIngresoPresupuesto,
+      seleccionarRecaudoPresupuesto,
       eliminar,
       editar,
       nuevo,
