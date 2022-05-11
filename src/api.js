@@ -811,6 +811,35 @@ const insertarRecaudoPresupuesto = function (
     });
 };
 
+const listarSolicitudPresupuesto = function (
+  institucionEducativaCodigo
+) {
+  return fetch(
+    `${url}/solicitudpresupuestalcabecera/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarSolicitudPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {  
+  return fetch(
+    `${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -883,4 +912,6 @@ export default {
   consultarRecaudoPresupuesto,
   eliminarRecaudoPresupuesto,
   insertarRecaudoPresupuesto,
+  listarSolicitudPresupuesto,
+  consultarSolicitudPresupuesto,
 };

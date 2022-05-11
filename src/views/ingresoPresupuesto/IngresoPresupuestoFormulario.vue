@@ -8,7 +8,9 @@
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
             v-on:eliminar="eliminar"
+            v-on:imprimir="imprimir"
             v-bind:ocultarBotonGuardar="!esNuevo"
+            v-bind:mostrarBotonImprimir="!esNuevo"
           />
         </div>
         <div class="card-body">
@@ -18,6 +20,111 @@
           <h5 v-if="!esNuevo" class="card-title">
             Actualizar Ingreso Presupuesto
           </h5>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Institución Educativa Código</label>
+              <input
+                v-model="institucionEducativaCodigo"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Institución Educativa Nombre</label>
+              <input
+                v-model="institucionEducativaNombre"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Consecutivo</label>
+              <ingreso-presupuesto-buscador
+                v-on:perderFoco="consultarIngresoPresupuesto"
+                v-bind:codigoPropiedad="consecutivo"
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Fecha</label>
+              <input
+                class="form-control"
+                v-model="fecha"
+                type="date"
+                id="fecha"
+                readonly
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Tipo Identificación</label>
+              <DxSelectBox
+                :items="tiposIdentificacion"
+                display-expr="nombre"
+                value-expr="codigo"
+                v-model="tipoIdentificacionCodigo"
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Tercero</label>
+              <tercero-buscador
+                v-on:perderFoco="consultarTercero"
+                v-bind:codigoPropiedad="terceroCodigo"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Fecha Proyección Recaudo</label>
+              <input
+                class="form-control"
+                v-model="fechaProyeccionRecaudo"
+                type="date"
+                id="fechaProyeccionRecaudo"
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Observación</label>
+              <input v-model="observacion" class="form-control" type="text" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Fuente Recurso</label>
+              <DxSelectBox
+                :items="fuentesRecursos"
+                display-expr="nombre"
+                value-expr="codigo"
+                v-model="fuenteRecursoCodigo"
+                @value-changed="fuenteRecursoCodigoCambio"
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Saldo</label>
+              <DxNumberBox
+                v-model="fuenteRecursoSaldo"
+                format="$ #,##0.##"
+                :read-only="true"
+              />
+            </div>
+          </div>
+
+          <label>Valor</label>
+          <DxNumberBox v-model="valor" format="$ #,##0.##" />
+        </div>
+
+        <div v-show="imprimiendo" id="pdf" class="card-body">
+          <h5 class="card-title">
+            Ingreso Presupuesto
+          </h5>          
 
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -133,6 +240,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import DxSelectBox from "devextreme-vue/select-box";
 import DxNumberBox from "devextreme-vue/number-box";
+import html2pdf from "html2pdf.js";
 
 export default {
   name: "IngresoPresupuestoFormulario",
@@ -158,6 +266,7 @@ export default {
     const valor = ref(0);
     const fuentesRecursos = ref([]);
     const fuenteRecursoSaldo = ref(0);
+    const imprimiendo = ref(false);
 
     const route = new useRoute();
     const router = useRouter();
@@ -255,7 +364,7 @@ export default {
           .insertarIngresoPresupuesto(ingresoPresupuesto)
           .then((data) => {
             consultarIngresoPresupuesto(data.consecutivo);
-            fuenteRecursoCodigoCambio({value:fuenteRecursoCodigo.value});
+            fuenteRecursoCodigoCambio({ value: fuenteRecursoCodigo.value });
             store.commit("mostrarInformacion", "registro insertado con exito");
           })
           .catch((e) => {
@@ -311,6 +420,20 @@ export default {
       });
     };
 
+    const imprimir = function () {
+      try {
+        imprimiendo.value = true;
+        store.commit("ocultarAlerta");
+        const element = document.getElementById("pdf");
+        html2pdf().from(element).save();
+        setTimeout(() => {
+          imprimiendo.value = false;
+        }, 0);
+      } catch (e) {
+        imprimiendo.value = false;
+      }      
+    };
+
     const nuevo = function () {
       store.commit("ocultarAlerta");
 
@@ -345,8 +468,11 @@ export default {
               name: "ingresopresupuesto",
             })
           )
-          .catch(()=> {
-            store.commit("mostrarError", "Existen documentos de recaudo presupuestal relacionados");
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Existen documentos de recaudo presupuestal relacionados"
+            );
           });
       }
     };
@@ -384,6 +510,8 @@ export default {
       consultarIngresoPresupuesto,
       consultarTercero,
       fuenteRecursoCodigoCambio,
+      imprimir,
+      imprimiendo,
     };
   },
 };

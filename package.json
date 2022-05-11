@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "devextreme": "^21.2.5",
     "devextreme-vue": "^21.2.5",
+    "html2pdf.js": "^0.10.1",
     "jquery": "^3.6.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.12",

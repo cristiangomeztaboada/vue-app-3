@@ -28,6 +28,8 @@ import IngresoPresupuestoGrid from "@/views/ingresoPresupuesto/IngresoPresupuest
 import IngresoPresupuestoFormulario from "@/views/ingresoPresupuesto/IngresoPresupuestoFormulario.vue";
 import RecaudoPresupuestoGrid from "@/views/recaudoPresupuesto/RecaudoPresupuestoGrid.vue";
 import RecaudoPresupuestoFormulario from "@/views/recaudoPresupuesto/RecaudoPresupuestoFormulario.vue";
+import SolicitudPresupuestoGrid from "@/views/solicitudPresupuesto/SolicitudPresupuestoGrid.vue";
+import SolicitudPresupuestoFormulario from "@/views/solicitudPresupuesto/SolicitudPresupuestoFormulario.vue";
 
 const routes = [
   {
@@ -213,6 +215,19 @@ const routes = [
     path: "/recaudopresupuestoformulario",
     name: "recaudopresupuestoformulario",
     component: RecaudoPresupuestoFormulario,
+  },
+  {
+    path: "/solicitudpresupuesto",
+    name: "solicitudpresupuesto",
+    component: SolicitudPresupuestoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/solicitudpresupuestoformulario",
+    name: "solicitudpresupuestoformulario",
+    component: SolicitudPresupuestoFormulario,
   },
 ];
 

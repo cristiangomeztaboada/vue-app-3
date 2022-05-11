@@ -9,6 +9,15 @@
         ⬅️
       </button>
     </li>
+    <li v-if="mostrarBotonImprimir ? true : false" class="nav-item">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        v-on:click="imprimir"
+      >
+        🖨️
+      </button>
+    </li>
     <li v-if="ocultarBotonGuardar ? false : true" class="nav-item">
       <button
         type="button"
@@ -43,6 +52,7 @@ export default {
     ocultarBotonAtras: Boolean,
     ocultarBotonNuevo: Boolean,
     ocultarBotonGuardar: Boolean,
+    mostrarBotonImprimir: Boolean,
   },
   setup(props, context) {
     const guardar = function () {
@@ -61,11 +71,16 @@ export default {
       context.emit("eliminar");
     };
 
+    const imprimir = function () {
+      context.emit("imprimir");
+    };
+
     return {
       guardar,
       irAtras,
       nuevo,
       eliminar,
+      imprimir,
     };
   },
 };
