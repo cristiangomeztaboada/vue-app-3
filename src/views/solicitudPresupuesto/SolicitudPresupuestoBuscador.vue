@@ -5,7 +5,7 @@
         <input
           class="form-control"
           v-model="codigo"
-          type="text"
+          type="number"
           id="codigo"
           v-on:blur="perderFoco"
         />

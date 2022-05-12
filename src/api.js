@@ -1,6 +1,14 @@
 //const url = "http://localhost:3000"; //Express
 const url = "http://127.0.0.1:8000"; //Django Rest Framework
 
+const obtenerFechaActual = function () {
+  let hoy = new Date();
+  let fullFechaActual = `${hoy.getFullYear()}-${(hoy.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${hoy.getDate().toString().padStart(2, "0")}`;
+  return fullFechaActual;
+};
+
 const manejarError = function (res) {
   if (!res.ok) {
     throw res.statusText;
@@ -292,7 +300,10 @@ const listarFuenteRecurso = function () {
 };
 
 const listarFuenteRecursoProyeccion = function (institucionEducativaCodigo) {
-  return fetch(`${url}/fuenterecurso/proyeccion/${institucionEducativaCodigo}`, { method: "GET" })
+  return fetch(
+    `${url}/fuenterecurso/proyeccion/${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -318,8 +329,14 @@ const consultarFuenteRecurso = function (codigo) {
     });
 };
 
-const consultarFuenteRecursoSaldo = function (institucionEducativaCodigo, fuenteRecursoCodigo) {
-  return fetch(`${url}/fuenterecurso/fuenterecursoporingreso/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}`, { method: "GET" })
+const consultarFuenteRecursoSaldo = function (
+  institucionEducativaCodigo,
+  fuenteRecursoCodigo
+) {
+  return fetch(
+    `${url}/fuenterecurso/fuenterecursoporingreso/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}`,
+    { method: "GET" }
+  )
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -697,7 +714,7 @@ const listarIngresoPresupuesto = function (
 const consultarIngresoPresupuesto = function (
   institucionEducativaCodigo,
   consecutivo
-) {  
+) {
   return fetch(
     `${url}/ingresopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
     { method: "GET" }
@@ -712,7 +729,7 @@ const consultarIngresoPresupuesto = function (
 const consultarIngresoPresupuestoSaldo = function (
   institucionEducativaCodigo,
   consecutivo
-) {  
+) {
   return fetch(
     `${url}/ingresopresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
     { method: "GET" }
@@ -724,9 +741,7 @@ const consultarIngresoPresupuestoSaldo = function (
     });
 };
 
-const insertarIngresoPresupuesto = function (
-  ingresoPresupuestoDetalle
-) {
+const insertarIngresoPresupuesto = function (ingresoPresupuestoDetalle) {
   return fetch(`${url}/ingresopresupuestal/`, {
     method: "POST",
     body: JSON.stringify(ingresoPresupuestoDetalle),
@@ -753,9 +768,7 @@ const eliminarIngresoPresupuesto = function (
     });
 };
 
-const listarRecaudoPresupuesto = function (
-  institucionEducativaCodigo
-) {
+const listarRecaudoPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/recaudopresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
     { method: "GET" }
@@ -770,7 +783,7 @@ const listarRecaudoPresupuesto = function (
 const consultarRecaudoPresupuesto = function (
   institucionEducativaCodigo,
   consecutivo
-) {  
+) {
   return fetch(
     `${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
     { method: "GET" }
@@ -796,9 +809,7 @@ const eliminarRecaudoPresupuesto = function (
     });
 };
 
-const insertarRecaudoPresupuesto = function (
-  recaudoPresupuestoDetalle
-) {
+const insertarRecaudoPresupuesto = function (recaudoPresupuestoDetalle) {
   return fetch(`${url}/recaudopresupuestal/`, {
     method: "POST",
     body: JSON.stringify(recaudoPresupuestoDetalle),
@@ -811,9 +822,7 @@ const insertarRecaudoPresupuesto = function (
     });
 };
 
-const listarSolicitudPresupuesto = function (
-  institucionEducativaCodigo
-) {
+const listarSolicitudPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/solicitudpresupuestalcabecera/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
     { method: "GET" }
@@ -828,11 +837,69 @@ const listarSolicitudPresupuesto = function (
 const consultarSolicitudPresupuesto = function (
   institucionEducativaCodigo,
   consecutivo
-) {  
+) {
   return fetch(
     `${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
     { method: "GET" }
   )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarSolicitudPresupuestoDetalle = function (
+  institucionEducativaCodigo,
+  consecutivo,
+  rubroPresupuestoCodigo
+) {
+  return fetch(
+    `${url}/solicitudpresupuestaldetalle/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarSolicitudPresupuestoDetalle = function (
+  solicitudPresupuestoDetalle
+) {
+  return fetch(`${url}/solicitudpresupuestaldetalle/`, {
+    method: "POST",
+    body: JSON.stringify(solicitudPresupuestoDetalle),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarSolicitudPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarSolicitudPresupuesto = function (
+  solicitudPresupuesto
+) {
+  return fetch(`${url}/solicitudpresupuestalcabecera/`, {
+    method: "POST",
+    body: JSON.stringify(solicitudPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -914,4 +981,9 @@ export default {
   insertarRecaudoPresupuesto,
   listarSolicitudPresupuesto,
   consultarSolicitudPresupuesto,
+  eliminarSolicitudPresupuestoDetalle,
+  insertarSolicitudPresupuestoDetalle,
+  eliminarSolicitudPresupuesto,
+  obtenerFechaActual,
+  insertarSolicitudPresupuesto,
 };

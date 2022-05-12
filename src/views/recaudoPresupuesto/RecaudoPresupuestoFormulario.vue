@@ -208,8 +208,7 @@ export default {
           consecutivo: ingresoPresupuestoConsecutivo.value,
         },
         documentorecaudo: documentoRecaudo.value,
-      };
-      console.log(recaudoPresupuesto);
+      };      
 
       if (esNuevo.value) {
         api

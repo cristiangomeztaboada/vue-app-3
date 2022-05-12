@@ -63,10 +63,7 @@
             format="yyyy/MM/dd"
             caption="Fecha Fin Contrato"
           />
-          <DxColumn
-            data-field="contratonumero"
-            caption="Número Contrato"
-          />
+          <DxColumn data-field="contratonumero" caption="Número Contrato" />
 
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
@@ -104,7 +101,6 @@ export default {
   },
   setup(props, context) {
     const dataSource = ref([]);
-    const mensajeAlerta = ref("");
     const router = useRouter();
     const store = useStore();
 
@@ -131,12 +127,19 @@ export default {
     };
 
     const eliminar = function (rowData) {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarSolicitudPresupuesto(rowData.row.values[0])
+          .eliminarSolicitudPresupuesto(
+            store.state.institucioneducativa,
+            rowData.row.values[1]
+          )
           .then(() => listar())
-          .catch(function (e) {
-            mensajeAlerta.value = e;
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Primero debe eliminar los registros de detalle del documento"
+            );
           });
       }
     };
@@ -149,7 +152,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       dataSource,
       seleccionarSolicitudPresupuesto,
       eliminar,
