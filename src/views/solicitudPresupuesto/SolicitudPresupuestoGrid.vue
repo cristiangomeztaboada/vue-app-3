@@ -123,7 +123,7 @@ export default {
     listar();
 
     const seleccionarSolicitudPresupuesto = function (e) {
-      context.emit("seleccionarSolicitudPresupuesto", e.data.codigo);
+      context.emit("seleccionarSolicitudPresupuesto", e.data.consecutivo);
     };
 
     const eliminar = function (rowData) {

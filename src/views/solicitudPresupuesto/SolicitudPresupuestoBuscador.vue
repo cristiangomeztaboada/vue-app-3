@@ -58,7 +58,7 @@ export default {
     SolicitudPresupuestoGrid,
   },
   props: {
-    codigoPropiedad: String,
+    codigoPropiedad: Number,
   },
   setup(props, context) {
     const codigo = ref("");

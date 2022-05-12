@@ -313,7 +313,7 @@ export default {
 
     listarTipoIdentificacion();
 
-    const consultarSolicitudPresupuesto = function (c) {
+    const consultarSolicitudPresupuesto = function (c) {      
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
@@ -421,7 +421,7 @@ export default {
           }
 
           if (!solicitado.value) {
-            store.commit("mostrarError", "ingrese un 'solicitado a' válido");
+            store.commit("mostrarError", "ingrese un solicitado válido");
           }
 
           if (!solicitante.value) {
@@ -469,6 +469,12 @@ export default {
       solicitante.value = "";
       solicitado.value = "";
       tipoIdentificacionCodigo.value = "";
+      terceroCodigo.value="";
+      tipoContratoCodigo.value="";
+      fechaInicioContrato.value="";
+      fechaFinContrato.value="";
+      contratoNumero.value="";
+      solicitudPresupuestoDetalle.value=[];
     };
 
     const eliminar = function () {
