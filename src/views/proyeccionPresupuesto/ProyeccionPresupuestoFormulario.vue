@@ -337,7 +337,7 @@ export default {
             consultarProyeccionPresupuesto();
           })
           .catch(() => {
-            store.commit("mostrarError", "Existen documentos de ingreso presupuestal con esta fuente asociada");
+            store.commit("mostrarError", "Existe ingreso presupuestal con esta fuente asociada ó existe solicitud presupuestal con este rubro asociado");
           });
       }
     };

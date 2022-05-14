@@ -892,14 +892,41 @@ const eliminarSolicitudPresupuesto = function (
     });
 };
 
-const insertarSolicitudPresupuesto = function (
-  solicitudPresupuesto
-) {
+const insertarSolicitudPresupuesto = function (solicitudPresupuesto) {
   return fetch(`${url}/solicitudpresupuestalcabecera/`, {
     method: "POST",
     body: JSON.stringify(solicitudPresupuesto),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarRubroPresupuestoSaldo = function (
+  institucionEducativaCodigo,
+  rubroPresupuestoCodigo
+) {
+  return fetch(
+    `${url}/rubropresupuestal/detalle/saldoporproyeccion/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const listarRubroPresupuestoProyeccion = function (institucionEducativaCodigo) {
+  return fetch(
+    `${url}/rubropresupuestal/detalle/proyectados/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    {
+      method: "GET",
+    }
+  )
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -986,4 +1013,6 @@ export default {
   eliminarSolicitudPresupuesto,
   obtenerFechaActual,
   insertarSolicitudPresupuesto,
+  consultarRubroPresupuestoSaldo,
+  listarRubroPresupuestoProyeccion,
 };

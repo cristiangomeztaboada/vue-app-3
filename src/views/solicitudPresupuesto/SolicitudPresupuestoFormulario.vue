@@ -150,11 +150,23 @@
                     display-expr="nombre"
                     value-expr="codigo"
                     v-model="rubroPresupuestoCodigo"
+                    @value-changed="consultarRubroPresupuestoSaldo"
+                  />
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                  <label>Saldo</label>
+                  <DxNumberBox
+                    v-model="rubroPresupuestoSaldo"
+                    format="$ #,##0.##"
+                    :read-only="true"
                   />
                 </div>
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                   <label>Valor</label>
-                  <DxNumberBox v-model="valor" format="$ #,##0.##" />
+                  <DxNumberBox
+                    v-model="rubroPresupuestovalor"
+                    format="$ #,##0.##"
+                  />
                 </div>
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                   <br />
@@ -266,13 +278,14 @@ export default {
     const contratoNumero = ref("");
     const listaPersonalPlanta = ref([]);
     const listaRubroPresupuesto = ref([]);
+    const rubroPresupuestoSaldo = ref(0);
 
     const store = useStore();
 
     const solicitudPresupuestoDetalle = ref([]);
 
     const rubroPresupuestoCodigo = ref("");
-    const valor = ref(0);
+    const rubroPresupuestovalor = ref(0);
 
     const route = new useRoute();
     const router = useRouter();
@@ -280,16 +293,16 @@ export default {
     institucionEducativaCodigo.value = store.state.institucioneducativa;
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
-    const listarRubroPresupuesto = function () {
+    const listarRubroPresupuestoProyeccion = function () {
       api
-        .listarRubroPresupuestoDetalle()
+        .listarRubroPresupuestoProyeccion(institucionEducativaCodigo.value)
         .then((data) => {
           listaRubroPresupuesto.value = data;
         })
         .catch(() => {});
     };
 
-    listarRubroPresupuesto();
+    listarRubroPresupuestoProyeccion();
 
     const listarPersonalPlanta = function () {
       api
@@ -313,7 +326,7 @@ export default {
 
     listarTipoIdentificacion();
 
-    const consultarSolicitudPresupuesto = function (c) {      
+    const consultarSolicitudPresupuesto = function (c) {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
@@ -441,7 +454,7 @@ export default {
         rubropresupuestalid: {
           codigo: rubroPresupuestoCodigo.value,
         },
-        valor: Math.abs(valor.value),
+        valor: Math.abs(rubroPresupuestovalor.value),
       };
 
       api
@@ -450,12 +463,13 @@ export default {
           store.commit("mostrarInformacion", "registro insertado con exito");
           consultarSolicitudPresupuesto(consecutivo.value);
           rubroPresupuestoCodigo.value = "";
-          valor.value = 0;
+          rubroPresupuestoSaldo.value = 0;
+          rubroPresupuestovalor.value = 0;
         })
         .catch(() => {
           store.commit(
             "mostrarError",
-            "Guarde primero la cabecera de la solicitud, e ingrese un rubro y valor válido; asegurese que el monto "
+            "1)Guarde primero la cabecera de la solicitud. 2)Ingrese un rubro y valor válido. 3)Asegurese que el monto solicitado por rubro no supera al montro proyectado 4)El rubro no se puede repetir para la misma solicitud"
           );
         });
     };
@@ -469,12 +483,14 @@ export default {
       solicitante.value = "";
       solicitado.value = "";
       tipoIdentificacionCodigo.value = "";
-      terceroCodigo.value="";
-      tipoContratoCodigo.value="";
-      fechaInicioContrato.value="";
-      fechaFinContrato.value="";
-      contratoNumero.value="";
-      solicitudPresupuestoDetalle.value=[];
+      terceroCodigo.value = "";
+      tipoContratoCodigo.value = "";
+      fechaInicioContrato.value = "";
+      fechaFinContrato.value = "";
+      contratoNumero.value = "";
+      solicitudPresupuestoDetalle.value = [];
+      rubroPresupuestoCodigo.value = "";
+      rubroPresupuestoSaldo.value = 0;
     };
 
     const eliminar = function () {
@@ -549,6 +565,18 @@ export default {
         });
     };
 
+    const consultarRubroPresupuestoSaldo = function (e) {
+      api
+        .consultarRubroPresupuestoSaldo(
+          institucionEducativaCodigo.value,
+          e.value
+        )
+        .then((data) => {
+          rubroPresupuestoSaldo.value = data;
+        })
+        .catch(() => {});
+    };
+
     return {
       esNuevo,
       institucionEducativaCodigo,
@@ -567,9 +595,10 @@ export default {
       contratoNumero,
       solicitudPresupuestoDetalle,
       rubroPresupuestoCodigo,
-      valor,
+      rubroPresupuestovalor,
       listaPersonalPlanta,
       listaRubroPresupuesto,
+      rubroPresupuestoSaldo,
 
       guardar,
       eliminar,
@@ -581,7 +610,8 @@ export default {
       consultarTercero,
       consultarTipoContrato,
       listarPersonalPlanta,
-      listarRubroPresupuesto,
+      listarRubroPresupuestoProyeccion,
+      consultarRubroPresupuestoSaldo,
     };
   },
 };
