@@ -183,6 +183,14 @@
                   Solicitud Presupuesto
                 </router-link>
               </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'certificadopresupuesto' }"
+                >
+                  Certificado Disponibilidad Presupuesto
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>

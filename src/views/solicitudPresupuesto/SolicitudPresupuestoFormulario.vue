@@ -393,7 +393,7 @@ export default {
         .catch((e) => {
           store.commit("mostrarError", e);
 
-          if (!observacion.value) {
+          if (!contratoNumero.value) {
             store.commit(
               "mostrarError",
               "ingrese un número de contrato válido"

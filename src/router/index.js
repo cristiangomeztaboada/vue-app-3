@@ -30,6 +30,8 @@ import RecaudoPresupuestoGrid from "@/views/recaudoPresupuesto/RecaudoPresupuest
 import RecaudoPresupuestoFormulario from "@/views/recaudoPresupuesto/RecaudoPresupuestoFormulario.vue";
 import SolicitudPresupuestoGrid from "@/views/solicitudPresupuesto/SolicitudPresupuestoGrid.vue";
 import SolicitudPresupuestoFormulario from "@/views/solicitudPresupuesto/SolicitudPresupuestoFormulario.vue";
+import CertificadoPresupuestoGrid from "@/views/certificadoPresupuesto/CertificadoPresupuestoGrid.vue";
+import CertificadoPresupuestoFormulario from "@/views/certificadoPresupuesto/CertificadoPresupuestoFormulario.vue";
 
 const routes = [
   {
@@ -228,6 +230,19 @@ const routes = [
     path: "/solicitudpresupuestoformulario",
     name: "solicitudpresupuestoformulario",
     component: SolicitudPresupuestoFormulario,
+  },
+  {
+    path: "/certificadopresupuesto",
+    name: "certificadopresupuesto",
+    component: CertificadoPresupuestoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/certificadopresupuestoformulario",
+    name: "certificadopresupuestoformulario",
+    component: CertificadoPresupuestoFormulario,
   },
 ];
 

@@ -934,6 +934,90 @@ const listarRubroPresupuestoProyeccion = function (institucionEducativaCodigo) {
     });
 };
 
+const listarCertificadoPresupuesto = function (institucionEducativaCodigo) {
+  return fetch(
+    `${url}/certificadodisponibilidadpresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarCertificadoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/certificadodisponibilidadpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarRubroPresupuestoSaldoSolicitud = function (
+  institucionEducativaCodigo,
+  rubroPresupuestoCodigo
+) {
+  return fetch(
+    `${url}/rubropresupuestal/detalle/saldosolicitud/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarRubroPresupuestoSaldoRecaudo = function (
+  institucionEducativaCodigo,
+  rubroPresupuestoCodigo
+) {
+  return fetch(
+    `${url}/rubropresupuestal/detalle/saldorecaudo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarCertificadoPresupuesto = function (certificadoPresupuesto) {
+  return fetch(`${url}/certificadodisponibilidadpresupuestal/`, {
+    method: "POST",
+    body: JSON.stringify(certificadoPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarCertificadoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/certificadodisponibilidadpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1015,4 +1099,10 @@ export default {
   insertarSolicitudPresupuesto,
   consultarRubroPresupuestoSaldo,
   listarRubroPresupuestoProyeccion,
+  listarCertificadoPresupuesto,
+  consultarCertificadoPresupuesto,
+  consultarRubroPresupuestoSaldoSolicitud,
+  consultarRubroPresupuestoSaldoRecaudo,
+  insertarCertificadoPresupuesto,
+  eliminarCertificadoPresupuesto,
 };
