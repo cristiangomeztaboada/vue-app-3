@@ -21,16 +21,7 @@
 
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Código</label>
-              <input
-                v-model="institucionEducativaCodigo"
-                class="form-control"
-                type="text"
-                readonly
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Nombre</label>
+              <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
                 class="form-control"
@@ -38,17 +29,14 @@
                 readonly
               />
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Consecutivo</label>
               <recaudo-presupuesto-buscador
                 v-on:perderFoco="consultarRecaudoPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Fecha</label>
               <input
                 class="form-control"
@@ -61,7 +49,7 @@
           </div>
 
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Tipo Recaudo</label>
               <DxSelectBox
                 :items="tiposRecaudos"
@@ -70,7 +58,7 @@
                 v-model="tipoRecaudoCodigo"
               />
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Documento Recaudo</label>
               <input
                 v-model="documentoRecaudo"
@@ -78,20 +66,21 @@
                 type="text"
               />
             </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Observación</label>
+              <input v-model="observacion" class="form-control" type="text" />
+            </div>
           </div>
 
-          <label>Observación</label>
-          <input v-model="observacion" class="form-control" type="text" />
-
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
               <label>Ingreso Presupuesto</label>
               <ingreso-presupuesto-buscador
                 v-on:perderFoco="consultarIngresoPresupuesto"
                 v-bind:codigoPropiedad="ingresoPresupuestoConsecutivo"
               />
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
               <label>Saldo</label>
               <DxNumberBox
                 v-model="ingresoPresupuestoSaldo"
@@ -99,10 +88,11 @@
                 :read-only="true"
               />
             </div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+              <label>Valor</label>
+              <DxNumberBox v-model="valor" format="$ #,##0.##" />
+            </div>
           </div>
-
-          <label>Valor</label>
-          <DxNumberBox v-model="valor" format="$ #,##0.##" />
         </div>
       </div>
     </div>
@@ -208,7 +198,7 @@ export default {
           consecutivo: ingresoPresupuestoConsecutivo.value,
         },
         documentorecaudo: documentoRecaudo.value,
-      };      
+      };
 
       if (esNuevo.value) {
         api

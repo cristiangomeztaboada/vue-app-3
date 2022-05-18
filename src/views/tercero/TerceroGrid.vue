@@ -27,8 +27,9 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="tipoidentificacionid.codigo" caption="Tipo Identificación Codigo"/>
           <DxColumn data-field="codigo" />
+          <DxColumn data-field="tipoidentificacionid.codigo" caption="Tipo Identificación Código"/>          
+          <DxColumn data-field="tipoidentificacionid.nombre" caption="Tipo Identificación Nombre"/>          
           <DxColumn data-field="nombre" />          
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
@@ -101,7 +102,7 @@ export default {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarTercero(rowData.row.values[1], rowData.row.values[0])
+          .eliminarTercero(rowData.row.values[0])
           .then(() => listar())
           .catch( ()=> {
             store.commit("mostrarError", "Imposible eliminar, se encuentra asociado a documento");
@@ -113,7 +114,7 @@ export default {
       store.commit("ocultarAlerta");
       router.push({
         name: "terceroformulario",
-        params: {codigo: rowData.row.values[1], tipoIdentificacionCodigo:rowData.row.values[0]},
+        params: {codigo: rowData.row.values[0]},
       });
     };
 

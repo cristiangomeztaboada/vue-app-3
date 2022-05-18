@@ -1,6 +1,6 @@
 <template>
   <div class="row d-flex justify-content-center">
-    <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
       <div class="card shadow-lg p-3 mb-5 bg-white rounded">
         <div class="card-header">
           <barra-botones
@@ -20,16 +20,7 @@
           </h5>
           <div class="row">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Institución Educativa Código</label>
-              <input
-                v-model="institucionEducativaCodigo"
-                class="form-control"
-                type="text"
-                readonly
-              />
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Institución Educativa Nombre</label>
+              <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
                 class="form-control"
@@ -54,14 +45,14 @@
                 readonly
               />
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Días Validez</label>
               <input v-model="diasValidez" class="form-control" type="number" />
             </div>
-            <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
             </div>

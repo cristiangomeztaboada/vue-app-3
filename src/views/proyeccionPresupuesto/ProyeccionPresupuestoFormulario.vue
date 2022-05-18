@@ -18,17 +18,8 @@
             Actualizar Proyección Presupuesto
           </h5>
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Código</label>
-              <input
-                v-model="institucionEducativaCodigo"
-                class="form-control"
-                type="text"
-                readonly
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Nombre</label>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
                 class="form-control"
@@ -36,42 +27,50 @@
                 readonly
               />
             </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
+              <label>Periodo</label>
+              <input
+                v-model="periodoCodigo"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <label>Observación</label>
+              <input v-model="observacion" class="form-control" type="text" />
+            </div>
           </div>
 
-          <label>Periodo</label>
-          <input
-            v-model="periodoCodigo"
-            class="form-control"
-            type="text"
-            readonly
-          />
-          <label>Observación</label>
-          <input v-model="observacion" class="form-control" type="text" />
           <br />
           <div class="card shadow-lg p-3 mb-5 bg-white rounded">
             <div class="card-header"></div>
             <div class="card-body">
               <h5 class="card-title">Fuente Recurso-Rubro Presupuesto</h5>
               <div class="row">
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                   <label>Fuente Recurso</label>
                   <fuente-recurso-buscador
                     v-bind:soloDetalle="true"
                     v-on:perderFoco="consultarFuenteRecurso"
+                    v-bind:mostrarCampoNombre="true"
+                    v-bind:nombrePropiedad="fuenteRecursoNombre"
                   />
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                   <label>Rubro Presupuesto</label>
                   <rubro-presupuesto-buscador
                     v-bind:soloDetalle="true"
                     v-on:perderFoco="consultarRubroPresupuesto"
+                    v-bind:mostrarCampoNombre="true"
+                    v-bind:nombrePropiedad="rubroPresupuestoNombre"
                   />
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                   <label>Valor</label>
                   <DxNumberBox v-model="valor" format="$ #,##0.##" />
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
                   <br />
                   <ul class="nav nav-pills card-header-pills">
                     <li class="nav-item">
@@ -175,7 +174,9 @@ export default {
     const store = useStore();
     const proyeccionPresupuestoDetalle = ref([]);
     const fuenteRecursoCodigo = ref("");
+    const fuenteRecursoNombre = ref("");
     const rubroPresupuestoCodigo = ref("");
+    const rubroPresupuestoNombre = ref("");
     const valor = ref(0);
 
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
@@ -337,7 +338,10 @@ export default {
             consultarProyeccionPresupuesto();
           })
           .catch(() => {
-            store.commit("mostrarError", "Existe ingreso presupuestal con esta fuente asociada ó existe solicitud presupuestal con este rubro asociado");
+            store.commit(
+              "mostrarError",
+              "Existe ingreso presupuestal con esta fuente asociada ó existe solicitud presupuestal con este rubro asociado"
+            );
           });
       }
     };
@@ -348,9 +352,11 @@ export default {
         .consultarFuenteRecurso(c)
         .then((data) => {
           fuenteRecursoCodigo.value = data.codigo;
+          fuenteRecursoNombre.value = data.nombre;
         })
         .catch(() => {
           fuenteRecursoCodigo.value = "";
+          fuenteRecursoNombre.value = "";
         });
     };
 
@@ -360,9 +366,11 @@ export default {
         .consultarRubroPresupuesto(c)
         .then((data) => {
           rubroPresupuestoCodigo.value = data.codigo;
+          rubroPresupuestoNombre.value = data.nombre;
         })
         .catch(() => {
           rubroPresupuestoCodigo.value = "";
+          rubroPresupuestoNombre.value = "";
         });
     };
 
@@ -374,7 +382,9 @@ export default {
       observacion,
       proyeccionPresupuestoDetalle,
       fuenteRecursoCodigo,
+      fuenteRecursoNombre,
       rubroPresupuestoCodigo,
+      rubroPresupuestoNombre,
       valor,
       guardar,
       eliminar,

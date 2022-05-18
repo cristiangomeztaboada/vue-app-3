@@ -13,18 +13,18 @@
         <div class="card-body">
           <h5 v-if="esNuevo" class="card-title">Insertar Tercero</h5>
           <h5 v-if="!esNuevo" class="card-title">Actualizar Tercero</h5>
-          <label>Tipo Identificacion</label>
 
+          <label>Código</label>
+          <tercero-buscador
+            v-on:perderFoco="consultarTercero"
+            v-bind:codigoPropiedad="codigo"
+          />
+          <label>Tipo Identificacion</label>
           <DxSelectBox
             :items="tiposIdentificacion"
             display-expr="nombre"
             value-expr="codigo"
             v-model="tipoIdentificacionCodigo"
-          />
-          <label>Código</label>
-          <tercero-buscador
-            v-on:perderFoco="consultarTercero"
-            v-bind:codigoPropiedad="codigo"
           />
           <label>Nombre</label>
           <input
@@ -72,9 +72,7 @@ export default {
         .then((data) => {
           tiposIdentificacion.value = data;
         })
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+        .catch(() => {});
     };
 
     listarTipoIdentificacion();
@@ -84,7 +82,7 @@ export default {
       esNuevo.value = true;
       const ti = tipoIdentificacionCodigo.value;
       api
-        .consultarTercero(c, tipoIdentificacionCodigo.value)
+        .consultarTercero(c)
         .then((data) => {
           if (data.codigo && data.tipoidentificacionid.codigo) {
             esNuevo.value = false;
@@ -100,29 +98,7 @@ export default {
         });
     };
 
-    const consultarTercero2 = function (c, ti) {
-      store.commit("ocultarAlerta");
-      api
-        .consultarTercero(c, ti)
-        .then((data) => {
-          if (data.codigo && data.tipoidentificacionid.codigo) {
-            esNuevo.value = false;
-          }
-          codigo.value = data.codigo;
-          nombre.value = data.nombre;
-          tipoIdentificacionCodigo.value = data.tipoidentificacionid.codigo;
-        })
-        .catch(function () {
-          nuevo();
-          codigo.value = c;
-          tipoIdentificacionCodigo.value = ti;
-        });
-    };
-
-    consultarTercero2(
-      route.params.codigo,
-      route.params.tipoIdentificacionCodigo
-    );
+    consultarTercero(route.params.codigo);
 
     const guardar = function () {
       store.commit("ocultarAlerta");
@@ -172,7 +148,7 @@ export default {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarTercero(codigo.value, tipoIdentificacionCodigo.value)
+          .eliminarTercero(codigo.value)
           .then(() =>
             router.push({
               name: "tercero",

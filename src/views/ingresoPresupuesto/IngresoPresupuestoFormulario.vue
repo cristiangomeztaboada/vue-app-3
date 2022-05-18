@@ -23,16 +23,7 @@
 
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Código</label>
-              <input
-                v-model="institucionEducativaCodigo"
-                class="form-control"
-                type="text"
-                readonly
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Nombre</label>
+              <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
                 class="form-control"
@@ -40,17 +31,14 @@
                 readonly
               />
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Consecutivo</label>
               <ingreso-presupuesto-buscador
                 v-on:perderFoco="consultarIngresoPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Fecha</label>
               <input
                 class="form-control"
@@ -61,33 +49,15 @@
               />
             </div>
           </div>
+
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Tipo Identificación</label>
-              <DxSelectBox
-                :items="tiposIdentificacion"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="tipoIdentificacionCodigo"
-              />
-            </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Tercero</label>
               <tercero-buscador
                 v-on:perderFoco="consultarTercero"
                 v-bind:codigoPropiedad="terceroCodigo"
-              />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Fecha Proyección Recaudo</label>
-              <input
-                class="form-control"
-                v-model="fechaProyeccionRecaudo"
-                type="date"
-                id="fechaProyeccionRecaudo"
+                v-bind:mostrarCampoNombre="true"
+                v-bind:nombrePropiedad="terceroNombre"
               />
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -96,8 +66,18 @@
             </div>
           </div>
 
+
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Fecha Proyección Recaudo</label>
+              <input
+                class="form-control"
+                v-model="fechaProyeccionRecaudo"
+                type="date"
+                id="fechaProyeccionRecaudo"
+              />
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Fuente Recurso</label>
               <DxSelectBox
                 :items="fuentesRecursos"
@@ -107,7 +87,7 @@
                 @value-changed="fuenteRecursoCodigoCambio"
               />
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Saldo</label>
               <DxNumberBox
                 v-model="fuenteRecursoSaldo"
@@ -115,10 +95,11 @@
                 :read-only="true"
               />
             </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Valor</label>
+              <DxNumberBox v-model="valor" format="$ #,##0.##" />
+            </div>
           </div>
-
-          <label>Valor</label>
-          <DxNumberBox v-model="valor" format="$ #,##0.##" />
         </div>
 
         <div v-show="imprimiendo" id="pdf" class="card-body">
@@ -165,15 +146,6 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Tipo Identificación</label>
-              <DxSelectBox
-                :items="tiposIdentificacion"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="tipoIdentificacionCodigo"
-              />
-            </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Tercero</label>
               <tercero-buscador
@@ -256,10 +228,9 @@ export default {
     const consecutivo = ref(0);
     const fecha = ref("");
     const fechaProyeccionRecaudo = ref("");
-    const tipoIdentificacionCodigo = ref("");
     const terceroCodigo = ref("");
+    const terceroNombre = ref("");
     const fuenteRecursoCodigo = ref("");
-    const tiposIdentificacion = ref([]);
     const observacion = ref("");
     const valor = ref(0);
     const fuentesRecursos = ref([]);
@@ -271,17 +242,6 @@ export default {
     const store = useStore();
 
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
-
-    const listarTipoIdentificacion = function () {
-      api
-        .listarTipoIdentificacion()
-        .then((data) => {
-          tiposIdentificacion.value = data;
-        })
-        .catch(() => {});
-    };
-
-    listarTipoIdentificacion();
 
     const fuenteRecursoCodigoCambio = function (e) {
       api
@@ -298,7 +258,7 @@ export default {
         .then((data) => {
           fuentesRecursos.value = data;
         })
-        .catch(()=> {});
+        .catch(() => {});
     };
 
     listarFuentesRecursos();
@@ -321,11 +281,11 @@ export default {
             10
           );
           terceroCodigo.value = data.terceroid.codigo;
-          tipoIdentificacionCodigo.value =
-            data.terceroid.tipoidentificacionid.codigo;
           fuenteRecursoCodigo.value = data.fuenterecursoid.codigo;
           observacion.value = data.observacion;
           valor.value = Number(data.valor);
+
+          consultarTercero(terceroCodigo.value);
         })
         .catch(function () {
           nuevo();
@@ -344,7 +304,6 @@ export default {
         fechaproyeccionrecaudo: fechaProyeccionRecaudo.value,
         terceroid: {
           codigo: terceroCodigo.value,
-          tipoidentificacion: tipoIdentificacionCodigo.value,
         },
         fuenterecursoid: {
           codigo: fuenteRecursoCodigo.value,
@@ -441,7 +400,7 @@ export default {
       consecutivo.value = 0;
       fecha.value = fullFechaActual;
       terceroCodigo.value = "";
-      tipoIdentificacionCodigo.value = "";
+      terceroNombre.value = "";
       fechaProyeccionRecaudo.value = "";
       observacion.value = "";
       fuenteRecursoCodigo.value = "";
@@ -474,12 +433,15 @@ export default {
     const consultarTercero = function (c) {
       store.commit("ocultarAlerta");
       api
-        .consultarTercero(c, tipoIdentificacionCodigo.value)
+        .consultarTercero(c)
         .then((data) => {
           terceroCodigo.value = data.codigo;
-          tipoIdentificacionCodigo.value = data.tipoidentificacionid.codigo;
+          terceroNombre.value = data.nombre;
         })
-        .catch(() => {});
+        .catch(() => {
+          terceroCodigo.value = "";
+          terceroNombre.value = "";
+        });
     };
 
     return {
@@ -489,10 +451,9 @@ export default {
       consecutivo,
       fecha,
       fechaProyeccionRecaudo,
-      tipoIdentificacionCodigo,
       terceroCodigo,
+      terceroNombre,
       fuenteRecursoCodigo,
-      tiposIdentificacion,
       observacion,
       valor,
       fuentesRecursos,

@@ -17,17 +17,8 @@
           </h5>
           <h5 v-if="!esNuevo" class="card-title">Solicitud Presupuesto</h5>
           <div class="row">
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Institución Educativa Código</label>
-              <input
-                v-model="institucionEducativaCodigo"
-                class="form-control"
-                type="text"
-                readonly
-              />
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Institución Educativa Nombre</label>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+              <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
                 class="form-control"
@@ -35,14 +26,14 @@
                 readonly
               />
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
               <label>Consecutivo</label>
               <solicitud-presupuesto-buscador
                 v-on:perderFoco="consultarSolicitudPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
               <label>Fecha</label>
               <input
                 class="form-control"
@@ -50,6 +41,24 @@
                 type="date"
                 id="fecha"
                 readonly
+              />
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+              <label>Solicitante</label>
+              <DxSelectBox
+                :items="listaPersonalPlanta"
+                display-expr="nombre"
+                value-expr="codigo"
+                v-model="solicitante"
+              />
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+              <label>Solicitado</label>
+              <DxSelectBox
+                :items="listaPersonalPlanta"
+                display-expr="nombre"
+                value-expr="codigo"
+                v-model="solicitado"
               />
             </div>
           </div>
@@ -62,54 +71,25 @@
           </div>
 
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Solicitante</label>
-              <DxSelectBox
-                :items="listaPersonalPlanta"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="solicitante"
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Solicitado</label>
-              <DxSelectBox
-                :items="listaPersonalPlanta"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="solicitado"
-              />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-              <label>Tercero Tipo Identificación</label>
-              <DxSelectBox
-                :items="listaTipoIdentificacion"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="tipoIdentificacionCodigo"
-              />
-            </div>
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
               <label>Tercero Identificiación</label>
               <tercero-buscador
                 v-on:perderFoco="consultarTercero"
                 v-bind:codigoPropiedad="terceroCodigo"
+                v-bind:mostrarCampoNombre="true"
+                v-bind:nombrePropiedad="terceroNombre"
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
               <label>Tipo Contrato</label>
-              <tipo-contrato-buscador
-                v-on:perderFoco="consultarTipoContrato"
-                v-bind:codigoPropiedad="tipoContratoCodigo"
+              <DxSelectBox
+                :items="listaTipoContrato"
+                display-expr="nombre"
+                value-expr="codigo"
+                v-model="tipoContratoCodigo"
               />
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
               <label>Fecha Inicio Contrato</label>
               <input
                 class="form-control"
@@ -118,7 +98,7 @@
                 id="fechaInicioContrato"
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
               <label>Fecha Fin Contrato</label>
               <input
                 class="form-control"
@@ -127,7 +107,7 @@
                 id="fechaFinContrato"
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
               <label>Número Contrato</label>
               <input
                 v-model="contratoNumero"
@@ -143,7 +123,7 @@
             <div class="card-body">
               <h5 class="card-title">Rubro Presupuesto</h5>
               <div class="row">
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                   <label>Rubro Presupuesto</label>
                   <DxSelectBox
                     :items="listaRubroPresupuesto"
@@ -153,7 +133,7 @@
                     @value-changed="consultarRubroPresupuestoSaldo"
                   />
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                   <label>Saldo</label>
                   <DxNumberBox
                     v-model="rubroPresupuestoSaldo"
@@ -161,14 +141,14 @@
                     :read-only="true"
                   />
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                   <label>Valor</label>
                   <DxNumberBox
                     v-model="rubroPresupuestovalor"
                     format="$ #,##0.##"
                   />
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
                   <br />
                   <ul class="nav nav-pills card-header-pills">
                     <li class="nav-item">
@@ -240,7 +220,6 @@ import {
   DxButton,
 } from "devextreme-vue/data-grid";
 import TerceroBuscador from "@/views/tercero/TerceroBuscador.vue";
-import TipoContratoBuscador from "@/views/tipoContrato/TipoContratoBuscador.vue";
 import DxNumberBox from "devextreme-vue/number-box";
 import DxSelectBox from "devextreme-vue/select-box";
 import { useRoute, useRouter } from "vue-router";
@@ -258,7 +237,6 @@ export default {
     DxNumberBox,
     DxSelectBox,
     TerceroBuscador,
-    TipoContratoBuscador,
   },
   setup() {
     const esNuevo = ref(true);
@@ -269,16 +247,16 @@ export default {
     const observacion = ref("");
     const solicitante = ref("");
     const solicitado = ref("");
-    const listaTipoIdentificacion = ref([]);
-    const tipoIdentificacionCodigo = ref("");
     const terceroCodigo = ref("");
+    const terceroNombre = ref("");
     const tipoContratoCodigo = ref("");
     const fechaInicioContrato = ref("");
     const fechaFinContrato = ref("");
     const contratoNumero = ref("");
     const listaPersonalPlanta = ref([]);
-    const listaRubroPresupuesto = ref([]);
+    const listaRubroPresupuesto = ref([]);    
     const rubroPresupuestoSaldo = ref(0);
+    const listaTipoContrato = ref([]);
 
     const store = useStore();
 
@@ -292,6 +270,17 @@ export default {
 
     institucionEducativaCodigo.value = store.state.institucioneducativa;
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
+
+    const listarTipoContrato = function () {
+      api
+        .listarTipoContrato()
+        .then((data) => {
+          listaTipoContrato.value = data;
+        })
+        .catch(() => {});
+    };
+
+    listarTipoContrato();
 
     const listarRubroPresupuestoProyeccion = function () {
       api
@@ -315,17 +304,6 @@ export default {
 
     listarPersonalPlanta();
 
-    const listarTipoIdentificacion = function () {
-      api
-        .listarTipoIdentificacion()
-        .then((data) => {
-          listaTipoIdentificacion.value = data;
-        })
-        .catch(() => {});
-    };
-
-    listarTipoIdentificacion();
-
     const consultarSolicitudPresupuesto = function (c) {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
@@ -340,14 +318,14 @@ export default {
           observacion.value = data.observacion;
           solicitante.value = data.personalplantaidsolicitante.codigo;
           solicitado.value = data.personalplantaidsolicitado.codigo;
-          tipoIdentificacionCodigo.value =
-            data.terceroid.tipoidentificacionid.codigo;
           terceroCodigo.value = data.terceroid.codigo;
           tipoContratoCodigo.value = data.tipocontratoid.codigo;
           fechaInicioContrato.value = data.fechainiciocontrato;
           fechaFinContrato.value = data.fechafincontrato;
           contratoNumero.value = data.contratonumero;
           solicitudPresupuestoDetalle.value = data.solicitudpresupuestaldetalle;
+
+          consultarTercero(terceroCodigo.value);
         })
         .catch(() => {
           nuevo();
@@ -374,7 +352,6 @@ export default {
         },
         terceroid: {
           codigo: terceroCodigo.value,
-          tipoidentificacion: tipoIdentificacionCodigo.value,
         },
         tipocontratoid: {
           codigo: tipoContratoCodigo.value,
@@ -426,13 +403,6 @@ export default {
             store.commit("mostrarError", "ingrese un tercero válido");
           }
 
-          if (!tipoIdentificacionCodigo.value) {
-            store.commit(
-              "mostrarError",
-              "ingrese un tipo de identificación válido"
-            );
-          }
-
           if (!solicitado.value) {
             store.commit("mostrarError", "ingrese un solicitado válido");
           }
@@ -482,8 +452,8 @@ export default {
       observacion.value = "";
       solicitante.value = "";
       solicitado.value = "";
-      tipoIdentificacionCodigo.value = "";
       terceroCodigo.value = "";
+      terceroNombre.value = "";
       tipoContratoCodigo.value = "";
       fechaInicioContrato.value = "";
       fechaFinContrato.value = "";
@@ -544,24 +514,14 @@ export default {
     const consultarTercero = function (c) {
       store.commit("ocultarAlerta");
       api
-        .consultarTercero(c, tipoIdentificacionCodigo.value)
+        .consultarTercero(c)
         .then((data) => {
           terceroCodigo.value = data.codigo;
-          tipoIdentificacionCodigo.value = data.tipoidentificacionid.codigo;
+          terceroNombre.value = data.nombre;
         })
         .catch(() => {
           terceroCodigo.value = "";
-        });
-    };
-
-    const consultarTipoContrato = function (c) {
-      api
-        .consultarTipoContrato(c)
-        .then((data) => {
-          tipoContratoCodigo.value = data.codigo;
-        })
-        .catch(() => {
-          tipoContratoCodigo.value = "";
+          terceroNombre.value = "";
         });
     };
 
@@ -586,9 +546,8 @@ export default {
       observacion,
       solicitante,
       solicitado,
-      listaTipoIdentificacion,
-      tipoIdentificacionCodigo,
       terceroCodigo,
+      terceroNombre,
       tipoContratoCodigo,
       fechaInicioContrato,
       fechaFinContrato,
@@ -599,6 +558,7 @@ export default {
       listaPersonalPlanta,
       listaRubroPresupuesto,
       rubroPresupuestoSaldo,
+      listaTipoContrato,
 
       guardar,
       eliminar,
@@ -608,7 +568,6 @@ export default {
       eliminarSolicitudPresupuestoDetalle,
       guardarSolicitudPresupuestoDetalle,
       consultarTercero,
-      consultarTipoContrato,
       listarPersonalPlanta,
       listarRubroPresupuestoProyeccion,
       consultarRubroPresupuestoSaldo,

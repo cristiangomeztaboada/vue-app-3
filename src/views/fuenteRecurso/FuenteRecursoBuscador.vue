@@ -19,6 +19,13 @@
             🔎
           </button>
         </div>
+        <input v-if="mostrarCampoNombre ? true : false"
+          class="form-control"
+          v-model="nombre"
+          type="text"
+          id="nombre"
+          readonly
+        />
       </div>
     </div>
     <div class="modal" id="modalFuenteRecurso" tabindex="-1">
@@ -61,14 +68,24 @@ export default {
   props: {
     codigoPropiedad: String,
     soloDetalle: Boolean,
+    nombrePropiedad: String,
+    mostrarCampoNombre : Boolean,
   },
   setup(props, context) {
     const codigo = ref("");
+    const nombre = ref("");
 
     watch(
       () => props.codigoPropiedad,
       (newCodigoPropiedad) => {
         codigo.value = newCodigoPropiedad;
+      }
+    );
+
+    watch(
+      () => props.nombrePropiedad,
+      (newNombrePropiedad) => {
+        nombre.value = newNombrePropiedad;
       }
     );
 
@@ -85,6 +102,7 @@ export default {
 
     return {
       codigo,
+      nombre,
       recibirFuenteRecursoSeleccionado,
       perderFoco,
     };

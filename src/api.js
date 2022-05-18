@@ -500,9 +500,9 @@ const listarTercero = function () {
     });
 };
 
-const consultarTercero = function (codigo, tipoIdentificacionCodigo) {
+const consultarTercero = function (codigo) {
   return fetch(
-    `${url}/tercero/tipoidentificacion/?codigo=${codigo}&tipoidentificacion=${tipoIdentificacionCodigo}`,
+    `${url}/tercero/${codigo}`,
     { method: "GET" }
   )
     .then(manejarError)
@@ -536,9 +536,9 @@ const actualizarTercero = function (tercero) {
     });
 };
 
-const eliminarTercero = function (codigo, tipoIdentificacionCodigo) {
+const eliminarTercero = function (codigo) {
   return fetch(
-    `${url}/tercero/tipoidentificacion/?codigo=${codigo}&tipoidentificacion=${tipoIdentificacionCodigo}`,
+    `${url}/tercero/${codigo}`,
     {
       method: "DELETE",
     }
