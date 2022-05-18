@@ -14,7 +14,7 @@
           <h5 v-if="esNuevo" class="card-title">Insertar Tercero</h5>
           <h5 v-if="!esNuevo" class="card-title">Actualizar Tercero</h5>
           <label>Tipo Identificacion</label>
-          
+
           <DxSelectBox
             :items="tiposIdentificacion"
             display-expr="nombre"
@@ -178,8 +178,11 @@ export default {
               name: "tercero",
             })
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociado a documento"
+            );
           });
       }
     };

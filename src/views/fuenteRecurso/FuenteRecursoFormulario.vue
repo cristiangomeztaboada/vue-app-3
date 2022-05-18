@@ -63,8 +63,8 @@ export default {
     const store = useStore();
 
     const consultarFuenteRecurso = function (c) {
-      esNuevo.value = true;
       store.commit("ocultarAlerta");
+      esNuevo.value = true;
       api
         .consultarFuenteRecurso(c)
         .then((data) => {
@@ -103,20 +103,29 @@ export default {
           .then(() => {
             store.commit("mostrarInformacion", "registro insertado con exito");
           })
-          .catch(()=> {
-            if(fuenteRecursoCodigoPadre.value){
-              store.commit("mostrarError", "Si la fuente de recurso esta asociado a una proyección presupuestal, no puede crearle hijos");
-            }else{
-              store.commit("mostrarError", "Solo puede existir una fuente de recurso raiz");
-            }            
+          .catch(() => {
+            if (fuenteRecursoCodigoPadre.value) {
+              store.commit(
+                "mostrarError",
+                "Si la fuente de recurso esta asociado a una proyección presupuestal, no puede crearle hijos"
+              );
+            } else {
+              store.commit(
+                "mostrarError",
+                "Solo puede existir una fuente de recurso raiz"
+              );
+            }
           });
       } else {
         api
           .actualizarFuenteRecurso(fuenteRecurso)
           .then(() => {
-            store.commit("mostrarInformacion", "registro actualizado con exito");
+            store.commit(
+              "mostrarInformacion",
+              "registro actualizado con exito"
+            );
           })
-          .catch( ()=> {
+          .catch(() => {
             store.commit("mostrarError", "Ingrese un código padre válido");
           });
       }
@@ -129,7 +138,7 @@ export default {
       });
     };
 
-    const nuevo = function () {      
+    const nuevo = function () {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       codigo.value = "";
@@ -147,8 +156,11 @@ export default {
               name: "fuenterecurso",
             })
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch( ()=> {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociada a documento"
+            );
           });
       }
     };

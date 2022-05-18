@@ -1,7 +1,4 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
@@ -43,7 +40,6 @@
   </div>
 </template>
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import {
   DxDataGrid,
   DxSearchPanel,
@@ -54,6 +50,7 @@ import {
 import api from "@/api.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   props: {
@@ -65,14 +62,14 @@ export default {
     DxColumn,
     DxButton,
     DxEditing,
-    ComponenteAlerta,
   },
   setup(props, context) {
     const dataSource = ref([]);
-    const mensajeAlerta = ref("");
     const router = useRouter();
+    const store = useStore();
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "usuarioformulario",
         params: { codigo: "" },
@@ -80,30 +77,37 @@ export default {
     };
 
     const listar = function () {
+      store.commit("ocultarAlerta");
       api
         .listarUsuario()
         .then((data) => (dataSource.value = data))
-        .catch(function (e) {
-          mensajeAlerta.value = e;
-        });
+        .catch(() => {});
     };
 
     listar();
 
     const seleccionarUsuario = function (e) {
+      store.commit("ocultarAlerta");
       context.emit("seleccionarUsuario", e.data.codigo);
     };
 
     const eliminar = function (rowData) {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarUsuario(rowData.row.values[0])
           .then(() => listar())
-          .catch(() => (mensajeAlerta.value = "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "No se puede eliminar usuario, se encuentra asociado a una institución educativa"
+            );
+          });
       }
     };
 
     const editar = function (rowData) {
+      store.commit("ocultarAlerta");
       router.push({
         name: "usuarioformulario",
         params: { codigo: rowData.row.values[0] },
@@ -111,7 +115,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       dataSource,
       seleccionarUsuario,
       eliminar,

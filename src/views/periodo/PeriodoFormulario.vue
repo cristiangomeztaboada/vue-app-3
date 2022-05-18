@@ -130,8 +130,11 @@ export default {
               name: "periodo",
             })
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociado a documento"
+            );
           });
       }
     };

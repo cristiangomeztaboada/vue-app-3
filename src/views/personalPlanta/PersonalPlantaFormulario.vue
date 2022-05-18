@@ -139,8 +139,8 @@ export default {
               name: "personalplanta",
             })
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch( ()=> {
+            store.commit("mostrarError", "Imposible eliminar, se encuentra asociado en una solicitud presupuestal");
           });
       }
     };

@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
+
 import {
   DxDataGrid,
   DxSearchPanel,
@@ -55,6 +55,7 @@ import {
 import api from "@/api.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   props: {
@@ -66,14 +67,14 @@ export default {
     DxColumn,
     DxButton,
     DxEditing,
-    ComponenteAlerta,
   },
   setup(props, context) {
     const dataSource = ref([]);
-    const mensajeAlerta = ref("");
     const router = useRouter();
+    const store = useStore();
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "institucioneducativaformulario",
         params: { codigo: "" },
@@ -81,17 +82,18 @@ export default {
     };
 
     const listar = function () {
+      store.commit("ocultarAlerta");
       api
         .listarInstitucionEducativa()
         .then((data) => {dataSource.value = data})
-        .catch(function (e) {
-          mensajeAlerta.value = e;
+        .catch( ()=> {
         });
     };
 
     listar();
 
     const seleccionarInstitucionEducativa = function (e) {
+      store.commit("ocultarAlerta");
       context.emit(
         "seleccionarInstitucionEducativa",
         e.data.codigo
@@ -99,17 +101,19 @@ export default {
     };
 
     const eliminar = function (rowData) {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarInstitucionEducativa(rowData.row.values[0])
           .then(() => listar())
-          .catch(function (e) {
-            mensajeAlerta.value = e;
+          .catch( ()=> {
+            store.commit("mostrarError", "Imposible eliminar, se encuentra asociada a un documento ó personal de planta");
           });
       }
     };
 
     const editar = function (rowData) {
+      store.commit("ocultarAlerta");
       router.push({
         name: "institucioneducativaformulario",
         params: { codigo: rowData.row.values[0] },
@@ -117,7 +121,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       dataSource,
       seleccionarInstitucionEducativa,
       eliminar,

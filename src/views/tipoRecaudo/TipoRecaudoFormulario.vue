@@ -80,14 +80,18 @@ export default {
       if (esNuevo.value) {
         api
           .insertarTipoRecaudo(tipoRecaudo)
-          .then(store.commit("mostrarInformacion", "registro insertado con exito"))
+          .then(
+            store.commit("mostrarInformacion", "registro insertado con exito")
+          )
           .catch(function (e) {
             store.commit("mostrarError", e);
           });
       } else {
         api
           .actualizarTipoRecaudo(tipoRecaudo)
-          .then(store.commit("mostrarInformacion", "registro actualizado con exito"))
+          .then(
+            store.commit("mostrarInformacion", "registro actualizado con exito")
+          )
           .catch(function (e) {
             store.commit("mostrarError", e);
           });
@@ -118,8 +122,11 @@ export default {
               name: "tiporecaudo",
             })
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociado a documento"
+            );
           });
       }
     };

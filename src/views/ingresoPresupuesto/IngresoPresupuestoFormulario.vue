@@ -122,9 +122,7 @@
         </div>
 
         <div v-show="imprimiendo" id="pdf" class="card-body">
-          <h5 class="card-title">
-            Ingreso Presupuesto
-          </h5>          
+          <h5 class="card-title">Ingreso Presupuesto</h5>
 
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -280,9 +278,7 @@ export default {
         .then((data) => {
           tiposIdentificacion.value = data;
         })
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+        .catch(() => {});
     };
 
     listarTipoIdentificacion();
@@ -302,9 +298,7 @@ export default {
         .then((data) => {
           fuentesRecursos.value = data;
         })
-        .catch(function (e) {
-          store.commit("mostrarError", e);
-        });
+        .catch(()=> {});
     };
 
     listarFuentesRecursos();
@@ -431,7 +425,7 @@ export default {
         }, 0);
       } catch (e) {
         imprimiendo.value = false;
-      }      
+      }
     };
 
     const nuevo = function () {

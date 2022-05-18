@@ -66,6 +66,7 @@ export default {
     const store = useStore();
 
     const consultarInstitucionEducativa = function (c) {
+      store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
         .consultarInstitucionEducativa(c)
@@ -99,8 +100,11 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro insertado con exito")
           )
-          .catch(()=> {
-            store.commit("mostrarError", "Ingrese un usuario válido que no este asociado a otra institución educativa");
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Ingrese un usuario válido que no este asociado a otra institución educativa"
+            );
           });
       } else {
         api
@@ -142,7 +146,12 @@ export default {
               name: "institucioneducativa",
             })
           )
-          .catch((e) => store.commit("mostrarError", e));
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociada a un documento ó personal de planta"
+            );
+          });
       }
     };
 

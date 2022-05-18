@@ -67,7 +67,7 @@ export default {
             esNuevo.value = false;
           }
           codigo.value = data.codigo;
-          nombre.value = data.nombre;          
+          nombre.value = data.nombre;
         })
         .catch(function () {
           nuevo();
@@ -87,18 +87,14 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro insertado con exito")
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
-          });
+          .catch(() => {});
       } else {
         api
           .actualizarTipoIdentificacion(tipoIdentificacion)
           .then(
             store.commit("mostrarInformacion", "registro actualizado con exito")
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
-          });
+          .catch(() => {});
       }
     };
 
@@ -126,8 +122,11 @@ export default {
               name: "tipoidentificacion",
             })
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociado a un tercero"
+            );
           });
       }
     };

@@ -1,11 +1,8 @@
 <template>
-  <div class="row">
-    <componente-alerta v-bind:mensajeAlerta="mensajeAlerta" />
-  </div>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="row">          
+        <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
             <h1 class="display-6">Personal Planta</h1>
           </div>
@@ -32,7 +29,10 @@
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
           <DxColumn data-field="codigo" />
           <DxColumn data-field="nombre" />
-          <DxColumn data-field="institucioneducativaid.codigo" caption="Institución Educativa" />
+          <DxColumn
+            data-field="institucioneducativaid.codigo"
+            caption="Institución Educativa"
+          />
           <DxColumn data-field="cargo" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
@@ -45,7 +45,6 @@
   </div>
 </template>
 <script>
-import ComponenteAlerta from "@/components/ComponentesTransversales/ComponenteAlerta.vue";
 import {
   DxDataGrid,
   DxSearchPanel,
@@ -68,11 +67,9 @@ export default {
     DxColumn,
     DxButton,
     DxEditing,
-    ComponenteAlerta,
   },
   setup(props, context) {
     const dataSource = ref([]);
-    const mensajeAlerta = ref("");
     const router = useRouter();
     const store = useStore();
 
@@ -86,26 +83,26 @@ export default {
     const listar = function () {
       api
         .listarPersonalPlanta(store.state.institucioneducativa)
-        .then((data) => {dataSource.value = data})
-        .catch(()=> {});
+        .then((data) => {
+          dataSource.value = data;
+        })
+        .catch(() => {});
     };
 
     listar();
 
     const seleccionarPersonalPlanta = function (e) {
-      context.emit(
-        "seleccionarPersonalPlanta",
-        e.data.codigo
-      );
+      context.emit("seleccionarPersonalPlanta", e.data.codigo);
     };
 
     const eliminar = function (rowData) {
+      store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
           .eliminarPersonalPlanta(rowData.row.values[0])
           .then(() => listar())
-          .catch(function (e) {
-            mensajeAlerta.value = e;
+          .catch(() => {
+            store.commit("mostrarError", "Imposible eliminar, se encuentra asociado en una solicitud presupuestal");
           });
       }
     };
@@ -118,7 +115,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       dataSource,
       seleccionarPersonalPlanta,
       eliminar,

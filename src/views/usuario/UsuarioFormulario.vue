@@ -131,7 +131,7 @@ export default {
               name: "usuario",
             })
           )
-          .catch(() => store.commit("mostrarInformacion", "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
+          .catch(() => store.commit("mostrarError", "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
           
       }
     };

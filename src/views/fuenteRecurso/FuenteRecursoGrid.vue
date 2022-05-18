@@ -67,7 +67,6 @@ export default {
   },
   setup(props, context) {
     const dataSource = ref([]);
-    const mensajeAlerta = ref("");
     const router = useRouter();
     const store = useStore();
 
@@ -111,8 +110,11 @@ export default {
         api
           .eliminarFuenteRecurso(rowData.row.values[1])
           .then(() => listar())
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociada a documento"
+            );
           });
       }
     };
@@ -126,7 +128,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       dataSource,
       seleccionarFuenteRecurso,
       eliminar,

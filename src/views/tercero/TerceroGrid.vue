@@ -66,7 +66,6 @@ export default {
   },
   setup(props, context) {
     const dataSource = ref([]);
-    const mensajeAlerta = ref("");
     const router = useRouter();
     const store = useStore();
 
@@ -104,8 +103,8 @@ export default {
         api
           .eliminarTercero(rowData.row.values[1], rowData.row.values[0])
           .then(() => listar())
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch( ()=> {
+            store.commit("mostrarError", "Imposible eliminar, se encuentra asociado a documento");
           });
       }
     };
@@ -119,7 +118,6 @@ export default {
     };
 
     return {
-      mensajeAlerta,
       dataSource,
       seleccionarTercero,
       eliminar,
