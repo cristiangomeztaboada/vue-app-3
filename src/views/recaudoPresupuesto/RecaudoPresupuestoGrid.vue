@@ -37,15 +37,12 @@
             sort-order="desc"
           />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
-          <DxColumn data-field="ingresopresupuestalid.consecutivo" caption="Ingreso Presupuesto" />
           <DxColumn
-            data-field="tiporecaudoid.nombre"
-            caption="Tipo Recaudo"
+            data-field="ingresopresupuestalid.consecutivo"
+            caption="Ingreso Presupuesto"
           />
-          <DxColumn
-            data-field="documentorecaudo"
-            caption="Documento Recaudo"
-          />
+          <DxColumn data-field="tiporecaudoid.nombre" caption="Tipo Recaudo" />
+          <DxColumn data-field="documentorecaudo" caption="Documento Recaudo" />
           <DxColumn data-field="observacion" />
           <DxColumn
             data-field="valor"
@@ -105,9 +102,7 @@ export default {
     const listar = function () {
       store.commit("ocultarAlerta");
       api
-        .listarRecaudoPresupuesto(
-          store.state.institucioneducativa
-        )
+        .listarRecaudoPresupuesto(store.state.institucioneducativa)
         .then((data) => {
           dataSource.value = data;
         })
@@ -130,8 +125,11 @@ export default {
             rowData.row.values[1]
           )
           .then(() => listar())
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Existen CDP con rubros asociados a la fuente"
+            );
           });
       }
     };

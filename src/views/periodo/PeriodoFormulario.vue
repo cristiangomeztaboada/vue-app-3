@@ -91,8 +91,8 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro insertado con exito")
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit("mostrarError", "Solo puede haber 1 periodo activo");
           });
       } else {
         api
@@ -100,8 +100,8 @@ export default {
           .then(
             store.commit("mostrarInformacion", "registro actualizado con exito")
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit("mostrarError", "Solo puede haber 1 periodo activo");
           });
       }
     };

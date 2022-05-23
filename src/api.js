@@ -934,6 +934,20 @@ const listarRubroPresupuestoProyeccion = function (institucionEducativaCodigo) {
     });
 };
 
+const listarRubroPresupuestoSolicitud = function (institucionEducativaCodigo) {
+  return fetch(
+    `${url}/rubropresupuestal/detalle/solicitados/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    {
+      method: "GET",
+    }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const listarCertificadoPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/certificadodisponibilidadpresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
@@ -1099,6 +1113,7 @@ export default {
   insertarSolicitudPresupuesto,
   consultarRubroPresupuestoSaldo,
   listarRubroPresupuestoProyeccion,
+  listarRubroPresupuestoSolicitud,
   listarCertificadoPresupuesto,
   consultarCertificadoPresupuesto,
   consultarRubroPresupuestoSaldoSolicitud,

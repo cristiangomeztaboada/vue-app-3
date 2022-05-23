@@ -97,6 +97,7 @@ export default {
     const store = useStore();
 
     const nuevo = function () {
+      store.commit("ocultarAlerta");
       router.push({
         name: "certificadopresupuestoformulario",
         params: { codigo: "" },
@@ -104,6 +105,7 @@ export default {
     };
 
     const listar = function () {
+      store.commit("ocultarAlerta");
       api
         .listarCertificadoPresupuesto(store.state.institucioneducativa)
         .then((data) => {
@@ -115,6 +117,7 @@ export default {
     listar();
 
     const seleccionarCertificadoPresupuesto = function (e) {
+      store.commit("ocultarAlerta");
       context.emit("seleccionarCertificadoPresupuesto", e.data.consecutivo);
     };
 
@@ -132,6 +135,7 @@ export default {
     };
 
     const editar = function (rowData) {
+      store.commit("ocultarAlerta");
       router.push({
         name: "certificadopresupuestoformulario",
         params: { codigo: rowData.row.values[1] },

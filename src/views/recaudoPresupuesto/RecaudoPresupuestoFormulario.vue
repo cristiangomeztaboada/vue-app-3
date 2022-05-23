@@ -283,8 +283,11 @@ export default {
               name: "recaudopresupuesto",
             })
           )
-          .catch(function (e) {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Existen CDP con rubros asociados a la fuente"
+            );
           });
       }
     };

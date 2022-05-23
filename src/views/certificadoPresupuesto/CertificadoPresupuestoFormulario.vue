@@ -42,7 +42,7 @@
                 v-model="fecha"
                 type="date"
                 id="fecha"
-                readonly
+                
               />
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -159,16 +159,16 @@ export default {
 
     consultarCertificadoPresupuesto(route.params.codigo);
 
-    const listarRubroPresupuestoProyeccion = function () {
+    const listarRubroPresupuestoSolicitud = function () {
       api
-        .listarRubroPresupuestoProyeccion(institucionEducativaCodigo.value)
+        .listarRubroPresupuestoSolicitud(institucionEducativaCodigo.value)
         .then((data) => {
           listaRubroPresupuesto.value = data;
         })
         .catch(() => {});
     };
 
-    listarRubroPresupuestoProyeccion();
+    listarRubroPresupuestoSolicitud();
 
     const guardar = function () {
       store.commit("ocultarAlerta");
@@ -193,8 +193,8 @@ export default {
           consultarCertificadoPresupuesto(data.consecutivo);
           store.commit("mostrarInformacion", "registro insertado con exito");
         })
-        .catch((e) => {
-          store.commit("mostrarError", e);
+        .catch(() => {
+          store.commit("mostrarError", "La fecha no pertenece al periodo activo");
 
           if (!valor.value) {
             store.commit("mostrarError", "ingrese un valor válido");
