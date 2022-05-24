@@ -13,10 +13,10 @@
         </div>
         <div class="card-body">
           <h5 v-if="esNuevo" class="card-title">
-            Insertar Certificado Disponibilidad Presupuesto
+            Insertar Certificado Presupuesto
           </h5>
           <h5 v-if="!esNuevo" class="card-title">
-            Certificado Disponibilidad Presupuesto
+            Certificado Presupuesto
           </h5>
           <div class="row">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">

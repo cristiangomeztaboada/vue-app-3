@@ -16,7 +16,7 @@
             Insertar Recaudo Presupuesto
           </h5>
           <h5 v-if="!esNuevo" class="card-title">
-            Actualizar Recaudo Presupuesto
+            Recaudo Presupuesto
           </h5>
 
           <div class="row">

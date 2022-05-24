@@ -18,7 +18,7 @@
             Insertar Ingreso Presupuesto
           </h5>
           <h5 v-if="!esNuevo" class="card-title">
-            Actualizar Ingreso Presupuesto
+            Ingreso Presupuesto
           </h5>
 
           <div class="row">

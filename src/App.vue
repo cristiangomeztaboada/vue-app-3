@@ -188,7 +188,7 @@
                   class="dropdown-item"
                   :to="{ name: 'certificadopresupuesto' }"
                 >
-                  Certificado Disponibilidad Presupuesto
+                  Certificado Presupuesto
                 </router-link>
               </li>
               <li>
