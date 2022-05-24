@@ -1032,6 +1032,18 @@ const eliminarCertificadoPresupuesto = function (
     });
 };
 
+const listarRegistroPresupuesto = function (institucionEducativaCodigo) {
+  return fetch(
+    `${url}/registropresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1120,4 +1132,5 @@ export default {
   consultarRubroPresupuestoSaldoRecaudo,
   insertarCertificadoPresupuesto,
   eliminarCertificadoPresupuesto,
+  listarRegistroPresupuesto,
 };

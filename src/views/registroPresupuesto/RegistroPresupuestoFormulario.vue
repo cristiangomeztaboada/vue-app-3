@@ -13,10 +13,10 @@
         </div>
         <div class="card-body">
           <h5 v-if="esNuevo" class="card-title">
-            Insertar Certificado Disponibilidad Presupuesto
+            Insertar Registro Presupuesto
           </h5>
           <h5 v-if="!esNuevo" class="card-title">
-            Certificado Disponibilidad Presupuesto
+            Registro Presupuesto
           </h5>
           <div class="row">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -30,8 +30,8 @@
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Consecutivo</label>
-              <certificado-presupuesto-buscador
-                v-on:perderFoco="consultarCertificadoPresupuesto"
+              <registro-presupuesto-buscador
+                v-on:perderFoco="consultarRegistroPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
@@ -42,6 +42,7 @@
                 v-model="fecha"
                 type="date"
                 id="fecha"
+                
               />
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -96,7 +97,7 @@
 </template>
 
 <script>
-import CertificadoPresupuestoBuscador from "./CertificadoPresupuestoBuscador.vue";
+import RegistroPresupuestoBuscador from "./RegistroPresupuestoBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
@@ -106,9 +107,9 @@ import DxSelectBox from "devextreme-vue/select-box";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
-  name: "CertificadoPresupuestoFormulario",
+  name: "RegistroPresupuestoFormulario",
   components: {
-    CertificadoPresupuestoBuscador,
+    RegistroPresupuestoBuscador,
     BarraBotones,
     DxNumberBox,
     DxSelectBox,
@@ -135,11 +136,11 @@ export default {
     institucionEducativaCodigo.value = store.state.institucioneducativa;
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
-    const consultarCertificadoPresupuesto = function (c) {
+    const consultarRegistroPresupuesto = function (c) {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
-        .consultarCertificadoPresupuesto(store.state.institucioneducativa, c)
+        .consultarRegistroPresupuesto(store.state.institucioneducativa, c)
         .then((data) => {
           if (data.id) {
             esNuevo.value = false;
@@ -156,7 +157,7 @@ export default {
         });
     };
 
-    consultarCertificadoPresupuesto(route.params.codigo);
+    consultarRegistroPresupuesto(route.params.codigo);
 
     const listarRubroPresupuestoSolicitud = function () {
       api
@@ -172,7 +173,7 @@ export default {
     const guardar = function () {
       store.commit("ocultarAlerta");
 
-      const certificadoPresupuesto = {
+      const registroPresupuesto = {
         institucioneducativaid: {
           codigo: institucionEducativaCodigo.value,
         },
@@ -187,16 +188,13 @@ export default {
       };
 
       api
-        .insertarCertificadoPresupuesto(certificadoPresupuesto)
+        .insertarRegistroPresupuesto(registroPresupuesto)
         .then((data) => {
-          consultarCertificadoPresupuesto(data.consecutivo);
+          consultarRegistroPresupuesto(data.consecutivo);
           store.commit("mostrarInformacion", "registro insertado con exito");
         })
         .catch(() => {
-          store.commit(
-            "mostrarError",
-            "La fecha no pertenece al periodo activo"
-          );
+          store.commit("mostrarError", "La fecha no pertenece al periodo activo");
 
           if (!valor.value) {
             store.commit("mostrarError", "ingrese un valor válido");
@@ -239,26 +237,21 @@ export default {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarCertificadoPresupuesto(
+          .eliminarRegistroPresupuesto(
             institucionEducativaCodigo.value,
             consecutivo.value
           )
           .then(() => {
             nuevo();
           })
-          .catch(() => {
-            store.commit(
-              "mostrarError",
-              "Existen registros de presupuesto con rubros asociados al CDP"
-            );
-          });
+          .catch(() => {});
       }
     };
 
     const irAtras = function () {
       store.commit("ocultarAlerta");
       router.push({
-        name: "certificadopresupuesto",
+        name: "registropresupuesto",
       });
     };
 
@@ -302,7 +295,7 @@ export default {
       eliminar,
       nuevo,
       irAtras,
-      consultarCertificadoPresupuesto,
+      consultarRegistroPresupuesto,
       consultarRubroPresupuestoSaldo,
     };
   },

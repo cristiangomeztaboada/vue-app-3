@@ -4,7 +4,7 @@
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
         <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
-            <h1 class="display-6">Certificado Disponibilidad Presupuesto</h1>
+            <h1 class="display-6">Registro Presupuesto</h1>
           </div>
           <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
             <button
@@ -19,10 +19,10 @@
         </div>
         <DxDataGrid
           :data-source="dataSource"
-          key-expr="id"
+          key-expr="consecutivo"
           :show-borders="true"
           :selection="{ mode: 'single' }"
-          @row-click="seleccionarCertificadoPresupuesto"
+          @row-click="seleccionarRegistroPresupuesto"
           :showRowLines="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
@@ -37,17 +37,16 @@
             sort-order="desc"
           />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
+          <DxColumn data-field="terceroid.nombre" caption="Tercero" />
+          <DxColumn data-field="observacion" caption="Observación" />
           <DxColumn
-            data-field="diasvalidez"
-            data-type="number"
-            alignment="right"
-            caption="Días Validez"
+            data-field="certificadodisponibilidadpresupuestalid.consecutivo"
+            caption="CDP"
           />
           <DxColumn
-            data-field="rubropresupuestalid.nombre"
+            data-field="certificadodisponibilidadpresupuestalid.rubropresupuestalid.nombre"
             caption="Rubro Presupuesto"
           />
-          <DxColumn data-field="observacion" caption="Observación" />
           <DxColumn
             data-field="valor"
             data-type="number"
@@ -96,7 +95,7 @@ export default {
     const nuevo = function () {
       store.commit("ocultarAlerta");
       router.push({
-        name: "certificadopresupuestoformulario",
+        name: "registropresupuestoformulario",
         params: { codigo: "" },
       });
     };
@@ -104,7 +103,7 @@ export default {
     const listar = function () {
       store.commit("ocultarAlerta");
       api
-        .listarCertificadoPresupuesto(store.state.institucioneducativa)
+        .listarRegistroPresupuesto(store.state.institucioneducativa)
         .then((data) => {
           dataSource.value = data;
         })
@@ -113,40 +112,35 @@ export default {
 
     listar();
 
-    const seleccionarCertificadoPresupuesto = function (e) {
+    const seleccionarRegistroPresupuesto = function (e) {
       store.commit("ocultarAlerta");
-      context.emit("seleccionarCertificadoPresupuesto", e.data.consecutivo);
+      context.emit("seleccionarRegistroPresupuesto", e.data.consecutivo);
     };
 
     const eliminar = function (rowData) {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarCertificadoPresupuesto(
+          .eliminarRegistroPresupuesto(
             store.state.institucioneducativa,
             rowData.row.values[1]
           )
           .then(() => listar())
-          .catch(() => {
-            store.commit(
-              "mostrarError",
-              "Existen registros de presupuesto con rubros asociados al CDP"
-            );
-          });
+          .catch(() => {});
       }
     };
 
     const editar = function (rowData) {
       store.commit("ocultarAlerta");
       router.push({
-        name: "certificadopresupuestoformulario",
+        name: "registropresupuestoformulario",
         params: { codigo: rowData.row.values[1] },
       });
     };
 
     return {
       dataSource,
-      seleccionarCertificadoPresupuesto,
+      seleccionarRegistroPresupuesto,
       eliminar,
       editar,
       nuevo,

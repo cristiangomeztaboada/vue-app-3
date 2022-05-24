@@ -39,12 +39,8 @@
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
           <DxColumn data-field="terceroid.nombre" caption="Tercero" />
           <DxColumn
-            data-field="fuenterecursoid.codigo"
-            caption="Fuente Recurso Código"
-          />
-          <DxColumn
             data-field="fuenterecursoid.nombre"
-            caption="Fuente Recurso Nombre"
+            caption="Fuente Recurso"
           />
           <DxColumn data-field="observacion" />
           <DxColumn
