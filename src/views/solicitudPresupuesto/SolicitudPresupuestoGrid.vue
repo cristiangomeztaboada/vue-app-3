@@ -112,6 +112,7 @@ export default {
     };
 
     const listar = function () {
+      store.commit("ocultarAlerta");
       api
         .listarSolicitudPresupuesto(store.state.institucioneducativa)
         .then((data) => {
@@ -123,6 +124,7 @@ export default {
     listar();
 
     const seleccionarSolicitudPresupuesto = function (e) {
+      store.commit("ocultarAlerta");
       context.emit("seleccionarSolicitudPresupuesto", e.data.consecutivo);
     };
 
@@ -145,6 +147,7 @@ export default {
     };
 
     const editar = function (rowData) {
+      store.commit("ocultarAlerta");
       router.push({
         name: "solicitudpresupuestoformulario",
         params: { codigo: rowData.row.values[1] },

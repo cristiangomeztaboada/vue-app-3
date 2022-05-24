@@ -130,7 +130,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "Existen registros de presupuesto con rubros asociados al CDP"
+              "Existen registros de presupuesto asociados al CDP"
             );
           });
       }

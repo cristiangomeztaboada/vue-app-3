@@ -501,10 +501,7 @@ const listarTercero = function () {
 };
 
 const consultarTercero = function (codigo) {
-  return fetch(
-    `${url}/tercero/${codigo}`,
-    { method: "GET" }
-  )
+  return fetch(`${url}/tercero/${codigo}`, { method: "GET" })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -537,12 +534,9 @@ const actualizarTercero = function (tercero) {
 };
 
 const eliminarTercero = function (codigo) {
-  return fetch(
-    `${url}/tercero/${codigo}`,
-    {
-      method: "DELETE",
-    }
-  )
+  return fetch(`${url}/tercero/${codigo}`, {
+    method: "DELETE",
+  })
     .then(manejarError)
     .catch(function (e) {
       throw e;
@@ -1044,6 +1038,63 @@ const listarRegistroPresupuesto = function (institucionEducativaCodigo) {
     });
 };
 
+const consultarRegistroPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/registropresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarCertificadoPresupuestoSaldo = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/certificadodisponibilidadpresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarRegistroPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/registropresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarRegistroPresupuesto = function (registroPresupuesto) {
+  return fetch(`${url}/registropresupuestal/`, {
+    method: "POST",
+    body: JSON.stringify(registroPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1133,4 +1184,8 @@ export default {
   insertarCertificadoPresupuesto,
   eliminarCertificadoPresupuesto,
   listarRegistroPresupuesto,
+  consultarRegistroPresupuesto,
+  consultarCertificadoPresupuestoSaldo,
+  eliminarRegistroPresupuesto,
+  insertarRegistroPresupuesto,
 };

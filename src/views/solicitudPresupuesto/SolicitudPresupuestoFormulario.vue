@@ -272,6 +272,7 @@ export default {
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
     const listarTipoContrato = function () {
+      store.commit("ocultarAlerta");
       api
         .listarTipoContrato()
         .then((data) => {
@@ -283,6 +284,7 @@ export default {
     listarTipoContrato();
 
     const listarRubroPresupuestoProyeccion = function () {
+      store.commit("ocultarAlerta");
       api
         .listarRubroPresupuestoProyeccion(institucionEducativaCodigo.value)
         .then((data) => {
@@ -294,6 +296,7 @@ export default {
     listarRubroPresupuestoProyeccion();
 
     const listarPersonalPlanta = function () {
+      store.commit("ocultarAlerta");
       api
         .listarPersonalPlanta(institucionEducativaCodigo.value)
         .then((data) => {
@@ -526,6 +529,7 @@ export default {
     };
 
     const consultarRubroPresupuestoSaldo = function (e) {
+      store.commit("ocultarAlerta");
       api
         .consultarRubroPresupuestoSaldo(
           institucionEducativaCodigo.value,
