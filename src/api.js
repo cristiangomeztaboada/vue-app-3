@@ -1095,6 +1095,75 @@ const insertarRegistroPresupuesto = function (registroPresupuesto) {
     });
 };
 
+const listarObligacionPresupuesto = function (institucionEducativaCodigo) {
+  return fetch(
+    `${url}/obligacionpresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarObligacionPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/obligacionpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarRegistroPresupuestoSaldo = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/registropresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarObligacionPresupuesto = function (obligacionPresupuesto) {
+  return fetch(`${url}/obligacionpresupuestal/`, {
+    method: "POST",
+    body: JSON.stringify(obligacionPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarObligacionPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/obligacionpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1188,4 +1257,9 @@ export default {
   consultarCertificadoPresupuestoSaldo,
   eliminarRegistroPresupuesto,
   insertarRegistroPresupuesto,
+  listarObligacionPresupuesto,
+  consultarObligacionPresupuesto,
+  consultarRegistroPresupuestoSaldo,
+  insertarObligacionPresupuesto,
+  eliminarObligacionPresupuesto,
 };

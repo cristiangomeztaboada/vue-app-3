@@ -13,9 +13,9 @@
         </div>
         <div class="card-body">
           <h5 v-if="esNuevo" class="card-title">
-            Insertar Registro Presupuesto
+            Insertar Obligación Presupuesto
           </h5>
-          <h5 v-if="!esNuevo" class="card-title">Registro Presupuesto</h5>
+          <h5 v-if="!esNuevo" class="card-title">Obligación Presupuesto</h5>
           <div class="row">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
               <label>Institución Educativa</label>
@@ -28,8 +28,8 @@
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
               <label>Consecutivo</label>
-              <registro-presupuesto-buscador
-                v-on:perderFoco="consultarRegistroPresupuesto"
+              <obligacion-presupuesto-buscador
+                v-on:perderFoco="consultarObligacionPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
@@ -46,16 +46,16 @@
           </div>
 
           <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Tercero</label>
-              <tercero-buscador
-                v-on:perderFoco="consultarTercero"
-                v-bind:codigoPropiedad="terceroCodigo"
-                v-bind:mostrarCampoNombre="true"
-                v-bind:nombrePropiedad="terceroNombre"
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+              <label>Recibido a Satisfacción #</label>
+              <input
+                class="form-control"
+                v-model="reciboSatisfacion"
+                type="number"
+                id="reciboSatisfacion"
               />
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
             </div>
@@ -63,16 +63,16 @@
 
           <div class="row">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-              <label>Certificado Presupuesto</label>
-              <certificado-presupuesto-buscador
-                v-on:perderFoco="consultarCertificadoPresupuesto"
-                v-bind:codigoPropiedad="certificadoPresupuestoConsecutivo"
+              <label>Registro Presupuesto</label>
+              <registro-presupuesto-buscador
+                v-on:perderFoco="consultarRegistroPresupuesto"
+                v-bind:codigoPropiedad="registroPresupuestoConsecutivo"
               />
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
               <label>Saldo</label>
               <DxNumberBox
-                v-model="certificadoPresupuestoSaldo"
+                v-model="registroPresupuestoSaldo"
                 format="$ #,##0.##"
                 :read-only="true"
               />
@@ -89,9 +89,8 @@
 </template>
 
 <script>
-import RegistroPresupuestoBuscador from "./RegistroPresupuestoBuscador.vue";
-import TerceroBuscador from "@/views/tercero/TerceroBuscador.vue";
-import CertificadoPresupuestoBuscador from "@/views/certificadoPresupuesto/CertificadoPresupuestoBuscador.vue";
+import ObligacionPresupuestoBuscador from "./ObligacionPresupuestoBuscador.vue";
+import RegistroPresupuestoBuscador from "@/views/registroPresupuesto/RegistroPresupuestoBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
@@ -102,9 +101,8 @@ import { useRoute, useRouter } from "vue-router";
 export default {
   name: "RegistroPresupuestoFormulario",
   components: {
+    ObligacionPresupuestoBuscador,
     RegistroPresupuestoBuscador,
-    CertificadoPresupuestoBuscador,
-    TerceroBuscador,
     BarraBotones,
     DxNumberBox,
   },
@@ -114,12 +112,11 @@ export default {
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
     const fecha = ref("");
-    const terceroCodigo = ref("");
-    const terceroNombre = ref("");
+    const reciboSatisfacion = ref(0);
     const observacion = ref("");
-    const certificadoPresupuestoConsecutivo = ref(0);
-    const certificadoPresupuestoSaldo = ref(0);
+    const registroPresupuestoConsecutivo = ref(0);
     const valor = ref(0);
+    const registroPresupuestoSaldo = ref(0);
 
     const store = useStore();
     const route = new useRoute();
@@ -128,27 +125,23 @@ export default {
     institucionEducativaCodigo.value = store.state.institucioneducativa;
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
-    const consultarRegistroPresupuesto = function (c) {
+    const consultarObligacionPresupuesto = function (c) {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       api
-        .consultarRegistroPresupuesto(store.state.institucioneducativa, c)
+        .consultarObligacionPresupuesto(store.state.institucioneducativa, c)
         .then((data) => {
           if (data.consecutivo) {
             esNuevo.value = false;
           }
           consecutivo.value = data.consecutivo;
           fecha.value = data.fecha.substring(0, 10);
-          terceroCodigo.value = data.terceroid.codigo;
-          consultarTercero(terceroCodigo.value);
+          reciboSatisfacion.value = data.recibosatisfacion;
           observacion.value = data.observacion;
+          registroPresupuestoConsecutivo.value =
+            data.registropresupuestalid.consecutivo;
 
-          certificadoPresupuestoConsecutivo.value =
-            data.certificadodisponibilidadpresupuestalid.consecutivo;
-
-          consultarCertificadoPresupuesto(
-            certificadoPresupuestoConsecutivo.value
-          );
+          consultarRegistroPresupuesto(registroPresupuestoConsecutivo.value);
 
           valor.value = data.valor;
         })
@@ -157,7 +150,7 @@ export default {
         });
     };
 
-    consultarRegistroPresupuesto(route.params.codigo);
+    consultarObligacionPresupuesto(route.params.codigo);
 
     const guardar = function () {
       store.commit("ocultarAlerta");
@@ -168,20 +161,18 @@ export default {
         },
         consecutivo: consecutivo.value,
         fecha: fecha.value,
-        terceroid: {
-          codigo: terceroCodigo.value,
+        recibosatisfacion: reciboSatisfacion.value,
+        registropresupuestalid: {
+          consecutivo: registroPresupuestoConsecutivo.value,
         },
         observacion: observacion.value,
-        certificadodisponibilidadpresupuestalid: {
-          consecutivo: certificadoPresupuestoConsecutivo.value,
-        },
         valor: Math.abs(valor.value),
       };
 
       api
-        .insertarRegistroPresupuesto(registroPresupuesto)
+        .insertarObligacionPresupuesto(registroPresupuesto)
         .then((data) => {
-          consultarRegistroPresupuesto(data.consecutivo);
+          consultarObligacionPresupuesto(data.consecutivo);
           store.commit("mostrarInformacion", "registro insertado con exito");
         })
         .catch(() => {
@@ -189,26 +180,34 @@ export default {
             "mostrarError",
             "La fecha no pertenece al periodo activo"
           );
-
-          store.commit(
+          
+          if (valor.value > registroPresupuestoSaldo.value) {
+            store.commit(
             "mostrarError",
-            "El valor ingresado supera el saldo del CDP"
+            "El valor ingresado supera el saldo del registro presupuesto"
           );
+          }          
 
           if (!valor.value) {
             store.commit("mostrarError", "ingrese un valor válido");
+          }
+
+          if (!registroPresupuestoConsecutivo.value) {
+            store.commit(
+              "mostrarError",
+              "ingrese un registro presupuesto válido"
+            );
           }
 
           if (!observacion.value) {
             store.commit("mostrarError", "ingrese una observación válida");
           }
 
-          if (!certificadoPresupuestoConsecutivo.value) {
-            store.commit("mostrarError", "ingrese un CDP válido");
-          }
-
-          if (!terceroCodigo.value) {
-            store.commit("mostrarError", "ingrese un tercero válido");
+          if (!reciboSatisfacion.value) {
+            store.commit(
+              "mostrarError",
+              "ingrese un # de recibido a satisfacción válido"
+            );
           }
         });
     };
@@ -218,11 +217,10 @@ export default {
       esNuevo.value = true;
       consecutivo.value = 0;
       fecha.value = api.obtenerFechaActual();
-      terceroCodigo.value = "";
-      consultarTercero(terceroCodigo.value);
+      reciboSatisfacion.value = 0;
       observacion.value = "";
-      certificadoPresupuestoConsecutivo.value = 0;
-      consultarCertificadoPresupuesto(certificadoPresupuestoConsecutivo.value);
+      registroPresupuestoConsecutivo.value = 0;
+      consultarRegistroPresupuesto(registroPresupuestoConsecutivo.value);
       valor.value = 0;
     };
 
@@ -230,87 +228,46 @@ export default {
       store.commit("ocultarAlerta");
       if (window.confirm("Desea eliminar este registro?")) {
         api
-          .eliminarRegistroPresupuesto(
+          .eliminarObligacionPresupuesto(
             institucionEducativaCodigo.value,
             consecutivo.value
           )
           .then(() => {
             nuevo();
           })
-          .catch(() => {
-            store.commit(
-              "mostrarError",
-              "Imposible eliminar, existen documentos de oblicación presupuestal relacionados"
-            );
-          });
+          .catch(() => {});
       }
     };
 
     const irAtras = function () {
       store.commit("ocultarAlerta");
       router.push({
-        name: "registropresupuesto",
+        name: "obligacionpresupuesto",
       });
     };
 
-    const consultarCertificadoPresupuestoSaldo = function (e) {
-      api
-        .consultarRubroPresupuestoSaldoSolicitud(
-          institucionEducativaCodigo.value,
-          e.value
-        )
-        .then((data) => {
-          consultarCertificadoPresupuestoSaldo.value = data;
-        })
-        .catch(() => {});
-
-      api
-        .consultarRubroPresupuestoSaldoRecaudo(
-          institucionEducativaCodigo.value,
-          e.value
-        )
-        .then((data) => {
-          consultarCertificadoPresupuestoSaldo.value = data;
-        })
-        .catch(() => {});
-    };
-
-    const consultarTercero = function (c) {
-      store.commit("ocultarAlerta");
-      api
-        .consultarTercero(c)
-        .then((data) => {
-          terceroCodigo.value = data.codigo;
-          terceroNombre.value = data.nombre;
-        })
-        .catch(() => {
-          terceroCodigo.value = "";
-          terceroNombre.value = "";
-        });
-    };
-
-    const consultarCertificadoPresupuesto = function (c) {
+    const consultarRegistroPresupuesto = function (c) {
       store.commit("ocultarAlerta");
 
       api
-        .consultarCertificadoPresupuesto(institucionEducativaCodigo.value, c)
+        .consultarRegistroPresupuesto(institucionEducativaCodigo.value, c)
         .then((data) => {
-          certificadoPresupuestoConsecutivo.value = data.consecutivo;
+          registroPresupuestoConsecutivo.value = data.consecutivo;
 
           api
-            .consultarCertificadoPresupuestoSaldo(
+            .consultarRegistroPresupuestoSaldo(
               institucionEducativaCodigo.value,
               c
             )
             .then((data) => {
-              certificadoPresupuestoSaldo.value = data;
+              registroPresupuestoSaldo.value = data;
             })
             .catch(() => {
-              certificadoPresupuestoSaldo.value = 0;
+              registroPresupuestoSaldo.value = 0;
             });
         })
         .catch(() => {
-          certificadoPresupuestoSaldo.value = 0;
+          registroPresupuestoSaldo.value = 0;
         });
     };
 
@@ -320,21 +277,18 @@ export default {
       institucionEducativaNombre,
       consecutivo,
       fecha,
-      terceroCodigo,
-      terceroNombre,
+      reciboSatisfacion,
       observacion,
-      certificadoPresupuestoConsecutivo,
-      certificadoPresupuestoSaldo,
+      registroPresupuestoConsecutivo,
       valor,
+      registroPresupuestoSaldo,
 
       guardar,
       eliminar,
       nuevo,
       irAtras,
+      consultarObligacionPresupuesto,
       consultarRegistroPresupuesto,
-      consultarCertificadoPresupuestoSaldo,
-      consultarTercero,
-      consultarCertificadoPresupuesto,
     };
   },
 };

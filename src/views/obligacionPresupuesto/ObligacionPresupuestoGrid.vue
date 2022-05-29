@@ -4,7 +4,7 @@
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
         <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
-            <h1 class="display-6">Registro Presupuesto</h1>
+            <h1 class="display-6">Obligación Presupuesto</h1>
           </div>
           <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
             <button
@@ -22,7 +22,7 @@
           key-expr="consecutivo"
           :show-borders="true"
           :selection="{ mode: 'single' }"
-          @row-click="seleccionarRegistroPresupuesto"
+          @row-click="seleccionarObligacionPresupuesto"
           :showRowLines="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
@@ -37,14 +37,14 @@
             sort-order="desc"
           />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
-          <DxColumn data-field="terceroid.nombre" caption="Tercero" />
+          <DxColumn data-field="recibosatisfacion" caption="Recibo Satisfacción #" />
           <DxColumn data-field="observacion" caption="Observación" />
           <DxColumn
-            data-field="certificadodisponibilidadpresupuestalid.consecutivo"
-            caption="CDP"
+            data-field="registropresupuestalid.consecutivo"
+            caption="Registro Presupuesto"
           />
           <DxColumn
-            data-field="certificadodisponibilidadpresupuestalid.rubropresupuestalid.nombre"
+            data-field="registropresupuestalid.certificadodisponibilidadpresupuestalid.rubropresupuestalid.nombre"
             caption="Rubro Presupuesto"
           />
           <DxColumn
@@ -95,7 +95,7 @@ export default {
     const nuevo = function () {
       store.commit("ocultarAlerta");
       router.push({
-        name: "registropresupuestoformulario",
+        name: "obligacionpresupuestoformulario",
         params: { codigo: "" },
       });
     };
@@ -103,7 +103,7 @@ export default {
     const listar = function () {
       store.commit("ocultarAlerta");
       api
-        .listarRegistroPresupuesto(store.state.institucioneducativa)
+        .listarObligacionPresupuesto(store.state.institucioneducativa)
         .then((data) => {
           dataSource.value = data;
         })
@@ -112,40 +112,35 @@ export default {
 
     listar();
 
-    const seleccionarRegistroPresupuesto = function (e) {
+    const seleccionarObligacionPresupuesto = function (e) {
       store.commit("ocultarAlerta");
-      context.emit("seleccionarRegistroPresupuesto", e.data.consecutivo);
+      context.emit("seleccionarObligacionPresupuesto", e.data.consecutivo);
     };
 
     const eliminar = function (rowData) {
       store.commit("ocultarAlerta");
-      if (window.confirm("Desea eliminar este registro?")) {
+      if (window.confirm("Desea eliminar este obligacion?")) {
         api
-          .eliminarRegistroPresupuesto(
+          .eliminarObligacionPresupuesto(
             store.state.institucioneducativa,
             rowData.row.values[1]
           )
           .then(() => listar())
-          .catch(() => {
-            store.commit(
-              "mostrarError",
-              "Imposible eliminar, existen documentos de oblicación presupuestal relacionados"
-            );
-          });
+          .catch(() => {});
       }
     };
 
     const editar = function (rowData) {
       store.commit("ocultarAlerta");
       router.push({
-        name: "registropresupuestoformulario",
+        name: "obligacionpresupuestoformulario",
         params: { codigo: rowData.row.values[1] },
       });
     };
 
     return {
       dataSource,
-      seleccionarRegistroPresupuesto,
+      seleccionarObligacionPresupuesto,
       eliminar,
       editar,
       nuevo,
