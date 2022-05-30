@@ -36,6 +36,8 @@ import RegistroPresupuestoGrid from "@/views/registroPresupuesto/RegistroPresupu
 import RegistroPresupuestoFormulario from "@/views/registroPresupuesto/RegistroPresupuestoFormulario.vue";
 import ObligacionPresupuestoGrid from "@/views/obligacionPresupuesto/ObligacionPresupuestoGrid.vue";
 import ObligacionPresupuestoFormulario from "@/views/obligacionPresupuesto/ObligacionPresupuestoFormulario.vue";
+import PagoPresupuestoGrid from "@/views/pagoPresupuesto/PagoPresupuestoGrid.vue";
+import PagoPresupuestoFormulario from "@/views/pagoPresupuesto/PagoPresupuestoFormulario.vue";
 
 const routes = [
   {
@@ -273,6 +275,19 @@ const routes = [
     path: "/obligacionpresupuestoformulario",
     name: "obligacionpresupuestoformulario",
     component: ObligacionPresupuestoFormulario,
+  },
+  {
+    path: "/pagopresupuesto",
+    name: "pagopresupuesto",
+    component: PagoPresupuestoGrid,
+    props: {
+      mostrarColumnaBotones: true,
+    },
+  },
+  {
+    path: "/pagopresupuestoformulario",
+    name: "pagopresupuestoformulario",
+    component: PagoPresupuestoFormulario,
   },
 ];
 

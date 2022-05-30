@@ -1164,6 +1164,75 @@ const eliminarObligacionPresupuesto = function (
     });
 };
 
+const listarPagoPresupuesto = function (institucionEducativaCodigo) {
+  return fetch(
+    `${url}/pagopresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarPagoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/pagopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarObligacionPresupuestoSaldo = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/obligacionpresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarPagoPresupuesto = function (pagoPresupuesto) {
+  return fetch(`${url}/pagopresupuestal/`, {
+    method: "POST",
+    body: JSON.stringify(pagoPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarPagoPresupuesto = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/pagopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1262,4 +1331,9 @@ export default {
   consultarRegistroPresupuestoSaldo,
   insertarObligacionPresupuesto,
   eliminarObligacionPresupuesto,
+  listarPagoPresupuesto,
+  consultarPagoPresupuesto,
+  consultarObligacionPresupuestoSaldo,
+  insertarPagoPresupuesto,
+  eliminarPagoPresupuesto,
 };

@@ -207,6 +207,14 @@
                   Obligacion Presupuesto
                 </router-link>
               </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'pagopresupuesto' }"
+                >
+                  Pago Presupuesto
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>
