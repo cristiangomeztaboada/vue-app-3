@@ -132,7 +132,7 @@ export default {
 
           consultarObligacionPresupuesto(obligacionPresupuestoConsecutivo.value);
 
-          valor.value = data.valor;
+          valor.value = Number(data.valor);
         })
         .catch(() => {
           nuevo();

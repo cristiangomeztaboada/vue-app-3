@@ -87,7 +87,7 @@
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Valor</label>
-              <DxNumberBox v-model="valor" format="$ #,##0.##" />
+              <DxNumberBox v-model="valor" format="$ #,##0.##"/>
             </div>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default {
           fecha.value = data.fecha.substring(0, 10);
           observacion.value = data.observacion;
           diasValidez.value = data.diasvalidez;
-          valor.value = data.valor;
+          valor.value = Number(data.valor);
           rubroPresupuestoCodigo.value = data.rubropresupuestalid.codigo;
         })
         .catch(() => {

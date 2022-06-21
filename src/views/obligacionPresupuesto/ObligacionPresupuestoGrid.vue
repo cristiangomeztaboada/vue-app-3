@@ -37,10 +37,12 @@
             sort-order="desc"
           />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
+          <!--
           <DxColumn
             data-field="recibosatisfacion"
             caption="Recibo Satisfacción #"
           />
+          -->
           <DxColumn data-field="observacion" caption="Observación" />
           <DxColumn
             data-field="registropresupuestalid.consecutivo"

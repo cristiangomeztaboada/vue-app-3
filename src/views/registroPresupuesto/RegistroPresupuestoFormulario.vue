@@ -150,7 +150,7 @@ export default {
             certificadoPresupuestoConsecutivo.value
           );
 
-          valor.value = data.valor;
+          valor.value = Number(data.valor);
         })
         .catch(() => {
           nuevo();
