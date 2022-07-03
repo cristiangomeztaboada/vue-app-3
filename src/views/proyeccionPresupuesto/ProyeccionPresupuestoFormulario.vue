@@ -130,6 +130,85 @@
               </DxDataGrid>
             </div>
           </div>
+
+          <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header"></div>
+            <div class="card-body">
+              <h5 class="card-title">Totales</h5>
+              <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <DxDataGrid
+                    :data-source="proyeccionPresupuestoDetalleTotalFuente"
+                    key-expr="fuenterecursoid.codigo"
+                    :show-borders="true"
+                    :selection="{ mode: 'single' }"
+                    :showRowLines="true"
+                  >
+                    <DxSearchPanel
+                      :visible="true"
+                      :highlight-case-sensitive="true"
+                    />
+                    <DxColumn
+                      data-field="fuenterecursoid.codigo"
+                      caption="Fuente Recurso Código"
+                    />
+                    <DxColumn
+                      data-field="fuenterecursoid.nombre"
+                      caption="Fuente Recurso Nombre"
+                    />
+                    <DxColumn
+                      data-field="valor"
+                      data-type="number"
+                      format="currency"
+                      alignment="right"
+                    />
+                    <DxSummary>
+                      <DxTotalItem
+                        column="valor"
+                        summary-type="sum"
+                        value-format="currency"
+                      />
+                    </DxSummary>
+                  </DxDataGrid>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <DxDataGrid
+                    :data-source="proyeccionPresupuestoDetalleTotalRubro"
+                    key-expr="rubropresupuestalid.codigo"
+                    :show-borders="true"
+                    :selection="{ mode: 'single' }"
+                    :showRowLines="true"
+                  >
+                    <DxSearchPanel
+                      :visible="true"
+                      :highlight-case-sensitive="true"
+                    />
+                    <DxColumn
+                      data-field="rubropresupuestalid.codigo"
+                      caption="Rubro Presupuesto Código"
+                    />
+                    <DxColumn
+                      data-field="rubropresupuestalid.nombre"
+                      caption="Rubro Presupuesto Nombre"
+                    />
+                    <DxColumn
+                      data-field="valor"
+                      data-type="number"
+                      format="currency"
+                      alignment="right"
+                    />
+                    <DxSummary>
+                      <DxTotalItem
+                        column="valor"
+                        summary-type="sum"
+                        value-format="currency"
+                      />
+                    </DxSummary>
+                  </DxDataGrid>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -147,6 +226,8 @@ import {
   DxColumn,
   DxEditing,
   DxButton,
+  DxSummary,
+  DxTotalItem,
 } from "devextreme-vue/data-grid";
 import FuenteRecursoBuscador from "@/views/fuenteRecurso/FuenteRecursoBuscador.vue";
 import RubroPresupuestoBuscador from "@/views/rubroPresupuesto/RubroPresupuestoBuscador.vue";
@@ -164,6 +245,8 @@ export default {
     FuenteRecursoBuscador,
     RubroPresupuestoBuscador,
     DxNumberBox,
+    DxSummary,
+    DxTotalItem,
   },
   setup() {
     const esNuevo = ref(true);
@@ -173,6 +256,8 @@ export default {
     const observacion = ref("");
     const store = useStore();
     const proyeccionPresupuestoDetalle = ref([]);
+    const proyeccionPresupuestoDetalleTotalFuente = ref([]);
+    const proyeccionPresupuestoDetalleTotalRubro = ref([]);
     const fuenteRecursoCodigo = ref("");
     const fuenteRecursoNombre = ref("");
     const rubroPresupuestoCodigo = ref("");
@@ -180,6 +265,95 @@ export default {
     const valor = ref(0);
 
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
+
+    const totalizarFuente = function () {
+      proyeccionPresupuestoDetalleTotalFuente.value = [];
+      proyeccionPresupuestoDetalleTotalFuente.value =
+        proyeccionPresupuestoDetalle.value.reduce(function (a, d) {
+          let existe = false;
+          for (var i = 0; i < a.length; i++) {
+            if (a[i].fuenterecursoid.codigo == d.fuenterecursoid.codigo) {
+              existe = true;
+            }
+          }
+          if (!existe) {
+            a.push({
+              fuenterecursoid: {
+                codigo: d.fuenterecursoid.codigo,
+                nombre: d.fuenterecursoid.nombre,
+              },
+              valor: Number(0),
+            });
+          }
+          return a;
+        }, []);
+
+      for (
+        var i = 0;
+        i < proyeccionPresupuestoDetalleTotalFuente.value.length;
+        i++
+      ) {
+        for (var j = 0; j < proyeccionPresupuestoDetalle.value.length; j++) {
+          if (
+            proyeccionPresupuestoDetalleTotalFuente.value[i].fuenterecursoid
+              .codigo ==
+            proyeccionPresupuestoDetalle.value[j].fuenterecursoid.codigo
+          ) {
+            proyeccionPresupuestoDetalleTotalFuente.value[i].valor += Number(
+              proyeccionPresupuestoDetalle.value[j].valor
+            );
+          }
+        }
+      }
+    };
+
+    const totalizarRubro = function () {
+      proyeccionPresupuestoDetalleTotalRubro.value = [];
+      proyeccionPresupuestoDetalleTotalRubro.value =
+        proyeccionPresupuestoDetalle.value.reduce(function (a, d) {
+          let existe = false;
+          for (var i = 0; i < a.length; i++) {
+            if (
+              a[i].rubropresupuestalid.codigo == d.rubropresupuestalid.codigo
+            ) {
+              existe = true;
+            }
+          }
+          if (!existe) {
+            a.push({
+              rubropresupuestalid: {
+                codigo: d.rubropresupuestalid.codigo,
+                nombre: d.rubropresupuestalid.nombre,
+              },
+              valor: Number(0),
+            });
+          }
+          return a;
+        }, []);
+
+      for (
+        var i = 0;
+        i < proyeccionPresupuestoDetalleTotalRubro.value.length;
+        i++
+      ) {
+        for (var j = 0; j < proyeccionPresupuestoDetalle.value.length; j++) {
+          if (
+            proyeccionPresupuestoDetalleTotalRubro.value[i].rubropresupuestalid
+              .codigo ==
+            proyeccionPresupuestoDetalle.value[j].rubropresupuestalid.codigo
+          ) {
+            proyeccionPresupuestoDetalleTotalRubro.value[i].valor += Number(
+              proyeccionPresupuestoDetalle.value[j].valor
+            );
+          }
+        }
+      }
+    };
+
+    const totalizar = function () {
+      totalizarFuente();
+      totalizarRubro();
+    };
 
     const consultarProyeccionPresupuesto = function () {
       store.commit("ocultarAlerta");
@@ -204,6 +378,7 @@ export default {
               observacion.value = data.observacion;
               proyeccionPresupuestoDetalle.value =
                 data.proyeccionpresupuestaldetalle;
+              totalizar();
             })
             .catch(() => {
               store.commit("mostrarError", "No existe proyección presupuestal");
@@ -381,6 +556,8 @@ export default {
       periodoCodigo,
       observacion,
       proyeccionPresupuestoDetalle,
+      proyeccionPresupuestoDetalleTotalFuente,
+      proyeccionPresupuestoDetalleTotalRubro,
       fuenteRecursoCodigo,
       fuenteRecursoNombre,
       rubroPresupuestoCodigo,
