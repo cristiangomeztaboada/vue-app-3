@@ -633,6 +633,20 @@ const eliminarProyeccionPresupuesto = function (
     });
 };
 
+const aprobarProyeccionPresupuesto = function (
+  periodoCodigo,
+  institucionEducativaCodigo
+) {
+  return fetch(
+    `${url}/proyeccionpresupuestalcabecera/aprobar/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "PUT" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const insertarProyeccionPresupuesto = function (proyeccionPresupuesto) {
   return fetch(`${url}/proyeccionpresupuestalcabecera/`, {
     method: "POST",
@@ -674,6 +688,22 @@ const insertarProyeccionPresupuestoDetalle = function (
     });
 };
 
+const insertarProyeccionPresupuestoDetalleMultiple = function (
+  periodoCodigo,
+  institucionEducativaCodigo,
+  proyeccionPresupuestoDetalle
+) {
+  return fetch(`${url}/proyeccionpresupuestaldetalle/todos/`, {
+    method: "POST",
+    body: JSON.stringify(proyeccionPresupuestoDetalle),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const eliminarProyeccionPresupuestoDetalle = function (
   periodoCodigo,
   institucionEducativaCodigo,
@@ -682,6 +712,20 @@ const eliminarProyeccionPresupuestoDetalle = function (
 ) {
   return fetch(
     `${url}/proyeccionpresupuestaldetalle/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarProyeccionPresupuestoDetalleMultiple = function (
+  periodoCodigo,
+  institucionEducativaCodigo
+) {
+  return fetch(
+    `${url}/proyeccionpresupuestaldetalle/todos/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
     { method: "DELETE" }
   )
     .then(manejarError)
@@ -1292,10 +1336,13 @@ export default {
   actualizarPeriodo,
   consultarProyeccionPresupuesto,
   eliminarProyeccionPresupuesto,
+  aprobarProyeccionPresupuesto,
   insertarProyeccionPresupuesto,
   actualizarProyeccionPresupuesto,
   insertarProyeccionPresupuestoDetalle,
+  insertarProyeccionPresupuestoDetalleMultiple,
   eliminarProyeccionPresupuestoDetalle,
+  eliminarProyeccionPresupuestoDetalleMultiple,
   listarIngresoPresupuesto,
   consultarIngresoPresupuesto,
   consultarIngresoPresupuestoSaldo,

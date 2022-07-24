@@ -6,8 +6,12 @@
           <barra-botones
             v-on:guardar="guardar"
             v-on:eliminar="eliminar"
+            v-on:aprobar="aprobar"
+            v-on:importar="importar"
             v-bind:ocultarBotonAtras="true"
             v-bind:ocultarBotonNuevo="true"
+            v-bind:mostrarBotonAprobar="true"
+            v-bind:mostrarBotonImportar="true"
           />
         </div>
         <div class="card-body">
@@ -36,7 +40,22 @@
                 readonly
               />
             </div>
-            <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+              <label>Estado</label>
+              <input
+                v-model="estado"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
             </div>
@@ -213,6 +232,24 @@
       </div>
     </div>
   </div>
+  <div class="modal" id="modalImportar" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <input id="archivo" type="file" @input="leerArchivo" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -232,6 +269,8 @@ import {
 import FuenteRecursoBuscador from "@/views/fuenteRecurso/FuenteRecursoBuscador.vue";
 import RubroPresupuestoBuscador from "@/views/rubroPresupuesto/RubroPresupuestoBuscador.vue";
 import DxNumberBox from "devextreme-vue/number-box";
+import $ from "jquery";
+import readXlsFile from "read-excel-file";
 
 export default {
   name: "ProyeccionPresupuestoFormulario",
@@ -253,6 +292,8 @@ export default {
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const periodoCodigo = ref("");
+    const estado = ref("");
+    const objeto = ref("");
     const observacion = ref("");
     const store = useStore();
     const proyeccionPresupuestoDetalle = ref([]);
@@ -263,6 +304,8 @@ export default {
     const rubroPresupuestoCodigo = ref("");
     const rubroPresupuestoNombre = ref("");
     const valor = ref(0);
+    const filasArchivo = ref([]);
+    const jsonDetalle = ref([]);
 
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
@@ -372,10 +415,13 @@ export default {
               if (data.id) {
                 esNuevo.value = false;
               }
+
               periodoCodigo.value = data.periodoid.codigo;
               institucionEducativaCodigo.value =
                 data.institucioneducativaid.codigo;
+              estado.value = data.estado;
               observacion.value = data.observacion;
+              objeto.value = data.objeto;
               proyeccionPresupuestoDetalle.value =
                 data.proyeccionpresupuestaldetalle;
               totalizar();
@@ -402,28 +448,42 @@ export default {
           codigo: periodoCodigo.value,
         },
         observacion: observacion.value,
+        objeto: objeto.value,
+        estado: estado.value,
       };
 
       if (esNuevo.value) {
         api
           .insertarProyeccionPresupuesto(proyeccionPresupuesto)
           .then(() => {
+            consultarProyeccionPresupuesto();
             store.commit("mostrarInformacion", "registro insertado con exito");
           })
           .catch((e) => {
             store.commit("mostrarError", e);
+
+            if (!proyeccionPresupuesto.objeto) {
+              store.commit(
+                "mostrarError",
+                "ingrese un valor en el campo objeto"
+              );
+            }
           });
       } else {
         api
           .actualizarProyeccionPresupuesto(proyeccionPresupuesto)
           .then(() => {
+            consultarProyeccionPresupuesto();
             store.commit(
               "mostrarInformacion",
               "registro actualizado con exito"
             );
           })
-          .catch((e) => {
-            store.commit("mostrarError", e);
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "No se puede modificar un documento aprobado"
+            );
           });
       }
     };
@@ -477,6 +537,8 @@ export default {
         });
 
       observacion.value = "";
+      estado.value = "";
+      objeto.value = "";
     };
 
     const eliminar = function () {
@@ -515,7 +577,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "Existe ingreso presupuestal con esta fuente asociada ó existe solicitud presupuestal con este rubro asociado"
+              "No es posible eliminar por: -1)EL documento se encuentra aprobado -2)Existe ingreso presupuestal con esta fuente asociada -3)Existe solicitud presupuestal con este rubro asociado"
             );
           });
       }
@@ -549,11 +611,98 @@ export default {
         });
     };
 
+    const aprobar = function () {
+      store.commit("ocultarAlerta");
+      if (window.confirm("Desea aprobar este documento?")) {
+        api
+          .aprobarProyeccionPresupuesto(
+            periodoCodigo.value,
+            institucionEducativaCodigo.value
+          )
+          .then(() => {
+            consultarProyeccionPresupuesto();
+          })
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Primero debe ingresar los registros de detalle del documento"
+            );
+          });
+      }
+    };
+
+    const importar = function () {
+      store.commit("ocultarAlerta");
+      if (!esNuevo.value) {
+        $("#modalImportar").modal("show");
+      }
+    };
+
+    const leerArchivo = function () {
+      store.commit("ocultarAlerta");
+      const inputArchivo = document.getElementById("archivo");      
+      readXlsFile(inputArchivo.files[0]).then((rows) => {
+        filasArchivo.value = rows;
+        jsonDetalle.value = [];
+        
+        for (var i = 1; i < filasArchivo.value.length; i++) {
+          jsonDetalle.value.push({
+            proyeccionpresupuestalid: {
+              codigoperiodo: periodoCodigo.value,
+              codigoinstitucioneducativa: institucionEducativaCodigo.value,
+            },
+            fuenterecursoid: {
+              codigo: filasArchivo.value[i][0],
+            },
+            rubropresupuestalid: {
+              codigo: filasArchivo.value[i][1],
+            },
+            valor: Math.abs(filasArchivo.value[i][2]),
+          });
+        }
+console.log(jsonDetalle.value);
+        api
+          .eliminarProyeccionPresupuestoDetalleMultiple(
+            periodoCodigo.value,
+            institucionEducativaCodigo.value
+          )
+          .then(() => {
+            api
+              .insertarProyeccionPresupuestoDetalleMultiple(
+                periodoCodigo.value,
+                institucionEducativaCodigo.value,
+                jsonDetalle.value,
+              )
+              .then(() => {
+                consultarProyeccionPresupuesto();
+              })
+              .catch(() => {
+                store.commit(
+                  "mostrarError",
+                  "Error al importar plantilla, revise los datos e intente nuevamente"
+                );
+              });
+
+            consultarProyeccionPresupuesto();
+          })
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "No es posible eliminar por: -1)EL documento se encuentra aprobado -2)Existe ingreso presupuestal con esta fuente asociada -3)Existe solicitud presupuestal con este rubro asociado"
+            );
+          });
+      });
+      document.getElementById("archivo").value = "";
+      $("#modalImportar").modal("hide");
+    };
+
     return {
       esNuevo,
       institucionEducativaCodigo,
       institucionEducativaNombre,
       periodoCodigo,
+      estado,
+      objeto,
       observacion,
       proyeccionPresupuestoDetalle,
       proyeccionPresupuestoDetalleTotalFuente,
@@ -571,6 +720,9 @@ export default {
       guardarProyeccionPresupuestoDetalle,
       consultarFuenteRecurso,
       consultarRubroPresupuesto,
+      aprobar,
+      importar,
+      leerArchivo,
     };
   },
 };

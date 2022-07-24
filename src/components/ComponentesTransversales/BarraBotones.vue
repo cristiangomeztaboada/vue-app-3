@@ -27,6 +27,24 @@
         💾
       </button>
     </li>
+    <li v-if="mostrarBotonImportar ? true : false" class="nav-item">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        v-on:click="importar"
+      >
+        📥
+      </button>
+    </li>
+    <li v-if="mostrarBotonAprobar ? true : false" class="nav-item">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        v-on:click="aprobar"
+      >
+        ✅
+      </button>
+    </li>
     <li v-if="ocultarBotonNuevo ? false : true" class="nav-item">
       <button type="button" class="btn btn-outline-primary" v-on:click="nuevo">
         ➕
@@ -53,6 +71,8 @@ export default {
     ocultarBotonNuevo: Boolean,
     ocultarBotonGuardar: Boolean,
     mostrarBotonImprimir: Boolean,
+    mostrarBotonAprobar: Boolean,
+    mostrarBotonImportar: Boolean,
   },
   setup(props, context) {
     const guardar = function () {
@@ -75,12 +95,22 @@ export default {
       context.emit("imprimir");
     };
 
+    const aprobar = function () {
+      context.emit("aprobar");
+    };
+
+    const importar = function () {
+      context.emit("importar");
+    };
+
     return {
       guardar,
       irAtras,
       nuevo,
       eliminar,
       imprimir,
+      aprobar,
+      importar,
     };
   },
 };
