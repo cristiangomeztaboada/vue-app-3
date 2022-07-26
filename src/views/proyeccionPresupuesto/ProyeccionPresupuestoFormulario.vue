@@ -640,11 +640,11 @@ export default {
 
     const leerArchivo = function () {
       store.commit("ocultarAlerta");
-      const inputArchivo = document.getElementById("archivo");      
+      const inputArchivo = document.getElementById("archivo");
       readXlsFile(inputArchivo.files[0]).then((rows) => {
         filasArchivo.value = rows;
         jsonDetalle.value = [];
-        
+
         for (var i = 1; i < filasArchivo.value.length; i++) {
           jsonDetalle.value.push({
             proyeccionpresupuestalid: {
@@ -660,37 +660,37 @@ export default {
             valor: Math.abs(filasArchivo.value[i][2]),
           });
         }
-console.log(jsonDetalle.value);
+        console.log(jsonDetalle.value);
         api
           .eliminarProyeccionPresupuestoDetalleMultiple(
             periodoCodigo.value,
             institucionEducativaCodigo.value
           )
-          .then(() => {
-            api
-              .insertarProyeccionPresupuestoDetalleMultiple(
-                periodoCodigo.value,
-                institucionEducativaCodigo.value,
-                jsonDetalle.value,
-              )
-              .then(() => {
-                consultarProyeccionPresupuesto();
-              })
-              .catch(() => {
-                store.commit(
-                  "mostrarError",
-                  "Error al importar plantilla, revise los datos e intente nuevamente"
-                );
-              });
-
-            consultarProyeccionPresupuesto();
-          })
+          .then(() => {})
           .catch(() => {
             store.commit(
               "mostrarError",
               "No es posible eliminar por: -1)EL documento se encuentra aprobado -2)Existe ingreso presupuestal con esta fuente asociada -3)Existe solicitud presupuestal con este rubro asociado"
             );
           });
+
+        api
+          .insertarProyeccionPresupuestoDetalleMultiple(
+            periodoCodigo.value,
+            institucionEducativaCodigo.value,
+            jsonDetalle.value
+          )
+          .then(() => {
+            consultarProyeccionPresupuesto();
+          })
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Error al importar plantilla por: 1)El documento se encuentra aprobado 2)revise los datos de la plantilla e intente nuevamente"
+            );
+          });
+
+        consultarProyeccionPresupuesto();
       });
       document.getElementById("archivo").value = "";
       $("#modalImportar").modal("hide");
