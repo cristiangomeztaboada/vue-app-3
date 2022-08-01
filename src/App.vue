@@ -162,6 +162,14 @@
               <li>
                 <router-link
                   class="dropdown-item"
+                  :to="{ name: 'modificacionpresupuestoformulario' }"
+                >
+                  Modificación Proyección Presupuesto
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
                   :to="{ name: 'ingresopresupuesto' }"
                 >
                   Ingreso Presupuesto

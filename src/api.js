@@ -1277,6 +1277,48 @@ const eliminarPagoPresupuesto = function (
     });
 };
 
+const consultarModificacionPresupuesto = function (
+  periodoCodigo,
+  institucionEducativaCodigo
+) {
+  return fetch(
+    `${url}/modificacionproyeccionpresupuestalcabecera/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarModificacionPresupuesto = function (proyeccionPresupuesto) {
+  return fetch(`${url}/modificacionproyeccionpresupuestalcabecera/`, {
+    method: "POST",
+    body: JSON.stringify(proyeccionPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const actualizarModificacionPresupuesto = function (proyeccionPresupuesto) {
+  return fetch(
+    `${url}/modificacionproyeccionpresupuestalcabecera/?codigoperiodo=${proyeccionPresupuesto.periodoid.codigo}&codigoinstitucioneducativa=${proyeccionPresupuesto.institucioneducativaid.codigo}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(proyeccionPresupuesto),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1383,4 +1425,7 @@ export default {
   consultarObligacionPresupuestoSaldo,
   insertarPagoPresupuesto,
   eliminarPagoPresupuesto,
+  consultarModificacionPresupuesto,
+  insertarModificacionPresupuesto,
+  actualizarModificacionPresupuesto,
 };

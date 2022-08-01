@@ -38,6 +38,7 @@ import ObligacionPresupuestoGrid from "@/views/obligacionPresupuesto/ObligacionP
 import ObligacionPresupuestoFormulario from "@/views/obligacionPresupuesto/ObligacionPresupuestoFormulario.vue";
 import PagoPresupuestoGrid from "@/views/pagoPresupuesto/PagoPresupuestoGrid.vue";
 import PagoPresupuestoFormulario from "@/views/pagoPresupuesto/PagoPresupuestoFormulario.vue";
+import ModificacionPresupuestoFormulario from "@/views/modificacionPresupuesto/ModificacionPresupuestoFormulario.vue";
 
 const routes = [
   {
@@ -288,6 +289,11 @@ const routes = [
     path: "/pagopresupuestoformulario",
     name: "pagopresupuestoformulario",
     component: PagoPresupuestoFormulario,
+  },
+  {
+    path: "/modificacionpresupuestoformulario",
+    name: "modificacionpresupuestoformulario",
+    component: ModificacionPresupuestoFormulario,
   },
 ];
 
