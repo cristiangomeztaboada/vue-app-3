@@ -1319,6 +1319,51 @@ const actualizarModificacionPresupuesto = function (proyeccionPresupuesto) {
     });
 };
 
+const eliminarModificacionPresupuesto = function (
+  periodoCodigo,
+  institucionEducativaCodigo
+) {
+  return fetch(
+    `${url}/modificacionproyeccionpresupuestalcabecera/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarModificacionPresupuestoDetalle = function (
+  proyeccionPresupuestoDetalle
+) {
+  
+  return fetch(`${url}/modificacionproyeccionpresupuestaldetalle/`, {
+    method: "POST",
+    body: JSON.stringify(proyeccionPresupuestoDetalle),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarModificacionPresupuestoDetalle = function (
+  periodoCodigo,
+  institucionEducativaCodigo,
+  fuenteRecursoCodigo,
+  rubroPresupuestoCodigo
+) {
+  return fetch(
+    `${url}/modificacionproyeccionpresupuestaldetalle/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1428,4 +1473,7 @@ export default {
   consultarModificacionPresupuesto,
   insertarModificacionPresupuesto,
   actualizarModificacionPresupuesto,
+  eliminarModificacionPresupuesto,
+  insertarModificacionPresupuestoDetalle,
+  eliminarModificacionPresupuestoDetalle,
 };

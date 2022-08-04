@@ -74,6 +74,7 @@
                     v-on:perderFoco="consultarFuenteRecurso"
                     v-bind:mostrarCampoNombre="true"
                     v-bind:nombrePropiedad="fuenteRecursoNombre"
+                    v-bind:codigoPropiedad="fuenteRecursoCodigo"
                   />
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
@@ -83,6 +84,7 @@
                     v-on:perderFoco="consultarRubroPresupuesto"
                     v-bind:mostrarCampoNombre="true"
                     v-bind:nombrePropiedad="rubroPresupuestoNombre"
+                    v-bind:codigoPropiedad="rubroPresupuestoCodigo"
                   />
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
@@ -660,7 +662,7 @@ export default {
             valor: Math.abs(filasArchivo.value[i][2]),
           });
         }
-        console.log(jsonDetalle.value);
+        
         api
           .eliminarProyeccionPresupuestoDetalleMultiple(
             periodoCodigo.value,

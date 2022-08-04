@@ -70,6 +70,7 @@
                     v-on:perderFoco="consultarFuenteRecurso"
                     v-bind:mostrarCampoNombre="true"
                     v-bind:nombrePropiedad="fuenteRecursoNombre"
+                    v-bind:codigoPropiedad="fuenteRecursoCodigo"
                   />
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
@@ -79,6 +80,7 @@
                     v-on:perderFoco="consultarRubroPresupuesto"
                     v-bind:mostrarCampoNombre="true"
                     v-bind:nombrePropiedad="rubroPresupuestoNombre"
+                    v-bind:codigoPropiedad="rubroPresupuestoCodigo"
                   />
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
@@ -415,7 +417,7 @@ export default {
               observacion.value = data.observacion;
               objeto.value = data.objeto;
               modificacionPresupuestoDetalle.value =
-                data.modificacionpresupuestaldetalle;
+                data.modificacionproyeccionpresupuestaldetalle;
               totalizar();
               
             })
@@ -486,7 +488,7 @@ export default {
       store.commit("ocultarAlerta");
 
       const modificacionPresupuestoDetalle = {
-        modificacionpresupuestalid: {
+        modificacionproyeccionpresupuestalid: {
           codigoperiodo: periodoCodigo.value,
           codigoinstitucioneducativa: institucionEducativaCodigo.value,
         },
@@ -496,7 +498,7 @@ export default {
         rubropresupuestalid: {
           codigo: rubroPresupuestoCodigo.value,
         },
-        valor: Math.abs(valor.value),
+        valor: Number(valor.value),
       };
 
       api
@@ -504,6 +506,7 @@ export default {
         .then(() => {
           store.commit("mostrarInformacion", "registro insertado con exito");
           consultarModificacionPresupuesto();
+
           fuenteRecursoCodigo.value = "";
           rubroPresupuestoCodigo.value = "";
           valor.value = 0;
@@ -571,7 +574,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "No es posible eliminar por: -1)EL documento se encuentra aprobado -2)Existe ingreso presupuestal con esta fuente asociada -3)Existe solicitud presupuestal con este rubro asociado"
+              "No es posible eliminar por: -1)Existe ingreso presupuestal con esta fuente asociada -2)Existe solicitud presupuestal con este rubro asociado"
             );
           });
       }
