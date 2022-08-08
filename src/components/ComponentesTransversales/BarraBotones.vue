@@ -50,7 +50,7 @@
         ➕
       </button>
     </li>
-    <li class="nav-item">
+    <li v-if="mostrarBotonEliminar ? true : false" class="nav-item">
       <button
         type="button"
         class="btn btn-outline-primary"
@@ -73,6 +73,7 @@ export default {
     mostrarBotonImprimir: Boolean,
     mostrarBotonAprobar: Boolean,
     mostrarBotonImportar: Boolean,
+    mostrarBotonEliminar: Boolean,
   },
   setup(props, context) {
     const guardar = function () {

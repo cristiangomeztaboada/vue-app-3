@@ -9,15 +9,14 @@
             v-on:nuevo="nuevo"
             v-on:eliminar="eliminar"
             v-bind:ocultarBotonGuardar="!esNuevo"
+            v-bind:mostrarBotonEliminar="!esNuevo"
           />
         </div>
         <div class="card-body">
           <h5 v-if="esNuevo" class="card-title">
             Insertar Recaudo Presupuesto
           </h5>
-          <h5 v-if="!esNuevo" class="card-title">
-            Recaudo Presupuesto
-          </h5>
+          <h5 v-if="!esNuevo" class="card-title">Recaudo Presupuesto</h5>
 
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -37,6 +36,18 @@
               />
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Estado</label>
+              <input
+                class="form-control"
+                v-model="estado"
+                id="estado"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Fecha</label>
               <input
                 class="form-control"
@@ -46,9 +57,6 @@
                 readonly
               />
             </div>
-          </div>
-
-          <div class="row">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Tipo Recaudo</label>
               <DxSelectBox
@@ -58,13 +66,20 @@
                 v-model="tipoRecaudoCodigo"
               />
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Documento Recaudo</label>
               <input
                 v-model="documentoRecaudo"
                 class="form-control"
                 type="text"
               />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Observación</label>
@@ -124,10 +139,12 @@ export default {
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
+    const estado = ref("");
     const fecha = ref("");
     const ingresoPresupuestoConsecutivo = ref(0);
     const tipoRecaudoCodigo = ref("");
     const documentoRecaudo = ref("");
+    const objeto = ref("");
     const observacion = ref("");
     const valor = ref(0);
 
@@ -165,11 +182,13 @@ export default {
           }
 
           consecutivo.value = data.consecutivo;
+          estado.value = data.estado;
           fecha.value = data.fecha.substring(0, 10);
           ingresoPresupuestoConsecutivo.value =
             data.ingresopresupuestalid.consecutivo;
           tipoRecaudoCodigo.value = data.tiporecaudoid.codigo;
           documentoRecaudo.value = data.documentorecaudo;
+          objeto.value = data.objeto;
           observacion.value = data.observacion;
           valor.value = Number(data.valor);
 
@@ -190,6 +209,7 @@ export default {
         consecutivo: consecutivo.value,
         fecha: fecha.value,
         valor: valor.value,
+        objeto: objeto.value,
         observacion: observacion.value,
         tiporecaudoid: {
           codigo: tipoRecaudoCodigo.value,
@@ -211,7 +231,7 @@ export default {
             if (e) {
               store.commit(
                 "mostrarError",
-                "El valor ingresado supera el saldo pendiente"
+                "El ingreso presupuestal se encuentra anulado o el valor ingresado supera el saldo pendiente"
               );
             }
 
@@ -239,6 +259,13 @@ export default {
             if (!recaudoPresupuesto.tiporecaudoid.codigo) {
               store.commit("mostrarError", "ingrese un tipo de recaudo válido");
             }
+
+            if (!recaudoPresupuesto.objeto) {
+              store.commit(
+                "mostrarError",
+                "ingrese un objeto de documento válido"
+              );
+            }
           });
       }
     };
@@ -261,7 +288,9 @@ export default {
       esNuevo.value = true;
       institucionEducativaCodigo.value = store.state.institucioneducativa;
       consecutivo.value = 0;
+      estado.value = "";
       fecha.value = fullFechaActual;
+      objeto.value = "";
       observacion.value = "";
       valor.value = 0;
       documentoRecaudo.value = "";
@@ -322,10 +351,12 @@ export default {
       institucionEducativaCodigo,
       institucionEducativaNombre,
       consecutivo,
+      estado,
       fecha,
       ingresoPresupuestoConsecutivo,
       tipoRecaudoCodigo,
       documentoRecaudo,
+      objeto,
       observacion,
       valor,
 

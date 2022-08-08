@@ -36,6 +36,7 @@
             :sort-index="0"
             sort-order="desc"
           />
+          <DxColumn data-field="estado" />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
           <DxColumn
             data-field="ingresopresupuestalid.consecutivo"
@@ -43,6 +44,7 @@
           />
           <DxColumn data-field="tiporecaudoid.nombre" caption="Tipo Recaudo" />
           <DxColumn data-field="documentorecaudo" caption="Documento Recaudo" />
+          <DxColumn data-field="objeto" />
           <DxColumn data-field="observacion" />
           <DxColumn
             data-field="valor"

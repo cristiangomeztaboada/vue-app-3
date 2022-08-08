@@ -36,6 +36,7 @@
             :sort-index="0"
             sort-order="desc"
           />
+          <DxColumn data-field="estado" />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
           <DxColumn data-field="terceroid.nombre" caption="Tercero" />
           <DxColumn
@@ -43,6 +44,7 @@
             caption="Fuente Recurso"
           />
           <DxColumn data-field="observacion" />
+          <DxColumn data-field="objeto" />
           <DxColumn
             data-field="valor"
             data-type="number"
@@ -143,6 +145,13 @@ export default {
               "mostrarError",
               "Existen documentos de recaudo presupuestal relacionados"
             );
+
+            if (rowData.row.values[2] == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };

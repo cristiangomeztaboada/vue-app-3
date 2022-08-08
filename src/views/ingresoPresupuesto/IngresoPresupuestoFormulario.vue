@@ -9,17 +9,15 @@
             v-on:nuevo="nuevo"
             v-on:eliminar="eliminar"
             v-on:imprimir="imprimir"
-            v-bind:ocultarBotonGuardar="!esNuevo"
             v-bind:mostrarBotonImprimir="!esNuevo"
+            v-bind:mostrarBotonEliminar="!esNuevo"
           />
         </div>
         <div class="card-body">
           <h5 v-if="esNuevo" class="card-title">
             Insertar Ingreso Presupuesto
           </h5>
-          <h5 v-if="!esNuevo" class="card-title">
-            Ingreso Presupuesto
-          </h5>
+          <h5 v-if="!esNuevo" class="card-title">Ingreso Presupuesto</h5>
 
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -39,12 +37,11 @@
               />
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Fecha</label>
+              <label>Estado</label>
               <input
                 class="form-control"
-                v-model="fecha"
-                type="date"
-                id="fecha"
+                v-model="estado"
+                id="estado"
                 readonly
               />
             </div>
@@ -60,12 +57,28 @@
                 v-bind:nombrePropiedad="terceroNombre"
               />
             </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Fecha</label>
+              <input
+                class="form-control"
+                v-model="fecha"
+                type="date"
+                id="fecha"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
+            </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
             </div>
           </div>
-
 
           <div class="row">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -226,12 +239,15 @@ export default {
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
+    const estado = ref("");
     const fecha = ref("");
     const fechaProyeccionRecaudo = ref("");
     const terceroCodigo = ref("");
     const terceroNombre = ref("");
     const fuenteRecursoCodigo = ref("");
+    const objeto = ref("");
     const observacion = ref("");
+
     const valor = ref(0);
     const fuentesRecursos = ref([]);
     const fuenteRecursoSaldo = ref(0);
@@ -275,6 +291,7 @@ export default {
 
           institucionEducativaCodigo.value = store.state.institucioneducativa;
           consecutivo.value = data.consecutivo;
+          estado.value = data.estado;
           fecha.value = data.fecha.substring(0, 10);
           fechaProyeccionRecaudo.value = data.fechaproyeccionrecaudo.substring(
             0,
@@ -282,6 +299,7 @@ export default {
           );
           terceroCodigo.value = data.terceroid.codigo;
           fuenteRecursoCodigo.value = data.fuenterecursoid.codigo;
+          objeto.value = data.objeto;
           observacion.value = data.observacion;
           valor.value = Number(data.valor);
 
@@ -310,6 +328,7 @@ export default {
         },
         valor: valor.value,
         observacion: observacion.value,
+        objeto: objeto.value,
       };
 
       if (esNuevo.value) {
@@ -321,46 +340,59 @@ export default {
             store.commit("mostrarInformacion", "registro insertado con exito");
           })
           .catch((e) => {
-            let isValidDate = Date.parse(ingresoPresupuesto.fecha);
-            if (isNaN(isValidDate)) {
-              store.commit("mostrarError", "ingrese una fecha válida");
-            }
-
-            isValidDate = Date.parse(ingresoPresupuesto.fechaproyeccionrecaudo);
-            if (isNaN(isValidDate)) {
-              store.commit(
-                "mostrarError",
-                "ingrese una fecha proyección recaudo válida"
-              );
-            }
-
-            if (!ingresoPresupuesto.terceroid.codigo) {
-              store.commit("mostrarError", "ingrese un tercero válido");
-            }
-
-            if (!ingresoPresupuesto.fuenterecursoid.codigo) {
-              store.commit(
-                "mostrarError",
-                "ingrese una fuente de recurso válida"
-              );
-            }
-
-            if (!ingresoPresupuesto.observacion) {
-              store.commit("mostrarError", "ingrese una observación válida");
-            }
-
-            if (
-              !ingresoPresupuesto.valor ||
-              Math.sign(ingresoPresupuesto.valor) != 1
-            ) {
-              store.commit("mostrarError", "ingrese un valor válido");
-            }
-
             if (e) {
               store.commit(
                 "mostrarError",
                 "El valor ingresado supera el saldo pendiente"
               );
+
+              let isValidDate = Date.parse(ingresoPresupuesto.fecha);
+              if (isNaN(isValidDate)) {
+                store.commit("mostrarError", "ingrese una fecha válida");
+              }
+
+              if (!ingresoPresupuesto.terceroid.codigo) {
+                store.commit("mostrarError", "ingrese un tercero válido");
+              }
+
+              if (!ingresoPresupuesto.fuenterecursoid.codigo) {
+                store.commit(
+                  "mostrarError",
+                  "ingrese una fuente de recurso válida"
+                );
+              }
+
+              if (!ingresoPresupuesto.observacion) {
+                store.commit("mostrarError", "ingrese una observación válida");
+              }
+
+              if (
+                !ingresoPresupuesto.valor ||
+                Math.sign(ingresoPresupuesto.valor) != 1
+              ) {
+                store.commit("mostrarError", "ingrese un valor válido");
+              }
+
+              if (!ingresoPresupuesto.objeto) {
+                store.commit(
+                  "mostrarError",
+                  "ingrese una objeto del documento válido"
+                );
+              }
+
+              isValidDate = Date.parse(
+                ingresoPresupuesto.fechaproyeccionrecaudo
+              );
+              if (isNaN(isValidDate)) {
+                store.commit(
+                  "mostrarError",
+                  "ingrese una fecha proyección recaudo válida"
+                );
+              }
+
+              if (!ingresoPresupuesto.terceroid.codigo) {
+                store.commit("mostrarError", "ingrese un tercero válido");
+              }
             }
           });
       }
@@ -398,10 +430,12 @@ export default {
       esNuevo.value = true;
       institucionEducativaCodigo.value = store.state.institucioneducativa;
       consecutivo.value = 0;
+      estado.value = "";
       fecha.value = fullFechaActual;
       terceroCodigo.value = "";
       terceroNombre.value = "";
       fechaProyeccionRecaudo.value = "";
+      objeto.value = "";
       observacion.value = "";
       fuenteRecursoCodigo.value = "";
       valor.value = 0;
@@ -426,6 +460,13 @@ export default {
               "mostrarError",
               "Existen documentos de recaudo presupuestal relacionados"
             );
+
+            if (estado.value == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };
@@ -449,12 +490,14 @@ export default {
       institucionEducativaCodigo,
       institucionEducativaNombre,
       consecutivo,
+      estado,
       fecha,
       fechaProyeccionRecaudo,
       terceroCodigo,
       terceroNombre,
       fuenteRecursoCodigo,
       observacion,
+      objeto,
       valor,
       fuentesRecursos,
       fuenteRecursoSaldo,
