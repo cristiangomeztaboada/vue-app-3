@@ -395,6 +395,71 @@ export default {
               }
             }
           });
+      } else {
+
+        api
+          .actualizarIngresoPresupuesto(ingresoPresupuesto)
+          .then((data) => {
+            consultarIngresoPresupuesto(data.consecutivo);
+            fuenteRecursoCodigoCambio({ value: fuenteRecursoCodigo.value });
+            store.commit("mostrarInformacion", "registro actualizado con exito");
+          })
+          .catch((e) => {
+            if (e) {
+              store.commit(
+                "mostrarError",
+                "El valor ingresado supera el saldo pendiente"
+              );
+
+              let isValidDate = Date.parse(ingresoPresupuesto.fecha);
+              if (isNaN(isValidDate)) {
+                store.commit("mostrarError", "ingrese una fecha válida");
+              }
+
+              if (!ingresoPresupuesto.terceroid.codigo) {
+                store.commit("mostrarError", "ingrese un tercero válido");
+              }
+
+              if (!ingresoPresupuesto.fuenterecursoid.codigo) {
+                store.commit(
+                  "mostrarError",
+                  "ingrese una fuente de recurso válida"
+                );
+              }
+
+              if (!ingresoPresupuesto.observacion) {
+                store.commit("mostrarError", "ingrese una observación válida");
+              }
+
+              if (
+                !ingresoPresupuesto.valor ||
+                Math.sign(ingresoPresupuesto.valor) != 1
+              ) {
+                store.commit("mostrarError", "ingrese un valor válido");
+              }
+
+              if (!ingresoPresupuesto.objeto) {
+                store.commit(
+                  "mostrarError",
+                  "ingrese una objeto del documento válido"
+                );
+              }
+
+              isValidDate = Date.parse(
+                ingresoPresupuesto.fechaproyeccionrecaudo
+              );
+              if (isNaN(isValidDate)) {
+                store.commit(
+                  "mostrarError",
+                  "ingrese una fecha proyección recaudo válida"
+                );
+              }
+
+              if (!ingresoPresupuesto.terceroid.codigo) {
+                store.commit("mostrarError", "ingrese un tercero válido");
+              }
+            }
+          });
       }
     };
 

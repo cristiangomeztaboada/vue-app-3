@@ -8,7 +8,6 @@
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
             v-on:eliminar="eliminar"
-            v-bind:ocultarBotonGuardar="!esNuevo"
             v-bind:mostrarBotonEliminar="!esNuevo"
           />
         </div>
@@ -226,6 +225,53 @@ export default {
           .then((data) => {
             consultarRecaudoPresupuesto(data.consecutivo);
             store.commit("mostrarInformacion", "registro insertado con exito");
+          })
+          .catch((e) => {
+            if (e) {
+              store.commit(
+                "mostrarError",
+                "El ingreso presupuestal se encuentra anulado o el valor ingresado supera el saldo pendiente"
+              );
+            }
+
+            if (
+              !recaudoPresupuesto.valor ||
+              Math.sign(recaudoPresupuesto.valor) != 1
+            ) {
+              store.commit("mostrarError", "ingrese un valor válido");
+            }
+
+            if (!recaudoPresupuesto.ingresopresupuestalid.consecutivo) {
+              store.commit(
+                "mostrarError",
+                "ingrese un ingreso presupuestal válido"
+              );
+            }
+
+            if (!recaudoPresupuesto.documentorecaudo) {
+              store.commit(
+                "mostrarError",
+                "ingrese un documento de recaudo válido"
+              );
+            }
+
+            if (!recaudoPresupuesto.tiporecaudoid.codigo) {
+              store.commit("mostrarError", "ingrese un tipo de recaudo válido");
+            }
+
+            if (!recaudoPresupuesto.objeto) {
+              store.commit(
+                "mostrarError",
+                "ingrese un objeto de documento válido"
+              );
+            }
+          });
+      } else {
+        api
+          .actualizarRecaudoPresupuesto(recaudoPresupuesto)
+          .then((data) => {
+            consultarRecaudoPresupuesto(data.consecutivo);
+            store.commit("mostrarInformacion", "registro actualizado con exito");
           })
           .catch((e) => {
             if (e) {

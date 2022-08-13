@@ -792,6 +792,22 @@ const insertarIngresoPresupuesto = function (ingresoPresupuestoDetalle) {
     });
 };
 
+const actualizarIngresoPresupuesto = function (ingresoPresupuesto) {
+  return fetch(
+    `${url}/ingresopresupuestal/consecutivo/?codigoinstitucioneducativa=${ingresoPresupuesto.institucioneducativaid.codigo}&consecutivo=${ingresoPresupuesto.consecutivo}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(ingresoPresupuesto),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const eliminarIngresoPresupuesto = function (
   institucionEducativaCodigo,
   consecutivo
@@ -851,6 +867,19 @@ const insertarRecaudoPresupuesto = function (recaudoPresupuestoDetalle) {
   return fetch(`${url}/recaudopresupuestal/`, {
     method: "POST",
     body: JSON.stringify(recaudoPresupuestoDetalle),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const actualizarRecaudoPresupuesto = function (recaudoPresupuesto) {
+  return fetch(`${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${recaudoPresupuesto.institucioneducativaid.codigo}&consecutivo=${recaudoPresupuesto.consecutivo}`, {
+    method: "PUT",
+    body: JSON.stringify(recaudoPresupuesto),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
     .then(manejarError)
@@ -1336,7 +1365,6 @@ const eliminarModificacionPresupuesto = function (
 const insertarModificacionPresupuestoDetalle = function (
   proyeccionPresupuestoDetalle
 ) {
-  
   return fetch(`${url}/modificacionproyeccionpresupuestaldetalle/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuestoDetalle),
@@ -1434,11 +1462,13 @@ export default {
   consultarIngresoPresupuesto,
   consultarIngresoPresupuestoSaldo,
   insertarIngresoPresupuesto,
+  actualizarIngresoPresupuesto,
   eliminarIngresoPresupuesto,
   listarRecaudoPresupuesto,
   consultarRecaudoPresupuesto,
   eliminarRecaudoPresupuesto,
   insertarRecaudoPresupuesto,
+  actualizarRecaudoPresupuesto,
   listarSolicitudPresupuesto,
   consultarSolicitudPresupuesto,
   eliminarSolicitudPresupuestoDetalle,
