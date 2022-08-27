@@ -277,7 +277,7 @@ export default {
             if (e) {
               store.commit(
                 "mostrarError",
-                "El ingreso presupuestal se encuentra anulado o el valor ingresado supera el saldo pendiente"
+                "No se puede modificar por una de las siguientes razones: 1)el documento se encuenta anulado, 2)el valor ingresado supera el saldo pendiente, 3)el documento ya esta relacionado"
               );
             }
 
