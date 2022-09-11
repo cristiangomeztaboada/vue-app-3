@@ -3,7 +3,7 @@
     <img src="@/assets/logo2.png" />
   </div>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #28a745;">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"></a>
       <button

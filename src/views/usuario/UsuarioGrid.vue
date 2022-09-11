@@ -11,9 +11,9 @@
               v-if="mostrarColumnaBotones"
               v-on:click="nuevo"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
-              ➕
+              NUEVO
             </button>
           </div>
         </div>
@@ -24,11 +24,18 @@
           :selection="{ mode: 'single' }"
           @row-click="seleccionarUsuario"
           :showRowLines="true"
+          :row-alternation-enabled="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="codigo" />
-          <DxColumn data-field="nombre" />
+          <DxColumn data-field="codigo" header-cell-template="usuarioCodigo"/>
+          <template #usuarioCodigo>
+            <b style="color: black">CÓDIGO</b>
+        </template>
+          <DxColumn data-field="nombre" header-cell-template="usuarioNombre"/>
+          <template #usuarioNombre>
+            <b style="color: black">NOMBRE</b>
+        </template>
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
