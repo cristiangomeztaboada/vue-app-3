@@ -24,7 +24,7 @@
             <button
               v-on:click="ingresar"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
               Ingresar
             </button>

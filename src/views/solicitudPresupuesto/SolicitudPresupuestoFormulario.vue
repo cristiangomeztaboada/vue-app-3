@@ -121,8 +121,26 @@
           <div class="card shadow-lg p-3 mb-5 bg-white rounded">
             <div class="card-header"></div>
             <div class="card-body">
-              <h5 class="card-title">Rubro Presupuesto</h5>
+              <h5 class="card-title">Fuente Recurso-Rubro Presupuesto</h5>
               <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                  <label>Fuente Recurso</label>
+                  <DxSelectBox
+                    :items="listaFuenteRecurso"
+                    display-expr="nombre"
+                    value-expr="codigo"
+                    v-model="fuenteRecursoCodigo"
+                    @value-changed="consultarFuenteRecursoSaldoRecaudo"
+                  />
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                  <label>Saldo</label>
+                  <DxNumberBox
+                    v-model="fuenteRecursoSaldo"
+                    format="$ #,##0.##"
+                    :read-only="true"
+                  />
+                </div>
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                   <label>Rubro Presupuesto</label>
                   <DxSelectBox
@@ -144,7 +162,7 @@
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                   <label>Valor</label>
                   <DxNumberBox
-                    v-model="rubroPresupuestovalor"
+                    v-model="rubroPresupuestoValor"
                     format="$ #,##0.##"
                   />
                 </div>
@@ -255,7 +273,9 @@ export default {
     const contratoNumero = ref("");
     const listaPersonalPlanta = ref([]);
     const listaRubroPresupuesto = ref([]);    
+    const listaFuenteRecurso = ref([]); 
     const rubroPresupuestoSaldo = ref(0);
+    const fuenteRecursoSaldo = ref(0);
     const listaTipoContrato = ref([]);
 
     const store = useStore();
@@ -263,7 +283,10 @@ export default {
     const solicitudPresupuestoDetalle = ref([]);
 
     const rubroPresupuestoCodigo = ref("");
-    const rubroPresupuestovalor = ref(0);
+    const rubroPresupuestoValor = ref(0);
+
+    const fuenteRecursoCodigo = ref("");
+    const fuenteRecursoValor = ref(0);
 
     const route = new useRoute();
     const router = useRouter();
@@ -293,7 +316,18 @@ export default {
         .catch(() => {});
     };
 
+    const listarFuenteRecursoProyeccion = function () {
+      store.commit("ocultarAlerta");
+      api
+        .listarFuenteRecursoProyeccion(institucionEducativaCodigo.value)
+        .then((data) => {
+          listaFuenteRecurso.value = data;
+        })
+        .catch(() => {});
+    };
+
     listarRubroPresupuestoProyeccion();
+    listarFuenteRecursoProyeccion();
 
     const listarPersonalPlanta = function () {
       store.commit("ocultarAlerta");
@@ -427,7 +461,10 @@ export default {
         rubropresupuestalid: {
           codigo: rubroPresupuestoCodigo.value,
         },
-        valor: Math.abs(rubroPresupuestovalor.value),
+        fuenterecursoid: {
+          codigo: fuenteRecursoCodigo.value,
+        },
+        valor: Math.abs(rubroPresupuestoValor.value),
       };
 
       api
@@ -437,7 +474,11 @@ export default {
           consultarSolicitudPresupuesto(consecutivo.value);
           rubroPresupuestoCodigo.value = "";
           rubroPresupuestoSaldo.value = 0;
-          rubroPresupuestovalor.value = 0;
+          rubroPresupuestoValor.value = 0;
+          
+          fuenteRecursoCodigo.value = "";
+          fuenteRecursoSaldo.value = 0;
+          fuenteRecursoValor.value = 0;
         })
         .catch(() => {
           store.commit(
@@ -464,6 +505,8 @@ export default {
       solicitudPresupuestoDetalle.value = [];
       rubroPresupuestoCodigo.value = "";
       rubroPresupuestoSaldo.value = 0;
+      fuenteRecursoCodigo.value = "";
+      fuenteRecursoSaldo.value = 0;
     };
 
     const eliminar = function () {
@@ -541,6 +584,19 @@ export default {
         .catch(() => {});
     };
 
+    const consultarFuenteRecursoSaldoRecaudo = function (e) {
+      store.commit("ocultarAlerta");
+      api
+        .consultarFuenteRecursoSaldoRecaudo(
+          institucionEducativaCodigo.value,
+          e.value
+        )
+        .then((data) => {
+          fuenteRecursoSaldo.value = data;
+        })
+        .catch(() => {});
+    };
+
     return {
       esNuevo,
       institucionEducativaCodigo,
@@ -558,10 +614,14 @@ export default {
       contratoNumero,
       solicitudPresupuestoDetalle,
       rubroPresupuestoCodigo,
-      rubroPresupuestovalor,
+      rubroPresupuestoValor,
+      fuenteRecursoCodigo,
+      fuenteRecursoValor,
       listaPersonalPlanta,
       listaRubroPresupuesto,
+      listaFuenteRecurso,
       rubroPresupuestoSaldo,
+      fuenteRecursoSaldo,
       listaTipoContrato,
 
       guardar,
@@ -574,7 +634,9 @@ export default {
       consultarTercero,
       listarPersonalPlanta,
       listarRubroPresupuestoProyeccion,
+      listarFuenteRecursoProyeccion,
       consultarRubroPresupuestoSaldo,
+      consultarFuenteRecursoSaldoRecaudo,
     };
   },
 };

@@ -344,6 +344,21 @@ const consultarFuenteRecursoSaldo = function (
     });
 };
 
+const consultarFuenteRecursoSaldoRecaudo = function (
+  institucionEducativaCodigo,
+  fuenteRecursoCodigo
+) {
+  return fetch(
+    `${url}/fuenterecurso/fuenterecursoporrecaudo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const insertarFuenteRecurso = function (fuenteRecurso) {
   return fetch(`${url}/fuenterecurso/`, {
     method: "POST",
@@ -1379,11 +1394,10 @@ const insertarModificacionPresupuestoDetalle = function (
 const eliminarModificacionPresupuestoDetalle = function (
   periodoCodigo,
   institucionEducativaCodigo,
-  fuenteRecursoCodigo,
-  rubroPresupuestoCodigo
+  id,
 ) {
   return fetch(
-    `${url}/modificacionproyeccionpresupuestaldetalle/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    `${url}/modificacionproyeccionpresupuestaldetalle/${id}/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
     { method: "DELETE" }
   )
     .then(manejarError)
@@ -1424,6 +1438,7 @@ export default {
   listarFuenteRecursoDetalle,
   consultarFuenteRecurso,
   consultarFuenteRecursoSaldo,
+  consultarFuenteRecursoSaldoRecaudo,
   insertarFuenteRecurso,
   actualizarFuenteRecurso,
   eliminarFuenteRecurso,

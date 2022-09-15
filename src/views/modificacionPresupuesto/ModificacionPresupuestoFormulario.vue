@@ -116,6 +116,10 @@
                   :highlight-case-sensitive="true"
                 />
                 <DxColumn
+                  data-field="id"
+                  caption="Id"
+                />
+                <DxColumn
                   data-field="fuenterecursoid.codigo"
                   caption="Fuente Recurso Código"
                 />
@@ -397,7 +401,7 @@ export default {
       esNuevo.value = true;
       api
         .listarPeriodoActivos()
-        .then((data) => {
+        .then((data) => {          
           periodoCodigo.value = data[0].codigo;
           institucionEducativaCodigo.value = store.state.institucioneducativa;
           api
@@ -408,8 +412,7 @@ export default {
             .then((data) => {
               if (data.id) {
                 esNuevo.value = false;
-              }              
-
+              }                            
               periodoCodigo.value = data.periodoid.codigo;
               institucionEducativaCodigo.value =
                 data.institucioneducativaid.codigo;
@@ -565,8 +568,7 @@ export default {
           .eliminarModificacionPresupuestoDetalle(
             periodoCodigo.value,
             institucionEducativaCodigo.value,
-            rowData.row.values[0],
-            rowData.row.values[2]
+            rowData.row.values[0]
           )
           .then(() => {
             consultarModificacionPresupuesto();
