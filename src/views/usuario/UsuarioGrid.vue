@@ -13,7 +13,7 @@
               type="button"
               class="btn btn-warning"
             >
-              NUEVO
+              <span>➕</span>NUEVO
             </button>
           </div>
         </div>
@@ -28,14 +28,14 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="codigo" header-cell-template="usuarioCodigo"/>
           <template #usuarioCodigo>
             <b style="color: black">CÓDIGO</b>
-        </template>
-          <DxColumn data-field="nombre" header-cell-template="usuarioNombre"/>
+          </template>
+          <DxColumn data-field="codigo" header-cell-template="usuarioCodigo" />
           <template #usuarioNombre>
             <b style="color: black">NOMBRE</b>
-        </template>
+          </template>
+          <DxColumn data-field="nombre" header-cell-template="usuarioNombre" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />

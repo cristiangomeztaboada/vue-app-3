@@ -5,7 +5,7 @@
   <div class="row d-flex justify-content-center">
     <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
       <div class="card text-center shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="row">          
+        <div class="row">
           <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
             <h1 class="display-6">Institución Educativa</h1>
           </div>
@@ -14,9 +14,9 @@
               v-if="mostrarColumnaBotones"
               v-on:click="nuevo"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
-              ➕
+              <span>➕</span>NUEVO
             </button>
           </div>
         </div>
@@ -30,9 +30,28 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="codigo" />
-          <DxColumn data-field="nombre" />
-          <DxColumn data-field="usuarioid.codigo" caption="Usuario Codigo"/>
+          <template #institucionEducativaCodigo>
+            <b style="color: black">CÓDIGO</b>
+          </template>
+          <DxColumn
+            data-field="codigo"
+            header-cell-template="institucionEducativaCodigo"
+          />
+          <template #institucionEducativaNombre>
+            <b style="color: black">NOMBRE</b>
+          </template>
+          <DxColumn
+            data-field="nombre"
+            header-cell-template="institucionEducativaNombre"
+          />
+          <template #usuarioCodigo>
+            <b style="color: black">NOMBRE</b>
+          </template>
+          <DxColumn
+            data-field="usuarioid.codigo"
+            header-cell-template="usuarioCodigo"
+          />
+
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
@@ -44,7 +63,6 @@
   </div>
 </template>
 <script>
-
 import {
   DxDataGrid,
   DxSearchPanel,
@@ -85,19 +103,17 @@ export default {
       store.commit("ocultarAlerta");
       api
         .listarInstitucionEducativa()
-        .then((data) => {dataSource.value = data})
-        .catch( ()=> {
-        });
+        .then((data) => {
+          dataSource.value = data;
+        })
+        .catch(() => {});
     };
 
     listar();
 
     const seleccionarInstitucionEducativa = function (e) {
       store.commit("ocultarAlerta");
-      context.emit(
-        "seleccionarInstitucionEducativa",
-        e.data.codigo
-      );
+      context.emit("seleccionarInstitucionEducativa", e.data.codigo);
     };
 
     const eliminar = function (rowData) {
@@ -106,8 +122,11 @@ export default {
         api
           .eliminarInstitucionEducativa(rowData.row.values[0])
           .then(() => listar())
-          .catch( ()=> {
-            store.commit("mostrarError", "Imposible eliminar, se encuentra asociada a un documento ó personal de planta");
+          .catch(() => {
+            store.commit(
+              "mostrarError",
+              "Imposible eliminar, se encuentra asociada a un documento ó personal de planta"
+            );
           });
       }
     };

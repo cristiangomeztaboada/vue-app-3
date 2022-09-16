@@ -352,7 +352,7 @@ export default {
           codigo: solicitado.value,
         },
       };
-
+console.log(solicitudPresupuesto);
       if (esNuevo.value) {
         api
           .insertarSolicitudPresupuesto(solicitudPresupuesto)
@@ -385,8 +385,8 @@ export default {
           .catch((e) => {
             store.commit("mostrarError", e);
 
-            if (!observacion.value) {
-              store.commit("mostrarError", "ingrese una observación válida");
+            if (!objeto.value) {
+              store.commit("mostrarError", "diligencie el campo objeto");
             }
 
             if (!solicitado.value) {
@@ -433,7 +433,7 @@ export default {
         .catch(() => {
           store.commit(
             "mostrarError",
-            "1)Guarde primero la cabecera de la solicitud. 2)Ingrese una fuente, rubro y valor válido. 3)Asegurese que el monto solicitado por rubro no supera al montro proyectado 4)La combinación fuente-rubro no se puede repetir para la misma solicitud"
+            "1)Guarde primero la cabecera de la solicitud. 2)Ingrese una fuente, rubro y valor válido. 3)Asegurese que el monto solicitado por fuente-rubro no supera al montro proyectado 4)La combinación fuente-rubro no se puede repetir para la misma solicitud"
           );
         });
     };

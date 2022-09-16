@@ -6,7 +6,7 @@
         class="btn btn-danger"
         v-on:click="irAtras"
       >
-        <span>&#8592;</span>IR ATRAS
+        <span>⬅️</span>IR ATRAS
       </button>
     </li>
     <li v-if="mostrarBotonImprimir ? true : false" class="nav-item">
@@ -24,7 +24,7 @@
         class="btn btn-success"
         v-on:click="guardar"
       >
-        <span>&#9745;</span>GUARDAR
+        <span>💾</span>GUARDAR
       </button>
     </li>
     <li v-if="mostrarBotonImportar ? true : false" class="nav-item">
@@ -47,7 +47,7 @@
     </li>
     <li v-if="ocultarBotonNuevo ? false : true" class="nav-item">
       <button type="button" class="btn btn-warning" v-on:click="nuevo">
-        <span>&#10009;</span>NUEVO
+        <span>➕</span>NUEVO
       </button>
     </li>
     <li v-if="mostrarBotonEliminar ? true : false" class="nav-item">

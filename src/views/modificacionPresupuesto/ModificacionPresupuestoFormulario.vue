@@ -576,7 +576,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "No es posible eliminar por: -1)Existe ingreso presupuestal con esta fuente asociada -2)Existe solicitud presupuestal con este rubro asociado -3)El saldo proyectado de la combinación fuente-rubro no puede ser negativo"
+              "No es posible eliminar por: -1)Existe ingreso presupuestal con esta fuente asociada -2)Existe solicitud presupuestal con esta fuente y/o rubro asociados -3)El saldo proyectado de la combinación fuente-rubro no puede ser negativo"
             );
           });
       }

@@ -130,7 +130,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "Existen CDP con rubros asociados a la fuente"
+              "Existen solicitudes de presupuesto asociadas a la fuente"
             );
 
             if (rowData.row.values[2] == "Anulado") {
