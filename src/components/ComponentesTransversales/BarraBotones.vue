@@ -53,10 +53,10 @@
     <li v-if="mostrarBotonEliminar ? true : false" class="nav-item">
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="btn btn-danger"
         v-on:click="eliminar"
       >
-        🗑️
+        <span>&#10008;</span>ELIMINAR
       </button>
     </li>
   </ul>

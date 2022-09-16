@@ -36,7 +36,9 @@
             :sort-index="0"
             sort-order="desc"
           />
-          <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
+          <DxColumn data-field="estado" caption="Estado" />
+          <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />          
+          <DxColumn data-field="objeto" caption="Objeto" />
           <DxColumn data-field="observacion" caption="Observación" />
           <DxColumn
             data-field="personalplantaidsolicitante.nombre"
@@ -46,25 +48,6 @@
             data-field="personalplantaidsolicitado.nombre"
             caption="Solicitado A"
           />
-          <DxColumn data-field="terceroid.nombre" caption="Tercero" />
-          <DxColumn
-            data-field="tipocontratoid.nombre"
-            caption="Tipo Contrato"
-          />
-          <DxColumn
-            data-field="fechainiciocontrato"
-            data-type="date"
-            format="yyyy/MM/dd"
-            caption="Fecha Inicio Contrato"
-          />
-          <DxColumn
-            data-field="fechafincontrato"
-            data-type="date"
-            format="yyyy/MM/dd"
-            caption="Fecha Fin Contrato"
-          />
-          <DxColumn data-field="contratonumero" caption="Número Contrato" />
-
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
@@ -142,6 +125,13 @@ export default {
               "mostrarError",
               "Primero debe eliminar los registros de detalle del documento"
             );
+
+            if (rowData.row.values[2] == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };

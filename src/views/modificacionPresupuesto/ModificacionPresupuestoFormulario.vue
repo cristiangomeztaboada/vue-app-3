@@ -115,10 +115,7 @@
                   :visible="true"
                   :highlight-case-sensitive="true"
                 />
-                <DxColumn
-                  data-field="id"
-                  caption="Id"
-                />
+                <DxColumn data-field="id" caption="Id" />
                 <DxColumn
                   data-field="fuenterecursoid.codigo"
                   caption="Fuente Recurso Código"
@@ -379,8 +376,8 @@ export default {
       ) {
         for (var j = 0; j < modificacionPresupuestoDetalle.value.length; j++) {
           if (
-            modificacionPresupuestoDetalleTotalRubro.value[i].rubropresupuestalid
-              .codigo ==
+            modificacionPresupuestoDetalleTotalRubro.value[i]
+              .rubropresupuestalid.codigo ==
             modificacionPresupuestoDetalle.value[j].rubropresupuestalid.codigo
           ) {
             modificacionPresupuestoDetalleTotalRubro.value[i].valor += Number(
@@ -401,7 +398,7 @@ export default {
       esNuevo.value = true;
       api
         .listarPeriodoActivos()
-        .then((data) => {          
+        .then((data) => {
           periodoCodigo.value = data[0].codigo;
           institucionEducativaCodigo.value = store.state.institucioneducativa;
           api
@@ -412,7 +409,7 @@ export default {
             .then((data) => {
               if (data.id) {
                 esNuevo.value = false;
-              }                            
+              }
               periodoCodigo.value = data.periodoid.codigo;
               institucionEducativaCodigo.value =
                 data.institucioneducativaid.codigo;
@@ -422,10 +419,12 @@ export default {
               modificacionPresupuestoDetalle.value =
                 data.modificacionproyeccionpresupuestaldetalle;
               totalizar();
-              
             })
             .catch(() => {
-              store.commit("mostrarError", "No existe modificación proyección presupuestal");
+              store.commit(
+                "mostrarError",
+                "No existe modificación proyección presupuestal"
+              );
             });
         })
         .catch(function (e) {
@@ -451,7 +450,6 @@ export default {
       };
 
       if (esNuevo.value) {
-
         api
           .insertarModificacionPresupuesto(modificacionPresupuesto)
           .then(() => {
@@ -511,7 +509,9 @@ export default {
           consultarModificacionPresupuesto();
 
           fuenteRecursoCodigo.value = "";
+          fuenteRecursoNombre.value = "";
           rubroPresupuestoCodigo.value = "";
+          rubroPresupuestoNombre.value = "";
           valor.value = 0;
         })
         .catch(() => {
@@ -576,7 +576,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "No es posible eliminar por: -1)Existe ingreso presupuestal con esta fuente asociada -2)Existe solicitud presupuestal con este rubro asociado"
+              "No es posible eliminar por: -1)Existe ingreso presupuestal con esta fuente asociada -2)Existe solicitud presupuestal con este rubro asociado -3)El saldo proyectado de la combinación fuente-rubro no puede ser negativo"
             );
           });
       }
@@ -608,7 +608,7 @@ export default {
           rubroPresupuestoCodigo.value = "";
           rubroPresupuestoNombre.value = "";
         });
-    };  
+    };
 
     return {
       esNuevo,

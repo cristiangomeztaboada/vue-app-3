@@ -934,10 +934,11 @@ const consultarSolicitudPresupuesto = function (
 const eliminarSolicitudPresupuestoDetalle = function (
   institucionEducativaCodigo,
   consecutivo,
+  fuenteRecursoCodigo,
   rubroPresupuestoCodigo
 ) {
   return fetch(
-    `${url}/solicitudpresupuestaldetalle/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    `${url}/solicitudpresupuestaldetalle/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
     { method: "DELETE" }
   )
     .then(manejarError)
@@ -977,6 +978,19 @@ const eliminarSolicitudPresupuesto = function (
 const insertarSolicitudPresupuesto = function (solicitudPresupuesto) {
   return fetch(`${url}/solicitudpresupuestalcabecera/`, {
     method: "POST",
+    body: JSON.stringify(solicitudPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const actualizarSolicitudPresupuesto = function (solicitudPresupuesto) {
+  return fetch(`${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${solicitudPresupuesto.institucioneducativaid.codigo}&consecutivo=${solicitudPresupuesto.consecutivo}`, {
+    method: "PUT",
     body: JSON.stringify(solicitudPresupuesto),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
@@ -1491,6 +1505,7 @@ export default {
   eliminarSolicitudPresupuesto,
   obtenerFechaActual,
   insertarSolicitudPresupuesto,
+  actualizarSolicitudPresupuesto,
   consultarRubroPresupuestoSaldo,
   listarRubroPresupuestoProyeccion,
   listarRubroPresupuestoSolicitud,

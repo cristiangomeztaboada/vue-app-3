@@ -8,7 +8,7 @@
             v-on:eliminar="eliminar"
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
-            v-bind:ocultarBotonGuardar="!esNuevo"
+            v-bind:mostrarBotonEliminar="!esNuevo"
           />
         </div>
         <div class="card-body">
@@ -44,6 +44,18 @@
               />
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+              <label>Estado</label>
+              <input
+                class="form-control"
+                v-model="estado"
+                id="estado"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
               <label>Solicitante</label>
               <DxSelectBox
                 :items="listaPersonalPlanta"
@@ -61,59 +73,13 @@
                 v-model="solicitado"
               />
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-              <label>Tercero Identificiación</label>
-              <tercero-buscador
-                v-on:perderFoco="consultarTercero"
-                v-bind:codigoPropiedad="terceroCodigo"
-                v-bind:mostrarCampoNombre="true"
-                v-bind:nombrePropiedad="terceroNombre"
-              />
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-              <label>Tipo Contrato</label>
-              <DxSelectBox
-                :items="listaTipoContrato"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="tipoContratoCodigo"
-              />
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-              <label>Fecha Inicio Contrato</label>
-              <input
-                class="form-control"
-                v-model="fechaInicioContrato"
-                type="date"
-                id="fechaInicioContrato"
-              />
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-              <label>Fecha Fin Contrato</label>
-              <input
-                class="form-control"
-                v-model="fechaFinContrato"
-                type="date"
-                id="fechaFinContrato"
-              />
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-              <label>Número Contrato</label>
-              <input
-                v-model="contratoNumero"
-                class="form-control"
-                type="text"
-              />
             </div>
           </div>
 
@@ -195,6 +161,14 @@
                   :highlight-case-sensitive="true"
                 />
                 <DxColumn
+                  data-field="fuenterecursoid.codigo"
+                  caption="Fuente Recurso Código"
+                />
+                <DxColumn
+                  data-field="fuenterecursoid.nombre"
+                  caption="Fuente Recurso Nombre"
+                />
+                <DxColumn
                   data-field="rubropresupuestalid.codigo"
                   caption="Rubro Presupuesto Código"
                 />
@@ -237,7 +211,6 @@ import {
   DxEditing,
   DxButton,
 } from "devextreme-vue/data-grid";
-import TerceroBuscador from "@/views/tercero/TerceroBuscador.vue";
 import DxNumberBox from "devextreme-vue/number-box";
 import DxSelectBox from "devextreme-vue/select-box";
 import { useRoute, useRouter } from "vue-router";
@@ -254,7 +227,6 @@ export default {
     DxEditing,
     DxNumberBox,
     DxSelectBox,
-    TerceroBuscador,
   },
   setup() {
     const esNuevo = ref(true);
@@ -262,18 +234,14 @@ export default {
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
     const fecha = ref("");
+    const estado = ref("");
+    const objeto = ref("");
     const observacion = ref("");
     const solicitante = ref("");
     const solicitado = ref("");
-    const terceroCodigo = ref("");
-    const terceroNombre = ref("");
-    const tipoContratoCodigo = ref("");
-    const fechaInicioContrato = ref("");
-    const fechaFinContrato = ref("");
-    const contratoNumero = ref("");
     const listaPersonalPlanta = ref([]);
-    const listaRubroPresupuesto = ref([]);    
-    const listaFuenteRecurso = ref([]); 
+    const listaRubroPresupuesto = ref([]);
+    const listaFuenteRecurso = ref([]);
     const rubroPresupuestoSaldo = ref(0);
     const fuenteRecursoSaldo = ref(0);
     const listaTipoContrato = ref([]);
@@ -352,17 +320,12 @@ export default {
           }
           consecutivo.value = data.consecutivo;
           fecha.value = data.fecha.substring(0, 10);
+          estado.value = data.estado;
+          objeto.value = data.objeto;
           observacion.value = data.observacion;
           solicitante.value = data.personalplantaidsolicitante.codigo;
           solicitado.value = data.personalplantaidsolicitado.codigo;
-          terceroCodigo.value = data.terceroid.codigo;
-          tipoContratoCodigo.value = data.tipocontratoid.codigo;
-          fechaInicioContrato.value = data.fechainiciocontrato;
-          fechaFinContrato.value = data.fechafincontrato;
-          contratoNumero.value = data.contratonumero;
           solicitudPresupuestoDetalle.value = data.solicitudpresupuestaldetalle;
-
-          consultarTercero(terceroCodigo.value);
         })
         .catch(() => {
           nuevo();
@@ -380,6 +343,7 @@ export default {
         },
         consecutivo: consecutivo.value,
         fecha: fecha.value,
+        objeto: objeto.value,
         observacion: observacion.value,
         personalplantaidsolicitante: {
           codigo: solicitante.value,
@@ -387,67 +351,53 @@ export default {
         personalplantaidsolicitado: {
           codigo: solicitado.value,
         },
-        terceroid: {
-          codigo: terceroCodigo.value,
-        },
-        tipocontratoid: {
-          codigo: tipoContratoCodigo.value,
-        },
-        fechainiciocontrato: fechaInicioContrato.value,
-        fechafincontrato: fechaFinContrato.value,
-        contratonumero: contratoNumero.value,
       };
 
-      api
-        .insertarSolicitudPresupuesto(solicitudPresupuesto)
-        .then((data) => {
-          consultarSolicitudPresupuesto(data.consecutivo);
-          store.commit("mostrarInformacion", "registro insertado con exito");
-        })
-        .catch((e) => {
-          store.commit("mostrarError", e);
+      if (esNuevo.value) {
+        api
+          .insertarSolicitudPresupuesto(solicitudPresupuesto)
+          .then((data) => {
+            consultarSolicitudPresupuesto(data.consecutivo);
+            store.commit("mostrarInformacion", "registro insertado con exito");
+          })
+          .catch((e) => {
+            store.commit("mostrarError", e);
 
-          if (!contratoNumero.value) {
-            store.commit(
-              "mostrarError",
-              "ingrese un número de contrato válido"
-            );
-          }
+            if (!objeto.value) {
+              store.commit("mostrarError", "diligencie el campo objeto");
+            }
 
-          if (!fechaFinContrato.value) {
-            store.commit(
-              "mostrarError",
-              "ingrese una fecha de fin de contrato válida"
-            );
-          }
+            if (!solicitado.value) {
+              store.commit("mostrarError", "ingrese un solicitado válido");
+            }
 
-          if (!fechaInicioContrato.value) {
-            store.commit(
-              "mostrarError",
-              "ingrese una fecha de inicio de contrato válida"
-            );
-          }
+            if (!solicitante.value) {
+              store.commit("mostrarError", "ingrese un solicitante válido");
+            }
+          });
+      } else {
+        api
+          .actualizarSolicitudPresupuesto(solicitudPresupuesto)
+          .then((data) => {
+            consultarSolicitudPresupuesto(data.consecutivo);
+            store.commit("mostrarInformacion", "registro insertado con exito");
+          })
+          .catch((e) => {
+            store.commit("mostrarError", e);
 
-          if (!observacion.value) {
-            store.commit("mostrarError", "ingrese una observación válida");
-          }
+            if (!observacion.value) {
+              store.commit("mostrarError", "ingrese una observación válida");
+            }
 
-          if (!tipoContratoCodigo.value) {
-            store.commit("mostrarError", "ingrese un tipo de contrato válido");
-          }
+            if (!solicitado.value) {
+              store.commit("mostrarError", "ingrese un solicitado válido");
+            }
 
-          if (!terceroCodigo.value) {
-            store.commit("mostrarError", "ingrese un tercero válido");
-          }
-
-          if (!solicitado.value) {
-            store.commit("mostrarError", "ingrese un solicitado válido");
-          }
-
-          if (!solicitante.value) {
-            store.commit("mostrarError", "ingrese un solicitante válido");
-          }
-        });
+            if (!solicitante.value) {
+              store.commit("mostrarError", "ingrese un solicitante válido");
+            }
+          });
+      }
     };
 
     const guardarSolicitudPresupuestoDetalle = function () {
@@ -475,7 +425,7 @@ export default {
           rubroPresupuestoCodigo.value = "";
           rubroPresupuestoSaldo.value = 0;
           rubroPresupuestoValor.value = 0;
-          
+
           fuenteRecursoCodigo.value = "";
           fuenteRecursoSaldo.value = 0;
           fuenteRecursoValor.value = 0;
@@ -483,7 +433,7 @@ export default {
         .catch(() => {
           store.commit(
             "mostrarError",
-            "1)Guarde primero la cabecera de la solicitud. 2)Ingrese un rubro y valor válido. 3)Asegurese que el monto solicitado por rubro no supera al montro proyectado 4)El rubro no se puede repetir para la misma solicitud"
+            "1)Guarde primero la cabecera de la solicitud. 2)Ingrese una fuente, rubro y valor válido. 3)Asegurese que el monto solicitado por rubro no supera al montro proyectado 4)La combinación fuente-rubro no se puede repetir para la misma solicitud"
           );
         });
     };
@@ -493,15 +443,10 @@ export default {
       esNuevo.value = true;
       consecutivo.value = 0;
       fecha.value = api.obtenerFechaActual();
+      estado.value = "";
       observacion.value = "";
       solicitante.value = "";
       solicitado.value = "";
-      terceroCodigo.value = "";
-      terceroNombre.value = "";
-      tipoContratoCodigo.value = "";
-      fechaInicioContrato.value = "";
-      fechaFinContrato.value = "";
-      contratoNumero.value = "";
       solicitudPresupuestoDetalle.value = [];
       rubroPresupuestoCodigo.value = "";
       rubroPresupuestoSaldo.value = 0;
@@ -518,13 +463,22 @@ export default {
             consecutivo.value
           )
           .then(() => {
-            nuevo();
+            router.push({
+              name: "solicitudpresupuesto",
+            })
           })
           .catch(() => {
             store.commit(
               "mostrarError",
               "Primero debe eliminar los registros de detalle del documento"
             );
+
+            if (estado.value == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };
@@ -536,7 +490,8 @@ export default {
           .eliminarSolicitudPresupuestoDetalle(
             institucionEducativaCodigo.value,
             consecutivo.value,
-            rowData.row.values[0]
+            rowData.row.values[0],
+            rowData.row.values[2]
           )
           .then(() => {
             consultarSolicitudPresupuesto(consecutivo.value);
@@ -555,20 +510,6 @@ export default {
       router.push({
         name: "solicitudpresupuesto",
       });
-    };
-
-    const consultarTercero = function (c) {
-      store.commit("ocultarAlerta");
-      api
-        .consultarTercero(c)
-        .then((data) => {
-          terceroCodigo.value = data.codigo;
-          terceroNombre.value = data.nombre;
-        })
-        .catch(() => {
-          terceroCodigo.value = "";
-          terceroNombre.value = "";
-        });
     };
 
     const consultarRubroPresupuestoSaldo = function (e) {
@@ -603,15 +544,11 @@ export default {
       institucionEducativaNombre,
       consecutivo,
       fecha,
+      estado,
+      objeto,
       observacion,
       solicitante,
       solicitado,
-      terceroCodigo,
-      terceroNombre,
-      tipoContratoCodigo,
-      fechaInicioContrato,
-      fechaFinContrato,
-      contratoNumero,
       solicitudPresupuestoDetalle,
       rubroPresupuestoCodigo,
       rubroPresupuestoValor,
@@ -631,7 +568,6 @@ export default {
       consultarSolicitudPresupuesto,
       eliminarSolicitudPresupuestoDetalle,
       guardarSolicitudPresupuestoDetalle,
-      consultarTercero,
       listarPersonalPlanta,
       listarRubroPresupuestoProyeccion,
       listarFuenteRecursoProyeccion,

@@ -132,6 +132,13 @@ export default {
               "mostrarError",
               "Existen CDP con rubros asociados a la fuente"
             );
+
+            if (rowData.row.values[2] == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };

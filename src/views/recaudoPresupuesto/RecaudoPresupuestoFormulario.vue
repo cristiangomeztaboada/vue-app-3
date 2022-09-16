@@ -277,7 +277,7 @@ export default {
             if (e) {
               store.commit(
                 "mostrarError",
-                "No se puede modificar por una de las siguientes razones: 1)el documento se encuenta anulado, 2)el valor ingresado supera el saldo pendiente, 3)el documento ya esta relacionado"
+                "No se puede modificar por una de las siguientes razones: 1)el documento se encuentra anulado, 2)el valor ingresado supera el saldo pendiente, 3)el documento ya esta relacionado"
               );
             }
 
@@ -361,8 +361,15 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "Existen CDP con rubros asociados a la fuente"
+              "Existen solicitudes de presupuesto asociadas a la fuente"
             );
+
+            if (estado.value == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };
