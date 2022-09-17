@@ -11,9 +11,9 @@
               v-if="mostrarColumnaBotones"
               v-on:click="nuevo"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
-              ➕
+              <span>➕</span>NUEVO
             </button>
           </div>
         </div>
@@ -27,9 +27,18 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="idpadre.codigo" caption="Código Padre" />
-          <DxColumn data-field="codigo" />
-          <DxColumn data-field="nombre" />
+          <template #rubroPresupuestoCodigoPadre>
+            <b style="color: black">CÓDIGO PADRE</b>
+          </template>
+          <DxColumn data-field="idpadre.codigo" header-cell-template="rubroPresupuestoCodigoPadre"/>
+          <template #rubroPresupuestoCodigo>
+            <b style="color: black">CÓDIGO</b>
+          </template>
+          <DxColumn data-field="codigo" header-cell-template="rubroPresupuestoCodigo" />
+          <template #rubroPresupuestoNombre>
+            <b style="color: black">NOMBRE</b>
+          </template>
+          <DxColumn data-field="nombre" header-cell-template="rubroPresupuestoNombre"/>
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />

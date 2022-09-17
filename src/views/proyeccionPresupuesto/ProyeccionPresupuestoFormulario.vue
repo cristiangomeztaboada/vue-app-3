@@ -97,10 +97,10 @@
                     <li class="nav-item">
                       <button
                         type="button"
-                        class="btn btn-outline-primary"
+                        class="btn btn-success"
                         v-on:click="guardarProyeccionPresupuestoDetalle"
                       >
-                        💾
+                        <span>💾</span>GUARDAR
                       </button>
                     </li>
                   </ul>
@@ -119,27 +119,47 @@
                   :visible="true"
                   :highlight-case-sensitive="true"
                 />
+                <template #fuenteRecursoCodigo>
+                  <b style="color: black">FUENTE RECURSO CÓDIGO</b>
+                </template>
                 <DxColumn
                   data-field="fuenterecursoid.codigo"
                   caption="Fuente Recurso Código"
+                  header-cell-template="fuenteRecursoCodigo"
                 />
+                <template #fuenteRecursoNombre>
+                  <b style="color: black">FUENTE RECURSO NOMBRE</b>
+                </template>
                 <DxColumn
                   data-field="fuenterecursoid.nombre"
                   caption="Fuente Recurso Nombre"
+                  header-cell-template="fuenteRecursoNombre"
                 />
+                <template #rubroPresupuestoCodigo>
+                  <b style="color: black">RUBRO PRESUPUESTO CÓDIGO</b>
+                </template>
                 <DxColumn
                   data-field="rubropresupuestalid.codigo"
                   caption="Rubro Presupuesto Código"
+                  header-cell-template="rubroPresupuestoCodigo"
                 />
+                <template #rubroPresupuestoNombre>
+                  <b style="color: black">RUBRO PRESUPUESTO NOMBRE</b>
+                </template>
                 <DxColumn
                   data-field="rubropresupuestalid.nombre"
                   caption="Rubro Presupuesto Nombre"
+                  header-cell-template="rubroPresupuestoNombre"
                 />
+                <template #valor>
+                  <b style="color: black">VALOR</b>
+                </template>
                 <DxColumn
                   data-field="valor"
                   data-type="number"
                   format="currency"
                   alignment="right"
+                  header-cell-template="valor"
                 />
                 <DxColumn type="buttons" :width="110">
                   <DxButton
@@ -169,19 +189,31 @@
                       :visible="true"
                       :highlight-case-sensitive="true"
                     />
+                    <template #fuenteRecursoCodigo>
+                      <b style="color: black">FUENTE RECURSO CÓDIGO</b>
+                    </template>
                     <DxColumn
                       data-field="fuenterecursoid.codigo"
                       caption="Fuente Recurso Código"
+                      header-cell-template="fuenteRecursoCodigo"
                     />
+                    <template #fuenteRecursoNombre>
+                      <b style="color: black">FUENTE RECURSO NOMBRE</b>
+                    </template>
                     <DxColumn
                       data-field="fuenterecursoid.nombre"
                       caption="Fuente Recurso Nombre"
+                      header-cell-template="fuenteRecursoNombre"
                     />
+                    <template #valor>
+                      <b style="color: black">VALOR</b>
+                    </template>
                     <DxColumn
                       data-field="valor"
                       data-type="number"
                       format="currency"
                       alignment="right"
+                      header-cell-template="valor"
                     />
                     <DxSummary>
                       <DxTotalItem
@@ -204,19 +236,31 @@
                       :visible="true"
                       :highlight-case-sensitive="true"
                     />
+                    <template #rubroPresupuestoCodigo>
+                      <b style="color: black">RUBRO PRESUPUESTO CÓDIGO</b>
+                    </template>
                     <DxColumn
                       data-field="rubropresupuestalid.codigo"
                       caption="Rubro Presupuesto Código"
+                      header-cell-template="rubroPresupuestoCodigo"
                     />
+                    <template #rubroPresupuestoNombre>
+                      <b style="color: black">RUBRO PRESUPUESTO NOMBRE</b>
+                    </template>
                     <DxColumn
                       data-field="rubropresupuestalid.nombre"
                       caption="Rubro Presupuesto Nombre"
+                      header-cell-template="rubroPresupuestoNombre"
                     />
+                    <template #valor>
+                      <b style="color: black">VALOR</b>
+                    </template>
                     <DxColumn
                       data-field="valor"
                       data-type="number"
                       format="currency"
                       alignment="right"
+                      header-cell-template="valor"
                     />
                     <DxSummary>
                       <DxTotalItem
@@ -662,7 +706,7 @@ export default {
             valor: Math.abs(filasArchivo.value[i][2]),
           });
         }
-        
+
         api
           .eliminarProyeccionPresupuestoDetalleMultiple(
             periodoCodigo.value,

@@ -11,9 +11,9 @@
               v-if="mostrarColumnaBotones"
               v-on:click="nuevo"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
-              ➕
+              <span>➕</span>NUEVO
             </button>
           </div>
         </div>
@@ -27,8 +27,14 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="codigo" :sort-index="0" sort-order="desc" />
-          <DxColumn data-field="activo" data-type="boolean" />
+          <template #periodoCodigo>
+            <b style="color: black">CÓDIGO</b>
+          </template>
+          <DxColumn data-field="codigo" :sort-index="0" sort-order="desc" header-cell-template="periodoCodigo" />
+          <template #periodoActivo>
+            <b style="color: black">ACTIVO</b>
+          </template>
+          <DxColumn data-field="activo" data-type="boolean" header-cell-template="periodoActivo"/>
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />

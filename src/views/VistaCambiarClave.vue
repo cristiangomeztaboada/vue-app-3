@@ -7,10 +7,10 @@
             <li class="nav-item">
               <button
                 type="button"
-                class="btn btn-outline-primary"
+                class="btn btn-success"
                 v-on:click="guardar"
               >
-                💾
+                <span>💾</span>GUARDAR
               </button>
             </li>
           </ul>

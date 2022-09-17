@@ -30,19 +30,19 @@
     <li v-if="mostrarBotonImportar ? true : false" class="nav-item">
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="btn btn-danger"
         v-on:click="importar"
       >
-        📥
+        <span>📥</span>IMPRIMIR
       </button>
     </li>
     <li v-if="mostrarBotonAprobar ? true : false" class="nav-item">
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="btn btn-warning"
         v-on:click="aprobar"
       >
-        ✅
+        <span>✅</span>APROBAR
       </button>
     </li>
     <li v-if="ocultarBotonNuevo ? false : true" class="nav-item">

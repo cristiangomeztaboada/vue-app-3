@@ -11,9 +11,9 @@
               v-if="mostrarColumnaBotones"
               v-on:click="nuevo"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
-              ➕
+              <span>➕</span>NUEVO
             </button>
           </div>
         </div>
@@ -27,10 +27,22 @@
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
-          <DxColumn data-field="codigo" />
-          <DxColumn data-field="tipoidentificacionid.codigo" caption="Tipo Identificación Código"/>          
-          <DxColumn data-field="tipoidentificacionid.nombre" caption="Tipo Identificación Nombre"/>          
-          <DxColumn data-field="nombre" />          
+          <template #terceroCodigo>
+            <b style="color: black">CÓDIGO</b>
+          </template>
+          <DxColumn data-field="codigo" header-cell-template="terceroCodigo"/>
+          <template #tipoIdentificacionCodigo>
+            <b style="color: black">TIPO IDENTIFICACIÓN CÓDIGO</b>
+          </template>
+          <DxColumn data-field="tipoidentificacionid.codigo" header-cell-template="tipoIdentificacionCodigo"/>          
+          <template #tipoIdentificacionNombre>
+            <b style="color: black">TIPO IDENTIFICACIÓN NOMBRE</b>
+          </template>
+          <DxColumn data-field="tipoidentificacionid.nombre" header-cell-template="tipoIdentificacionNombre"/>          
+          <template #terceroNombre>
+            <b style="color: black">NOMBRE</b>
+          </template>
+          <DxColumn data-field="nombre" header-cell-template="terceroNombre"/>          
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
