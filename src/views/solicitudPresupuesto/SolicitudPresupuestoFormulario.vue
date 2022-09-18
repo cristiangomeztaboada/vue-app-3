@@ -502,7 +502,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "Existen documentos de CDP con este rubro asociado"
+              "Existen documentos de CDP asoiados a esta solicitud"
             );
           });
       }
