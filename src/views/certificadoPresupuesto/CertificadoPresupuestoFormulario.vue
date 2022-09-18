@@ -8,16 +8,14 @@
             v-on:eliminar="eliminar"
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
-            v-bind:ocultarBotonGuardar="!esNuevo"
+            v-bind:mostrarBotonEliminar="!esNuevo"
           />
         </div>
         <div class="card-body">
           <h5 v-if="esNuevo" class="card-title">
             Insertar Certificado Presupuesto
           </h5>
-          <h5 v-if="!esNuevo" class="card-title">
-            Certificado Presupuesto
-          </h5>
+          <h5 v-if="!esNuevo" class="card-title">Certificado Presupuesto</h5>
           <div class="row">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Institución Educativa</label>
@@ -46,13 +44,22 @@
               />
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Días Validez</label>
-              <input v-model="diasValidez" class="form-control" type="number" />
+              <label>Estado</label>
+              <input
+                v-model="estado"
+                class="form-control"
+                type="text"
+                readonly
+              />
             </div>
           </div>
 
           <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
             </div>
@@ -60,34 +67,27 @@
 
           <div class="row">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Rubro Presupuesto</label>
-              <DxSelectBox
-                :items="listaRubroPresupuesto"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="rubroPresupuestoCodigo"
-                @value-changed="consultarRubroPresupuestoSaldo"
+              <label>Días Validez</label>
+              <input v-model="diasValidez" class="form-control" type="number" />
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Solicitud Presupuesto</label>
+              <solicitud-presupuesto-buscador
+                v-on:perderFoco="consultarSolicitudPresupuesto"
+                v-bind:codigoPropiedad="solicitudPresupuestoConsecutivo"
               />
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Saldo Solicitado</label>
+              <label>Saldo</label>
               <DxNumberBox
-                v-model="rubroPresupuestoSaldoSolicitud"
-                format="$ #,##0.##"
-                :read-only="true"
-              />
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-              <label>Saldo Recaudado</label>
-              <DxNumberBox
-                v-model="rubroPresupuestoSaldoRecaudo"
+                v-model="solicitudPresupuestoSaldo"
                 format="$ #,##0.##"
                 :read-only="true"
               />
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Valor</label>
-              <DxNumberBox v-model="valor" format="$ #,##0.##"/>
+              <DxNumberBox v-model="valor" format="$ #,##0.##" />
             </div>
           </div>
         </div>
@@ -98,21 +98,21 @@
 
 <script>
 import CertificadoPresupuestoBuscador from "./CertificadoPresupuestoBuscador.vue";
+import SolicitudPresupuestoBuscador from "@/views/solicitudPresupuesto/SolicitudPresupuestoBuscador.vue";
 import { ref } from "vue";
 import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue";
 import api from "@/api.js";
 import { useStore } from "vuex";
 import DxNumberBox from "devextreme-vue/number-box";
-import DxSelectBox from "devextreme-vue/select-box";
 import { useRoute, useRouter } from "vue-router";
 
 export default {
   name: "CertificadoPresupuestoFormulario",
   components: {
     CertificadoPresupuestoBuscador,
+    SolicitudPresupuestoBuscador,
     BarraBotones,
     DxNumberBox,
-    DxSelectBox,
   },
   setup() {
     const esNuevo = ref(true);
@@ -120,13 +120,13 @@ export default {
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
     const fecha = ref("");
+    const estado = ref("");
+    const objeto = ref("");
     const observacion = ref("");
     const diasValidez = ref(0);
-    const rubroPresupuestoCodigo = ref("");
 
-    const listaRubroPresupuesto = ref([]);
-    const rubroPresupuestoSaldoSolicitud = ref(0);
-    const rubroPresupuestoSaldoRecaudo = ref(0);
+    const solicitudPresupuestoSaldo = ref(0);
+    const solicitudPresupuestoConsecutivo = ref(0);
     const valor = ref(0);
 
     const store = useStore();
@@ -147,10 +147,15 @@ export default {
           }
           consecutivo.value = data.consecutivo;
           fecha.value = data.fecha.substring(0, 10);
+          estado.value = data.estado;
+          objeto.value = data.objeto;
           observacion.value = data.observacion;
           diasValidez.value = data.diasvalidez;
+          solicitudPresupuestoConsecutivo.value =
+            data.solicitudpresupuestalcabeceraid.consecutivo;
           valor.value = Number(data.valor);
-          rubroPresupuestoCodigo.value = data.rubropresupuestalid.codigo;
+
+          consultarSolicitudPresupuesto(solicitudPresupuestoConsecutivo.value);
         })
         .catch(() => {
           nuevo();
@@ -158,17 +163,6 @@ export default {
     };
 
     consultarCertificadoPresupuesto(route.params.codigo);
-
-    const listarRubroPresupuestoSolicitud = function () {
-      api
-        .listarRubroPresupuestoSolicitud(institucionEducativaCodigo.value)
-        .then((data) => {
-          listaRubroPresupuesto.value = data;
-        })
-        .catch(() => {});
-    };
-
-    listarRubroPresupuestoSolicitud();
 
     const guardar = function () {
       store.commit("ocultarAlerta");
@@ -180,47 +174,91 @@ export default {
         consecutivo: consecutivo.value,
         fecha: fecha.value,
         diasvalidez: diasValidez.value,
-        rubropresupuestalid: {
-          codigo: rubroPresupuestoCodigo.value,
-        },
+        objeto: objeto.value,
         observacion: observacion.value,
+        solicitudpresupuestalcabeceraid: {
+          consecutivo: solicitudPresupuestoConsecutivo.value,
+        },
         valor: Math.abs(valor.value),
       };
 
-      api
-        .insertarCertificadoPresupuesto(certificadoPresupuesto)
-        .then((data) => {
-          consultarCertificadoPresupuesto(data.consecutivo);
-          store.commit("mostrarInformacion", "registro insertado con exito");
-        })
-        .catch(() => {
-          store.commit(
-            "mostrarError",
-            "La fecha no pertenece al periodo activo"
-          );
-
-          if (!valor.value) {
-            store.commit("mostrarError", "ingrese un valor válido");
-          }
-
-          if (!rubroPresupuestoCodigo.value) {
+      if (esNuevo.value) {
+        api
+          .insertarCertificadoPresupuesto(certificadoPresupuesto)
+          .then((data) => {
+            consultarCertificadoPresupuesto(data.consecutivo);
+            store.commit("mostrarInformacion", "registro insertado con exito");
+          })
+          .catch(() => {
             store.commit(
               "mostrarError",
-              "ingrese un rubro de presupuesto válido"
+              "La fecha no pertenece al periodo activo"
             );
-          }
 
-          if (!observacion.value) {
-            store.commit("mostrarError", "ingrese una observación válida");
-          }
+            if (!valor.value) {
+              store.commit("mostrarError", "ingrese un valor válido");
+            }
 
-          if (!diasValidez.value) {
+            if (!objeto.value) {
+              store.commit(
+                "mostrarError",
+                "Diligencie el campo objeto del documento"
+              );
+            }
+
+            if (Number(diasValidez.value) <= 0) {
+              store.commit(
+                "mostrarError",
+                "ingrese una cantidad de dias de validez válida"
+              );
+            }
+
+            if (
+              Number(valor.value) > Number(solicitudPresupuestoSaldo.value) ||
+              !valor.value
+            ) {
+              store.commit("mostrarError", "ingrese un valor válido");
+            }
+          });
+      } else {
+        api
+          .actualizarCertificadoPresupuesto(certificadoPresupuesto)
+          .then((data) => {
+            consultarCertificadoPresupuesto(data.consecutivo);
+            store.commit("mostrarInformacion", "registro insertado con exito");
+          })
+          .catch(() => {
             store.commit(
               "mostrarError",
-              "ingrese una cantidad de dias de validez válida"
+              "La fecha no pertenece al periodo activo"
             );
-          }
-        });
+
+            if (!valor.value) {
+              store.commit("mostrarError", "ingrese un valor válido");
+            }
+
+            if (!objeto.value) {
+              store.commit(
+                "mostrarError",
+                "Diligencie el campo objeto del documento"
+              );
+            }
+
+            if (Number(diasValidez.value) <= 0) {
+              store.commit(
+                "mostrarError",
+                "ingrese una cantidad de dias de validez válida"
+              );
+            }
+
+            if (
+              Number(valor.value) > Number(solicitudPresupuestoSaldo.value) ||
+              !valor.value
+            ) {
+              store.commit("mostrarError", "ingrese un valor válido");
+            }
+          });
+      }
     };
 
     const nuevo = function () {
@@ -228,11 +266,12 @@ export default {
       esNuevo.value = true;
       consecutivo.value = 0;
       fecha.value = api.obtenerFechaActual();
+      estado.value = "";
+      objeto.value = "";
       observacion.value = "";
-      rubroPresupuestoCodigo.value = "";
-      rubroPresupuestoSaldoSolicitud.value = 0;
-      rubroPresupuestoSaldoRecaudo.value = 0;
+      solicitudPresupuestoSaldo.value = 0;
       diasValidez.value = 0;
+      solicitudPresupuestoConsecutivo.value = 0;
       valor.value = 0;
     };
 
@@ -245,13 +284,22 @@ export default {
             consecutivo.value
           )
           .then(() => {
-            nuevo();
+            router.push({
+              name: "solicitudpresupuesto",
+            });
           })
           .catch(() => {
             store.commit(
               "mostrarError",
               "Existen registros de presupuesto asociados al CDP"
             );
+
+            if (estado.value == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuenta anulado"
+              );
+            }
           });
       }
     };
@@ -263,26 +311,29 @@ export default {
       });
     };
 
-    const consultarRubroPresupuestoSaldo = function (e) {
+    const consultarSolicitudPresupuesto = function (c) {
+      store.commit("ocultarAlerta");
       api
-        .consultarRubroPresupuestoSaldoSolicitud(
-          institucionEducativaCodigo.value,
-          e.value
-        )
+        .consultarSolicitudPresupuesto(store.state.institucioneducativa, c)
         .then((data) => {
-          rubroPresupuestoSaldoSolicitud.value = data;
-        })
-        .catch(() => {});
+          solicitudPresupuestoConsecutivo.value = data.consecutivo;
 
-      api
-        .consultarRubroPresupuestoSaldoRecaudo(
-          institucionEducativaCodigo.value,
-          e.value
-        )
-        .then((data) => {
-          rubroPresupuestoSaldoRecaudo.value = data;
+          api
+            .consultarSolicitudPresupuestoSaldo(
+              store.state.institucioneducativa,
+              c
+            )
+            .then((data) => {
+              solicitudPresupuestoSaldo.value = data;
+            })
+            .catch(() => {
+              solicitudPresupuestoSaldo.value = 0;
+            });
         })
-        .catch(() => {});
+        .catch(() => {
+          solicitudPresupuestoConsecutivo.value = 0;
+          solicitudPresupuestoSaldo.value = 0;
+        });
     };
 
     return {
@@ -291,20 +342,20 @@ export default {
       institucionEducativaNombre,
       consecutivo,
       fecha,
+      estado,
+      objeto,
       observacion,
       diasValidez,
-      rubroPresupuestoCodigo,
       valor,
-      listaRubroPresupuesto,
-      rubroPresupuestoSaldoSolicitud,
-      rubroPresupuestoSaldoRecaudo,
+      solicitudPresupuestoSaldo,
+      solicitudPresupuestoConsecutivo,
 
       guardar,
       eliminar,
       nuevo,
       irAtras,
       consultarCertificadoPresupuesto,
-      consultarRubroPresupuestoSaldo,
+      consultarSolicitudPresupuesto,
     };
   },
 };

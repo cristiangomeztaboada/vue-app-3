@@ -934,11 +934,10 @@ const consultarSolicitudPresupuesto = function (
 const eliminarSolicitudPresupuestoDetalle = function (
   institucionEducativaCodigo,
   consecutivo,
-  fuenteRecursoCodigo,
-  rubroPresupuestoCodigo
+  id
 ) {
   return fetch(
-    `${url}/solicitudpresupuestaldetalle/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
+    `${url}/solicitudpresupuestaldetalle/${id}`,
     { method: "DELETE" }
   )
     .then(manejarError)
@@ -1104,6 +1103,19 @@ const consultarRubroPresupuestoSaldoRecaudo = function (
 const insertarCertificadoPresupuesto = function (certificadoPresupuesto) {
   return fetch(`${url}/certificadodisponibilidadpresupuestal/`, {
     method: "POST",
+    body: JSON.stringify(certificadoPresupuesto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const actualizarCertificadoPresupuesto = function (certificadoPresupuesto) {
+  return fetch(`${url}/certificadodisponibilidadpresupuestal/`, {
+    method: "PUT",
     body: JSON.stringify(certificadoPresupuesto),
     headers: { "Content-type": "application/json; charset=UTF-8" },
   })
@@ -1420,6 +1432,21 @@ const eliminarModificacionPresupuestoDetalle = function (
     });
 };
 
+const consultarSolicitudPresupuestoSaldo = function (
+  institucionEducativaCodigo,
+  consecutivo
+) {
+  return fetch(
+    `${url}/solicitudpresupuestalcabecera/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1514,6 +1541,7 @@ export default {
   consultarRubroPresupuestoSaldoSolicitud,
   consultarRubroPresupuestoSaldoRecaudo,
   insertarCertificadoPresupuesto,
+  actualizarCertificadoPresupuesto,
   eliminarCertificadoPresupuesto,
   listarRegistroPresupuesto,
   consultarRegistroPresupuesto,
@@ -1536,4 +1564,5 @@ export default {
   eliminarModificacionPresupuesto,
   insertarModificacionPresupuestoDetalle,
   eliminarModificacionPresupuestoDetalle,
+  consultarSolicitudPresupuestoSaldo,
 };

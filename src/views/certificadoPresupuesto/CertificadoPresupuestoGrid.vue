@@ -36,6 +36,7 @@
             :sort-index="0"
             sort-order="desc"
           />
+          <DxColumn data-field="estado" caption="Estado" />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
           <DxColumn
             data-field="diasvalidez"
@@ -43,11 +44,13 @@
             alignment="right"
             caption="Días Validez"
           />
-          <DxColumn
-            data-field="rubropresupuestalid.nombre"
-            caption="Rubro Presupuesto"
-          />
+
+          <DxColumn data-field="objeto" caption="Objeto" />
           <DxColumn data-field="observacion" caption="Observación" />
+          <DxColumn
+            data-field="solicitudpresupuestalcabeceraid.consecutivo"
+            caption="Solicitud Presupuesto"
+          />
           <DxColumn
             data-field="valor"
             data-type="number"
@@ -132,6 +135,13 @@ export default {
               "mostrarError",
               "Existen registros de presupuesto asociados al CDP"
             );
+
+            if (rowData.row.values[2] == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };

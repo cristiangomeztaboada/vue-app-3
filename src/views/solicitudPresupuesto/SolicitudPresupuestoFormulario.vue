@@ -161,6 +161,10 @@
                   :highlight-case-sensitive="true"
                 />
                 <DxColumn
+                  data-field="id"
+                  caption="Id"
+                />
+                <DxColumn
                   data-field="fuenterecursoid.codigo"
                   caption="Fuente Recurso Código"
                 />
@@ -352,7 +356,7 @@ export default {
           codigo: solicitado.value,
         },
       };
-console.log(solicitudPresupuesto);
+
       if (esNuevo.value) {
         api
           .insertarSolicitudPresupuesto(solicitudPresupuesto)
@@ -490,8 +494,7 @@ console.log(solicitudPresupuesto);
           .eliminarSolicitudPresupuestoDetalle(
             institucionEducativaCodigo.value,
             consecutivo.value,
-            rowData.row.values[0],
-            rowData.row.values[2]
+            rowData.row.values[0]
           )
           .then(() => {
             consultarSolicitudPresupuesto(consecutivo.value);
