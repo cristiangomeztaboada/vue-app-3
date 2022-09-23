@@ -183,7 +183,7 @@ export default {
         observacion: observacion.value,
         valor: Math.abs(valor.value),
       };
-console.log(obligacionPresupuesto);
+
       api
         .insertarObligacionPresupuesto(obligacionPresupuesto)
         .then((data) => {
