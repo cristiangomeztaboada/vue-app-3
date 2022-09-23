@@ -36,16 +36,27 @@
             :sort-index="0"
             sort-order="desc"
           />
+          <DxColumn data-field="estado" />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
-          <DxColumn data-field="terceroid.nombre" caption="Tercero" />
+          <DxColumn data-field="objeto" caption="Objeto" />
           <DxColumn data-field="observacion" caption="Observación" />
+          <DxColumn data-field="terceroid.nombre" caption="Tercero" />
+          <DxColumn
+            data-field="tipocontratoid.codigo"
+            caption="Tipo Contrato"
+          />
+          <DxColumn
+            data-field="fechainiciocontrato"
+            caption="Fecha Inicio Contrato"
+          />
+          <DxColumn
+            data-field="fechafincontrato"
+            caption="Fecha Fin Contrato"
+          />
+          <DxColumn data-field="contratonumero" caption="Número Contrato" />
           <DxColumn
             data-field="certificadodisponibilidadpresupuestalid.consecutivo"
             caption="CDP"
-          />
-          <DxColumn
-            data-field="certificadodisponibilidadpresupuestalid.rubropresupuestalid.nombre"
-            caption="Rubro Presupuesto"
           />
           <DxColumn
             data-field="valor"
@@ -131,6 +142,13 @@ export default {
               "mostrarError",
               "Imposible eliminar, existen documentos de oblicación presupuestal relacionados"
             );
+
+            if (rowData.row.values[2] == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };

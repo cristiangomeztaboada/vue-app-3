@@ -17,7 +17,7 @@
           </h5>
           <h5 v-if="!esNuevo" class="card-title">Obligación Presupuesto</h5>
           <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
@@ -26,20 +26,29 @@
                 readonly
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Consecutivo</label>
               <obligacion-presupuesto-buscador
                 v-on:perderFoco="consultarObligacionPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Fecha</label>
               <input
                 class="form-control"
                 v-model="fecha"
                 type="date"
                 id="fecha"
+                readonly
+              />
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Estado</label>
+              <input
+                v-model="estado"
+                class="form-control"
+                type="text"
                 readonly
               />
             </div>
@@ -55,7 +64,11 @@
                 id="reciboSatisfacion"
               />
             </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
             </div>
@@ -111,8 +124,10 @@ export default {
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
+    const estado = ref("");
     const fecha = ref("");
     const reciboSatisfacion = ref(0);
+    const objeto = ref("");
     const observacion = ref("");
     const registroPresupuestoConsecutivo = ref(0);
     const valor = ref(0);
@@ -168,7 +183,7 @@ export default {
         observacion: observacion.value,
         valor: Math.abs(valor.value),
       };
-
+console.log(obligacionPresupuesto);
       api
         .insertarObligacionPresupuesto(obligacionPresupuesto)
         .then((data) => {
@@ -201,13 +216,6 @@ export default {
 
           if (!observacion.value) {
             store.commit("mostrarError", "ingrese una observación válida");
-          }
-
-          if (!reciboSatisfacion.value) {
-            store.commit(
-              "mostrarError",
-              "ingrese un # de recibido a satisfacción válido"
-            );
           }
         });
     };
@@ -281,8 +289,10 @@ export default {
       institucionEducativaCodigo,
       institucionEducativaNombre,
       consecutivo,
+      estado,
       fecha,
       reciboSatisfacion,
+      objeto,
       observacion,
       registroPresupuestoConsecutivo,
       valor,

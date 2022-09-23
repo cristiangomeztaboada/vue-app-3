@@ -9,6 +9,7 @@
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
             v-bind:ocultarBotonGuardar="!esNuevo"
+            v-bind:mostrarBotonEliminar="true"
           />
         </div>
         <div class="card-body">
@@ -17,7 +18,7 @@
           </h5>
           <h5 v-if="!esNuevo" class="card-title">Registro Presupuesto</h5>
           <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
@@ -26,14 +27,14 @@
                 readonly
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Consecutivo</label>
               <registro-presupuesto-buscador
                 v-on:perderFoco="consultarRegistroPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Fecha</label>
               <input
                 class="form-control"
@@ -42,6 +43,26 @@
                 id="fecha"
                 readonly
               />
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Estado</label>
+              <input
+                v-model="estado"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Observación</label>
+              <input v-model="observacion" class="form-control" type="text" />
             </div>
           </div>
 
@@ -55,9 +76,43 @@
                 v-bind:nombrePropiedad="terceroNombre"
               />
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Observación</label>
-              <input v-model="observacion" class="form-control" type="text" />
+          </div>
+
+          <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Tipo Contrato</label>
+              <DxSelectBox
+                :items="listaTipoContrato"
+                display-expr="nombre"
+                value-expr="codigo"
+                v-model="tipoContratoCodigo"
+              />
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Fecha Inicio Contrato</label>
+              <input
+                class="form-control"
+                v-model="fechaInicioContrato"
+                type="date"
+                id="fechaInicioContrato"
+              />
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Fecha Fin Contrato</label>
+              <input
+                class="form-control"
+                v-model="fechaFinContrato"
+                type="date"
+                id="fechaFinContrato"
+              />
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Número Contrato</label>
+              <input
+                v-model="contratoNumero"
+                class="form-control"
+                type="text"
+              />
             </div>
           </div>
 
@@ -98,6 +153,7 @@ import api from "@/api.js";
 import { useStore } from "vuex";
 import DxNumberBox from "devextreme-vue/number-box";
 import { useRoute, useRouter } from "vue-router";
+import DxSelectBox from "devextreme-vue/select-box";
 
 export default {
   name: "RegistroPresupuestoFormulario",
@@ -107,19 +163,27 @@ export default {
     TerceroBuscador,
     BarraBotones,
     DxNumberBox,
+    DxSelectBox,
   },
   setup() {
     const esNuevo = ref(true);
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
+    const estado = ref("");
     const fecha = ref("");
     const terceroCodigo = ref("");
     const terceroNombre = ref("");
+    const objeto = ref("");
     const observacion = ref("");
     const certificadoPresupuestoConsecutivo = ref(0);
     const certificadoPresupuestoSaldo = ref(0);
     const valor = ref(0);
+    const listaTipoContrato = ref([]);
+    const tipoContratoCodigo = ref("");
+    const fechaInicioContrato = ref("");
+    const fechaFinContrato = ref("");
+    const contratoNumero = ref("");
 
     const store = useStore();
     const route = new useRoute();
@@ -127,6 +191,18 @@ export default {
 
     institucionEducativaCodigo.value = store.state.institucioneducativa;
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
+
+    const listarTipoContrato = function () {
+      store.commit("ocultarAlerta");
+      api
+        .listarTipoContrato()
+        .then((data) => {
+          listaTipoContrato.value = data;
+        })
+        .catch(() => {});
+    };
+
+    listarTipoContrato();
 
     const consultarRegistroPresupuesto = function (c) {
       store.commit("ocultarAlerta");
@@ -139,9 +215,16 @@ export default {
           }
           consecutivo.value = data.consecutivo;
           fecha.value = data.fecha.substring(0, 10);
+          estado.value=data.estado;
           terceroCodigo.value = data.terceroid.codigo;
           consultarTercero(terceroCodigo.value);
+          objeto.value = data.objeto;
           observacion.value = data.observacion;
+
+          tipoContratoCodigo.value=data.tipocontratoid.codigo;
+          fechaInicioContrato.value=data.fechainiciocontrato;
+          fechaFinContrato.value=data.fechafincontrato;
+          contratoNumero.value=data.contratonumero;
 
           certificadoPresupuestoConsecutivo.value =
             data.certificadodisponibilidadpresupuestalid.consecutivo;
@@ -171,6 +254,13 @@ export default {
         terceroid: {
           codigo: terceroCodigo.value,
         },
+        tipocontratoid: {
+          codigo: tipoContratoCodigo.value,
+        },
+        fechainiciocontrato: fechaInicioContrato.value,
+        fechafincontrato: fechaFinContrato.value,
+        contratonumero: contratoNumero.value,
+        objeto: objeto.value,
         observacion: observacion.value,
         certificadodisponibilidadpresupuestalid: {
           consecutivo: certificadoPresupuestoConsecutivo.value,
@@ -199,8 +289,8 @@ export default {
             store.commit("mostrarError", "ingrese un valor válido");
           }
 
-          if (!observacion.value) {
-            store.commit("mostrarError", "ingrese una observación válida");
+          if (!objeto.value) {
+            store.commit("mostrarError", "Diligencie el campo objeto");
           }
 
           if (!certificadoPresupuestoConsecutivo.value) {
@@ -209,6 +299,36 @@ export default {
 
           if (!terceroCodigo.value) {
             store.commit("mostrarError", "ingrese un tercero válido");
+          }
+
+          let isValidDate = Date.parse(registroPresupuesto.fechainiciocontrato);
+          if (isNaN(isValidDate)) {
+            store.commit(
+              "mostrarError",
+              "ingrese una fecha inicio contrato válida"
+            );
+          }
+
+          isValidDate = Date.parse(registroPresupuesto.fechafincontrato);
+          if (isNaN(isValidDate)) {
+            store.commit(
+              "mostrarError",
+              "ingrese una fecha fin contrato válida"
+            );
+          }
+
+          if (!contratoNumero.value) {
+            store.commit(
+              "mostrarError",
+              "ingrese un número de contrato válido"
+            );
+          }
+
+          if (!tipoContratoCodigo.value) {
+            store.commit(
+              "mostrarError",
+              "ingrese un tipo de contrato válido"
+            );
           }
         });
     };
@@ -224,6 +344,12 @@ export default {
       certificadoPresupuestoConsecutivo.value = 0;
       consultarCertificadoPresupuesto(certificadoPresupuestoConsecutivo.value);
       valor.value = 0;
+      estado.value="";
+      objeto.value="";
+      tipoContratoCodigo.value="";
+      fechaInicioContrato.value="";
+      fechaFinContrato.value="";
+      contratoNumero.value="";
     };
 
     const eliminar = function () {
@@ -235,13 +361,22 @@ export default {
             consecutivo.value
           )
           .then(() => {
-            nuevo();
+            router.push({
+              name: "registropresupuesto",
+            })
           })
           .catch(() => {
             store.commit(
               "mostrarError",
               "Imposible eliminar, existen documentos de oblicación presupuestal relacionados"
             );
+
+            if (estado.value == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };
@@ -319,13 +454,20 @@ export default {
       institucionEducativaCodigo,
       institucionEducativaNombre,
       consecutivo,
+      estado,
       fecha,
       terceroCodigo,
       terceroNombre,
+      objeto,
       observacion,
       certificadoPresupuestoConsecutivo,
       certificadoPresupuestoSaldo,
       valor,
+      listaTipoContrato,
+      tipoContratoCodigo,
+      fechaInicioContrato,
+      fechaFinContrato,
+      contratoNumero,
 
       guardar,
       eliminar,

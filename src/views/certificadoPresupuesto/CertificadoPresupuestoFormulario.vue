@@ -9,6 +9,7 @@
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
             v-bind:mostrarBotonEliminar="!esNuevo"
+            v-bind:ocultarBotonGuardar="!esNuevo"
           />
         </div>
         <div class="card-body">
@@ -182,83 +183,43 @@ export default {
         valor: Math.abs(valor.value),
       };
 
-      if (esNuevo.value) {
-        api
-          .insertarCertificadoPresupuesto(certificadoPresupuesto)
-          .then((data) => {
-            consultarCertificadoPresupuesto(data.consecutivo);
-            store.commit("mostrarInformacion", "registro insertado con exito");
-          })
-          .catch(() => {
+      api
+        .insertarCertificadoPresupuesto(certificadoPresupuesto)
+        .then((data) => {
+          consultarCertificadoPresupuesto(data.consecutivo);
+          store.commit("mostrarInformacion", "registro insertado con exito");
+        })
+        .catch(() => {
+          store.commit(
+            "mostrarError",
+            "La fecha no pertenece al periodo activo"
+          );
+
+          if (!valor.value) {
+            store.commit("mostrarError", "ingrese un valor válido");
+          }
+
+          if (!objeto.value) {
             store.commit(
               "mostrarError",
-              "La fecha no pertenece al periodo activo"
+              "Diligencie el campo objeto del documento"
             );
+          }
 
-            if (!valor.value) {
-              store.commit("mostrarError", "ingrese un valor válido");
-            }
-
-            if (!objeto.value) {
-              store.commit(
-                "mostrarError",
-                "Diligencie el campo objeto del documento"
-              );
-            }
-
-            if (Number(diasValidez.value) <= 0) {
-              store.commit(
-                "mostrarError",
-                "ingrese una cantidad de dias de validez válida"
-              );
-            }
-
-            if (
-              Number(valor.value) > Number(solicitudPresupuestoSaldo.value) ||
-              !valor.value
-            ) {
-              store.commit("mostrarError", "ingrese un valor válido");
-            }
-          });
-      } else {
-        api
-          .actualizarCertificadoPresupuesto(certificadoPresupuesto)
-          .then((data) => {
-            consultarCertificadoPresupuesto(data.consecutivo);
-            store.commit("mostrarInformacion", "registro insertado con exito");
-          })
-          .catch(() => {
+          if (Number(diasValidez.value) <= 0) {
             store.commit(
               "mostrarError",
-              "La fecha no pertenece al periodo activo"
+              "ingrese una cantidad de dias de validez válida"
             );
+          }
 
-            if (!valor.value) {
-              store.commit("mostrarError", "ingrese un valor válido");
-            }
-
-            if (!objeto.value) {
-              store.commit(
-                "mostrarError",
-                "Diligencie el campo objeto del documento"
-              );
-            }
-
-            if (Number(diasValidez.value) <= 0) {
-              store.commit(
-                "mostrarError",
-                "ingrese una cantidad de dias de validez válida"
-              );
-            }
-
-            if (
-              Number(valor.value) > Number(solicitudPresupuestoSaldo.value) ||
-              !valor.value
-            ) {
-              store.commit("mostrarError", "ingrese un valor válido");
-            }
-          });
-      }
+          if (
+            Number(valor.value) > Number(solicitudPresupuestoSaldo.value) ||
+            !valor.value
+          ) {
+            store.commit("mostrarError", "ingrese un valor válido");
+          }
+        });
     };
 
     const nuevo = function () {
@@ -297,7 +258,7 @@ export default {
             if (estado.value == "Anulado") {
               store.commit(
                 "mostrarError",
-                "El documento ya se encuenta anulado"
+                "El documento ya se encuentra anulado"
               );
             }
           });

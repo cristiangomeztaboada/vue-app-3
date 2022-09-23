@@ -36,6 +36,7 @@
             :sort-index="0"
             sort-order="desc"
           />
+          <DxColumn data-field="estado" />
           <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
           <!--
           <DxColumn
@@ -43,15 +44,12 @@
             caption="Recibo Satisfacción #"
           />
           -->
+          <DxColumn data-field="objeto" caption="Objeto" />
           <DxColumn data-field="observacion" caption="Observación" />
           <DxColumn
             data-field="registropresupuestalid.consecutivo"
             caption="Registro Presupuesto"
-          />
-          <DxColumn
-            data-field="registropresupuestalid.certificadodisponibilidadpresupuestalid.rubropresupuestalid.nombre"
-            caption="Rubro Presupuesto"
-          />
+          />          
           <DxColumn
             data-field="valor"
             data-type="number"
