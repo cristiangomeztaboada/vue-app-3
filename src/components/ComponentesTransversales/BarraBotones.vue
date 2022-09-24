@@ -33,7 +33,7 @@
         class="btn btn-danger"
         v-on:click="importar"
       >
-        <span>📥</span>IMPRIMIR
+        <span>📥</span>IMPORTAR
       </button>
     </li>
     <li v-if="mostrarBotonAprobar ? true : false" class="nav-item">
