@@ -11,9 +11,9 @@
               v-if="mostrarColumnaBotones"
               v-on:click="nuevo"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
-              ➕
+              <span>➕</span>NUEVO
             </button>
           </div>
         </div>
@@ -24,45 +24,95 @@
           :selection="{ mode: 'single' }"
           @row-click="seleccionarRegistroPresupuesto"
           :showRowLines="true"
+          :row-alternation-enabled="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
+          <template #institucioneducativaidnombre>
+            <b style="color: black">INSTITUCIÓN EDUCATIVA</b>
+          </template>
           <DxColumn
             data-field="institucioneducativaid.nombre"
-            caption="Institución Educativa"
+            header-cell-template="institucioneducativaidnombre"
           />
+          <template #consecutivo>
+            <b style="color: black">CONSECUTIVO</b>
+          </template>
           <DxColumn
             data-field="consecutivo"
             :sort-index="0"
             sort-order="desc"
+            header-cell-template="consecutivo"
           />
-          <DxColumn data-field="estado" />
-          <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
-          <DxColumn data-field="objeto" caption="Objeto" />
-          <DxColumn data-field="observacion" caption="Observación" />
-          <DxColumn data-field="terceroid.nombre" caption="Tercero" />
+          <template #estado>
+            <b style="color: black">ESTADO</b>
+          </template>
+          <DxColumn data-field="estado" header-cell-template="estado" />
+          <template #fecha>
+            <b style="color: black">FECHA</b>
+          </template>
           <DxColumn
-            data-field="tipocontratoid.codigo"
-            caption="Tipo Contrato"
+            data-field="fecha"
+            data-type="date"
+            format="yyyy/MM/dd"
+            header-cell-template="fecha"
           />
+          <template #objeto>
+            <b style="color: black">OBJETO</b>
+          </template>
+          <DxColumn data-field="objeto" header-cell-template="objeto" />
+          <template #observacion>
+            <b style="color: black">OBSERVACIÓN</b>
+          </template>
+          <DxColumn
+            data-field="observacion"
+            header-cell-template="observacion"
+          />
+          <template #terceroidnombre>
+            <b style="color: black">TERCERO</b>
+          </template>
+          <DxColumn data-field="terceroid.nombre" header-cell-template="terceroidnombre"/>
+          <template #tipocontratoidnombre>
+            <b style="color: black">TIPO CONTRATO</b>
+          </template>
+          <DxColumn
+            data-field="tipocontratoid.nombre"
+            header-cell-template="tipocontratoidnombre"
+          />
+          <template #fechainiciocontrato>
+            <b style="color: black">FECHA INICIO CONTRATO</b>
+          </template>
           <DxColumn
             data-field="fechainiciocontrato"
-            caption="Fecha Inicio Contrato"
+            header-cell-template="fechainiciocontrato"
           />
+          <template #fechafincontrato>
+            <b style="color: black">FECHA FIN CONTRATO</b>
+          </template>
           <DxColumn
             data-field="fechafincontrato"
-            caption="Fecha Fin Contrato"
+            header-cell-template="fechafincontrato"
           />
-          <DxColumn data-field="contratonumero" caption="Número Contrato" />
+          <template #contratonumero>
+            <b style="color: black">NÚMERO CONTRATO</b>
+          </template>
+          <DxColumn data-field="contratonumero" header-cell-template="contratonumero"/>
+          <template #CDP>
+            <b style="color: black">CDP</b>
+          </template>
           <DxColumn
             data-field="certificadodisponibilidadpresupuestalid.consecutivo"
-            caption="CDP"
+            header-cell-template="CDP"
           />
+          <template #valor>
+            <b style="color: black">VALOR</b>
+          </template>
           <DxColumn
             data-field="valor"
             data-type="number"
             format="currency"
             alignment="right"
+            header-cell-template="valor"
           />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />

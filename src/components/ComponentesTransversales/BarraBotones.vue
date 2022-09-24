@@ -12,10 +12,10 @@
     <li v-if="mostrarBotonImprimir ? true : false" class="nav-item">
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="btn btn-warning"
         v-on:click="imprimir"
       >
-        🖨️
+        <span>🖨️</span>IMPRIMIR
       </button>
     </li>
     <li v-if="ocultarBotonGuardar ? false : true" class="nav-item">

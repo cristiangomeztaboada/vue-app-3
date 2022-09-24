@@ -24,6 +24,7 @@
           :selection="{ mode: 'single' }"
           @row-click="seleccionarTipoIdentificacion"
           :showRowLines="true"
+          :row-alternation-enabled="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />

@@ -12,7 +12,7 @@
         <div class="input-group-append">
           <button
             type="button"
-            class="btn btn-outline-primary"
+            class="btn btn-warning"
             data-bs-toggle="modal"
             data-bs-target="#modalObligacionPresupuesto"
           >

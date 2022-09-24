@@ -93,10 +93,10 @@
                     <li class="nav-item">
                       <button
                         type="button"
-                        class="btn btn-outline-primary"
+                        class="btn btn-success"
                         v-on:click="guardarModificacionPresupuestoDetalle"
                       >
-                        💾
+                        <span>💾</span>GUARDAR
                       </button>
                     </li>
                   </ul>
@@ -109,34 +109,57 @@
                 :show-borders="true"
                 :selection="{ mode: 'single' }"
                 :showRowLines="true"
+                :row-alternation-enabled="true"
               >
                 <DxEditing :use-icons="true" mode="row"> </DxEditing>
                 <DxSearchPanel
                   :visible="true"
                   :highlight-case-sensitive="true"
                 />
-                <DxColumn data-field="id" caption="Id" />
+                <template #id>
+                  <b style="color: black">ID</b>
+                </template>
+                <DxColumn
+                  data-field="id"
+                  header-cell-template="id"
+                />
+                <template #fuenteRecursoCodigo>
+                  <b style="color: black">FUENTE RECURSO CÓDIGO</b>
+                </template>
                 <DxColumn
                   data-field="fuenterecursoid.codigo"
-                  caption="Fuente Recurso Código"
+                  header-cell-template="fuenteRecursoCodigo"
                 />
+                <template #fuenteRecursoNombre>
+                  <b style="color: black">FUENTE RECURSO NOMBRE</b>
+                </template>
                 <DxColumn
                   data-field="fuenterecursoid.nombre"
-                  caption="Fuente Recurso Nombre"
+                  header-cell-template="fuenteRecursoNombre"
                 />
+                <template #rubroPresupuestoCodigo>
+                  <b style="color: black">RUBRO PRESUPUESTO CÓDIGO</b>
+                </template>
                 <DxColumn
                   data-field="rubropresupuestalid.codigo"
-                  caption="Rubro Presupuesto Código"
+                  header-cell-template="rubroPresupuestoCodigo"
                 />
+                <template #rubroPresupuestoNombre>
+                  <b style="color: black">RUBRO PRESUPUESTO NOMBRE</b>
+                </template>
                 <DxColumn
                   data-field="rubropresupuestalid.nombre"
-                  caption="Rubro Presupuesto Nombre"
+                  header-cell-template="rubroPresupuestoNombre"
                 />
+                <template #valor>
+                  <b style="color: black">VALOR</b>
+                </template>
                 <DxColumn
                   data-field="valor"
                   data-type="number"
                   format="currency"
                   alignment="right"
+                  header-cell-template="valor"
                 />
                 <DxColumn type="buttons" :width="110">
                   <DxButton
@@ -161,24 +184,35 @@
                     :show-borders="true"
                     :selection="{ mode: 'single' }"
                     :showRowLines="true"
+                    :row-alternation-enabled="true"
                   >
                     <DxSearchPanel
                       :visible="true"
                       :highlight-case-sensitive="true"
                     />
+                    <template #fuenteRecursoCodigo>
+                      <b style="color: black">FUENTE RECURSO CÓDIGO</b>
+                    </template>
                     <DxColumn
                       data-field="fuenterecursoid.codigo"
-                      caption="Fuente Recurso Código"
+                      header-cell-template="fuenteRecursoCodigo"
                     />
+                    <template #fuenteRecursoNombre>
+                      <b style="color: black">FUENTE RECURSO NOMBRE</b>
+                    </template>
                     <DxColumn
                       data-field="fuenterecursoid.nombre"
-                      caption="Fuente Recurso Nombre"
+                      header-cell-template="fuenteRecursoNombre"
                     />
+                    <template #valor>
+                      <b style="color: black">VALOR</b>
+                    </template>
                     <DxColumn
                       data-field="valor"
                       data-type="number"
                       format="currency"
                       alignment="right"
+                      header-cell-template="valor"
                     />
                     <DxSummary>
                       <DxTotalItem
@@ -196,24 +230,35 @@
                     :show-borders="true"
                     :selection="{ mode: 'single' }"
                     :showRowLines="true"
+                    :row-alternation-enabled="true"
                   >
                     <DxSearchPanel
                       :visible="true"
                       :highlight-case-sensitive="true"
                     />
+                    <template #rubroPresupuestoCodigo>
+                      <b style="color: black">RUBRO PRESUPUESTO CÓDIGO</b>
+                    </template>
                     <DxColumn
                       data-field="rubropresupuestalid.codigo"
-                      caption="Rubro Presupuesto Código"
+                      header-cell-template="rubroPresupuestoCodigo"
                     />
+                    <template #rubroPresupuestoNombre>
+                      <b style="color: black">RUBRO PRESUPUESTO NOMBRE</b>
+                    </template>
                     <DxColumn
                       data-field="rubropresupuestalid.nombre"
-                      caption="Rubro Presupuesto Nombre"
+                      header-cell-template="rubroPresupuestoNombre"
                     />
+                    <template #valor>
+                      <b style="color: black">VALOR</b>
+                    </template>
                     <DxColumn
                       data-field="valor"
                       data-type="number"
                       format="currency"
                       alignment="right"
+                      header-cell-template="valor"
                     />
                     <DxSummary>
                       <DxTotalItem

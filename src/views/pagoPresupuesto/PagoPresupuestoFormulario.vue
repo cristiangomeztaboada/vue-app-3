@@ -9,15 +9,14 @@
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
             v-bind:ocultarBotonGuardar="!esNuevo"
+            v-bind:mostrarBotonEliminar="!esNuevo"
           />
         </div>
         <div class="card-body">
-          <h5 v-if="esNuevo" class="card-title">
-            Insertar Pago Presupuesto
-          </h5>
+          <h5 v-if="esNuevo" class="card-title">Insertar Pago Presupuesto</h5>
           <h5 v-if="!esNuevo" class="card-title">Pago Presupuesto</h5>
           <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Institución Educativa</label>
               <input
                 v-model="institucionEducativaNombre"
@@ -26,14 +25,14 @@
                 readonly
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Consecutivo</label>
               <pago-presupuesto-buscador
                 v-on:perderFoco="consultarPagoPresupuesto"
                 v-bind:codigoPropiedad="consecutivo"
               />
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
               <label>Fecha</label>
               <input
                 class="form-control"
@@ -43,10 +42,23 @@
                 readonly
               />
             </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <label>Estado</label>
+              <input
+                v-model="estado"
+                class="form-control"
+                type="text"
+                readonly
+              />
+            </div>
           </div>
 
           <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+              <label>Objeto</label>
+              <input v-model="objeto" class="form-control" type="text" />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Observación</label>
               <input v-model="observacion" class="form-control" type="text" />
             </div>
@@ -103,6 +115,8 @@ export default {
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
     const fecha = ref("");
+    const estado = ref("");
+    const objeto = ref("");
     const observacion = ref("");
     const obligacionPresupuestoConsecutivo = ref(0);
     const valor = ref(0);
@@ -126,11 +140,15 @@ export default {
           }
           consecutivo.value = data.consecutivo;
           fecha.value = data.fecha.substring(0, 10);
+          estado.value = data.estado;
+          objeto.value = data.objeto;
           observacion.value = data.observacion;
           obligacionPresupuestoConsecutivo.value =
             data.obligacionpresupuestalid.consecutivo;
 
-          consultarObligacionPresupuesto(obligacionPresupuestoConsecutivo.value);
+          consultarObligacionPresupuesto(
+            obligacionPresupuestoConsecutivo.value
+          );
 
           valor.value = Number(data.valor);
         })
@@ -153,6 +171,7 @@ export default {
         obligacionpresupuestalid: {
           consecutivo: obligacionPresupuestoConsecutivo.value,
         },
+        objeto: objeto.value,
         observacion: observacion.value,
         valor: Math.abs(valor.value),
       };
@@ -168,13 +187,13 @@ export default {
             "mostrarError",
             "La fecha no pertenece al periodo activo"
           );
-          
+
           if (valor.value > obligacionPresupuestoSaldo.value) {
             store.commit(
-            "mostrarError",
-            "El valor ingresado supera el saldo de la obligación presupuesto"
-          );
-          }          
+              "mostrarError",
+              "El valor ingresado supera el saldo de la obligación presupuesto"
+            );
+          }
 
           if (!valor.value) {
             store.commit("mostrarError", "ingrese un valor válido");
@@ -187,8 +206,8 @@ export default {
             );
           }
 
-          if (!observacion.value) {
-            store.commit("mostrarError", "ingrese una observación válida");
+          if (!objeto.value) {
+            store.commit("mostrarError", "Diligencie el campo objeto");
           }
         });
     };
@@ -197,7 +216,9 @@ export default {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       consecutivo.value = 0;
+      estado.value = "";
       fecha.value = api.obtenerFechaActual();
+      objeto.value = "";
       observacion.value = "";
       obligacionPresupuestoConsecutivo.value = 0;
       consultarObligacionPresupuesto(obligacionPresupuestoConsecutivo.value);
@@ -213,9 +234,18 @@ export default {
             consecutivo.value
           )
           .then(() => {
-            nuevo();
+            router.push({
+              name: "pagopresupuesto",
+            })
           })
-          .catch(() => {});
+          .catch(() => {
+            if (estado.value == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
+          });
       }
     };
 
@@ -257,6 +287,8 @@ export default {
       institucionEducativaNombre,
       consecutivo,
       fecha,
+      estado,
+      objeto,
       observacion,
       obligacionPresupuestoConsecutivo,
       valor,

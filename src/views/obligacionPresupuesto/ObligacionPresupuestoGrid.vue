@@ -11,9 +11,9 @@
               v-if="mostrarColumnaBotones"
               v-on:click="nuevo"
               type="button"
-              class="btn btn-outline-primary"
+              class="btn btn-warning"
             >
-              ➕
+              <span>➕</span>NUEVO
             </button>
           </div>
         </div>
@@ -24,37 +24,72 @@
           :selection="{ mode: 'single' }"
           @row-click="seleccionarObligacionPresupuesto"
           :showRowLines="true"
+          :row-alternation-enabled="true"
         >
           <DxEditing :use-icons="true" mode="row"> </DxEditing>
           <DxSearchPanel :visible="true" :highlight-case-sensitive="true" />
+          <template #institucioneducativaidnombre>
+            <b style="color: black">INSTITUCIÓN EDUCATIVA</b>
+          </template>
           <DxColumn
             data-field="institucioneducativaid.nombre"
-            caption="Institución Educativa"
+            header-cell-template="institucioneducativaidnombre"
           />
+          <template #consecutivo>
+            <b style="color: black">CONSECUTIVO</b>
+          </template>
           <DxColumn
             data-field="consecutivo"
             :sort-index="0"
             sort-order="desc"
+            header-cell-template="consecutivo"
           />
-          <DxColumn data-field="estado" />
-          <DxColumn data-field="fecha" data-type="date" format="yyyy/MM/dd" />
+          <template #estado>
+            <b style="color: black">ESTADO</b>
+          </template>
+          <DxColumn data-field="estado" header-cell-template="estado" />
+          <template #fecha>
+            <b style="color: black">FECHA</b>
+          </template>
+          <DxColumn
+            data-field="fecha"
+            data-type="date"
+            format="yyyy/MM/dd"
+            header-cell-template="fecha"
+          />
           <!--
           <DxColumn
             data-field="recibosatisfacion"
             caption="Recibo Satisfacción #"
           />
           -->
-          <DxColumn data-field="objeto" caption="Objeto" />
-          <DxColumn data-field="observacion" caption="Observación" />
+          <template #objeto>
+            <b style="color: black">OBJETO</b>
+          </template>
+          <DxColumn data-field="objeto" header-cell-template="objeto" />
+          <template #observacion>
+            <b style="color: black">OBSERVACIÓN</b>
+          </template>
+          <DxColumn
+            data-field="observacion"
+            header-cell-template="observacion"
+          />
+          <template #registropresupuestalidconsecutivo>
+            <b style="color: black">REGISTRO PRESUPUESTO</b>
+          </template>
           <DxColumn
             data-field="registropresupuestalid.consecutivo"
-            caption="Registro Presupuesto"
-          />          
+            header-cell-template="registropresupuestalidconsecutivo"
+          />
+          <template #valor>
+            <b style="color: black">VALOR</b>
+          </template>
           <DxColumn
             data-field="valor"
             data-type="number"
             format="currency"
             alignment="right"
+            header-cell-template="valor"
           />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton name="delete" />
@@ -134,6 +169,13 @@ export default {
               "mostrarError",
               "Imposible eliminar, existen documentos de pago presupuestal relacionados"
             );
+
+            if (rowData.row.values[2] == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };

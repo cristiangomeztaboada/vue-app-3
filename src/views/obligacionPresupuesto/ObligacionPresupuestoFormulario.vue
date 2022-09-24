@@ -9,6 +9,7 @@
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
             v-bind:ocultarBotonGuardar="!esNuevo"
+            v-bind:mostrarBotonEliminar="!esNuevo"
           />
         </div>
         <div class="card-body">
@@ -150,8 +151,10 @@ export default {
             esNuevo.value = false;
           }
           consecutivo.value = data.consecutivo;
+          estado.value=data.estado;
           fecha.value = data.fecha.substring(0, 10);
           reciboSatisfacion.value = data.recibosatisfacion;
+          objeto.value=data.objeto;
           observacion.value = data.observacion;
           registroPresupuestoConsecutivo.value =
             data.registropresupuestalid.consecutivo;
@@ -180,6 +183,7 @@ export default {
         registropresupuestalid: {
           consecutivo: registroPresupuestoConsecutivo.value,
         },
+        objeto: objeto.value,
         observacion: observacion.value,
         valor: Math.abs(valor.value),
       };
@@ -214,8 +218,8 @@ export default {
             );
           }
 
-          if (!observacion.value) {
-            store.commit("mostrarError", "ingrese una observación válida");
+          if (!objeto.value) {
+            store.commit("mostrarError", "Diligencie el campo objeto");
           }
         });
     };
@@ -224,8 +228,10 @@ export default {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
       consecutivo.value = 0;
+      estado.value="";
       fecha.value = api.obtenerFechaActual();
       reciboSatisfacion.value = 0;
+      objeto.value = "";
       observacion.value = "";
       registroPresupuestoConsecutivo.value = 0;
       consultarRegistroPresupuesto(registroPresupuestoConsecutivo.value);
@@ -241,13 +247,22 @@ export default {
             consecutivo.value
           )
           .then(() => {
-            nuevo();
+            router.push({
+              name: "obligacionpresupuesto",
+            })
           })
           .catch(() => {
             store.commit(
               "mostrarError",
               "Imposible eliminar, existen documentos de pago presupuestal relacionados"
             );
+
+            if (estado.value == "Anulado") {
+              store.commit(
+                "mostrarError",
+                "El documento ya se encuentra anulado"
+              );
+            }
           });
       }
     };

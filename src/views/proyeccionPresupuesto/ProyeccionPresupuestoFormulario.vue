@@ -113,6 +113,7 @@
                 :show-borders="true"
                 :selection="{ mode: 'single' }"
                 :showRowLines="true"
+                :row-alternation-enabled="true"
               >
                 <DxEditing :use-icons="true" mode="row"> </DxEditing>
                 <DxSearchPanel
@@ -184,6 +185,7 @@
                     :show-borders="true"
                     :selection="{ mode: 'single' }"
                     :showRowLines="true"
+                    :row-alternation-enabled="true"
                   >
                     <DxSearchPanel
                       :visible="true"
@@ -231,6 +233,7 @@
                     :show-borders="true"
                     :selection="{ mode: 'single' }"
                     :showRowLines="true"
+                    :row-alternation-enabled="true"
                   >
                     <DxSearchPanel
                       :visible="true"
