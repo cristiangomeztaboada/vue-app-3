@@ -11,6 +11,9 @@
             v-on:imprimir="imprimir"
             v-bind:mostrarBotonImprimir="!esNuevo"
             v-bind:mostrarBotonEliminar="!esNuevo"
+            v-bind:mostrarBotonAdjuntar="!esNuevo"
+            v-bind:tipo="1"
+            v-bind:id="1"
           />
         </div>
         <div class="card-body">

@@ -1,47 +1,27 @@
 <template>
   <ul class="nav nav-pills card-header-pills">
-    <li v-if="ocultarBotonAtras ? false : true" li class="nav-item">
-      <button
-        type="button"
-        class="btn btn-danger"
-        v-on:click="irAtras"
-      >
+    <li v-if="ocultarBotonAtras ? false : true" class="nav-item">
+      <button type="button" class="btn btn-danger" v-on:click="irAtras">
         <span>⬅️</span>IR ATRAS
       </button>
     </li>
     <li v-if="mostrarBotonImprimir ? true : false" class="nav-item">
-      <button
-        type="button"
-        class="btn btn-warning"
-        v-on:click="imprimir"
-      >
+      <button type="button" class="btn btn-warning" v-on:click="imprimir">
         <span>🖨️</span>IMPRIMIR
       </button>
     </li>
     <li v-if="ocultarBotonGuardar ? false : true" class="nav-item">
-      <button
-        type="button"
-        class="btn btn-success"
-        v-on:click="guardar"
-      >
+      <button type="button" class="btn btn-success" v-on:click="guardar">
         <span>💾</span>GUARDAR
       </button>
     </li>
     <li v-if="mostrarBotonImportar ? true : false" class="nav-item">
-      <button
-        type="button"
-        class="btn btn-danger"
-        v-on:click="importar"
-      >
+      <button type="button" class="btn btn-danger" v-on:click="importar">
         <span>📥</span>IMPORTAR
       </button>
     </li>
     <li v-if="mostrarBotonAprobar ? true : false" class="nav-item">
-      <button
-        type="button"
-        class="btn btn-warning"
-        v-on:click="aprobar"
-      >
+      <button type="button" class="btn btn-warning" v-on:click="aprobar">
         <span>✅</span>APROBAR
       </button>
     </li>
@@ -51,21 +31,47 @@
       </button>
     </li>
     <li v-if="mostrarBotonEliminar ? true : false" class="nav-item">
-      <button
-        type="button"
-        class="btn btn-danger"
-        v-on:click="eliminar"
-      >
+      <button type="button" class="btn btn-danger" v-on:click="eliminar">
         <span>&#10008;</span>ELIMINAR
       </button>
     </li>
+    <li v-if="mostrarBotonAdjuntar ? true : false" class="nav-item">
+      <button
+        type="button"
+        class="btn btn-success"
+        v-on:click="abrirModalAdjuntar"
+      >
+        <span>🖇️</span>ADJUNTAR
+      </button>
+    </li>
   </ul>
+
+  <div class="modal" id="modalAdjuntar" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <componente-adjuntar v-bind:tipo=tipo v-bind:id=id ></componente-adjuntar>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import $ from "jquery";
+import ComponenteAdjuntar from './ComponenteAdjuntar.vue';
 export default {
   name: "BarraBotones",
-  components: {},
+  components: {ComponenteAdjuntar},
   props: {
     ocultarBotonAtras: Boolean,
     ocultarBotonNuevo: Boolean,
@@ -74,8 +80,12 @@ export default {
     mostrarBotonAprobar: Boolean,
     mostrarBotonImportar: Boolean,
     mostrarBotonEliminar: Boolean,
+    mostrarBotonAdjuntar: Boolean,
+    tipo: String,
+    id: String,
   },
   setup(props, context) {
+
     const guardar = function () {
       context.emit("guardar");
     };
@@ -104,6 +114,10 @@ export default {
       context.emit("importar");
     };
 
+    const abrirModalAdjuntar = function () {
+      $("#modalAdjuntar").modal("show");
+    };
+
     return {
       guardar,
       irAtras,
@@ -112,6 +126,7 @@ export default {
       imprimir,
       aprobar,
       importar,
+      abrirModalAdjuntar,
     };
   },
 };

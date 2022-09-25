@@ -115,7 +115,6 @@
             header-cell-template="valor"
           />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
-            <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
             <DxButton :on-click="eliminar" hint="Eliminar" icon="trash" />
           </DxColumn>

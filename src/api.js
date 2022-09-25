@@ -1447,6 +1447,45 @@ const consultarSolicitudPresupuestoSaldo = function (
     });
 };
 
+const listarAdjuntos = function (institucionEducativaCodigo) {
+  return fetch(
+    `${url}/adjuntos/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarAdjuntos = function (
+  adjunto
+) {
+  return fetch(`${url}/adjuntos/`, {
+    method: "POST",
+    body: JSON.stringify(adjunto),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarAdjuntos = function (
+  id,
+) {
+  return fetch(
+    `${url}/adjuntos/id/${id}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1565,4 +1604,7 @@ export default {
   insertarModificacionPresupuestoDetalle,
   eliminarModificacionPresupuestoDetalle,
   consultarSolicitudPresupuestoSaldo,
+  listarAdjuntos,
+  insertarAdjuntos,
+  eliminarAdjuntos,
 };

@@ -11,7 +11,7 @@
             v-bind:ocultarBotonAtras="true"
             v-bind:ocultarBotonNuevo="true"
             v-bind:mostrarBotonAprobar="true"
-            v-bind:mostrarBotonImportar="true"
+            v-bind:mostrarBotonImportar="true"            
           />
         </div>
         <div class="card-body">
@@ -719,7 +719,7 @@ export default {
           .catch(() => {
             store.commit(
               "mostrarError",
-              "No es posible eliminar por: -1)EL documento se encuentra aprobado -2)Existe ingreso presupuestal con esta fuente asociada -3)Existe solicitud presupuestal con este rubro asociado"
+              "No es posible eliminar por: -1)El documento se encuentra aprobado -2)Existe ingreso presupuestal con esta fuente asociada -3)Existe solicitud presupuestal con este rubro asociado"
             );
           });
 

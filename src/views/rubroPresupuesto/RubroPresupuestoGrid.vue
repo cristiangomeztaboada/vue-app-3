@@ -41,7 +41,6 @@
           </template>
           <DxColumn data-field="nombre" header-cell-template="rubroPresupuestoNombre"/>
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
-            <DxButton name="delete" />
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
             <DxButton :on-click="eliminar" hint="Eliminar" icon="trash" />
           </DxColumn>
