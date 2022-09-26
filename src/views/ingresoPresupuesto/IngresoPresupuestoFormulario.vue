@@ -13,7 +13,7 @@
             v-bind:mostrarBotonEliminar="!esNuevo"
             v-bind:mostrarBotonAdjuntar="!esNuevo"
             v-bind:tipo="1"
-            v-bind:id="1"
+            v-bind:id="id"
           />
         </div>
         <div class="card-body">
@@ -21,7 +21,7 @@
             Insertar Ingreso Presupuesto
           </h5>
           <h5 v-if="!esNuevo" class="card-title">Ingreso Presupuesto</h5>
-
+          <input v-model="id" type="hidden" />
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Institución Educativa</label>
@@ -239,6 +239,7 @@ export default {
   },
   setup() {
     const esNuevo = ref(true);
+    const id = ref(0);
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
@@ -291,7 +292,7 @@ export default {
           if (data.consecutivo) {
             esNuevo.value = false;
           }
-
+          id.value = data.id;
           institucionEducativaCodigo.value = store.state.institucioneducativa;
           consecutivo.value = data.consecutivo;
           estado.value = data.estado;
@@ -399,13 +400,15 @@ export default {
             }
           });
       } else {
-
         api
           .actualizarIngresoPresupuesto(ingresoPresupuesto)
           .then((data) => {
             consultarIngresoPresupuesto(data.consecutivo);
             fuenteRecursoCodigoCambio({ value: fuenteRecursoCodigo.value });
-            store.commit("mostrarInformacion", "registro actualizado con exito");
+            store.commit(
+              "mostrarInformacion",
+              "registro actualizado con exito"
+            );
           })
           .catch((e) => {
             if (e) {
@@ -492,6 +495,7 @@ export default {
         .padStart(2, "0")}-${hoy.getDate().toString().padStart(2, "0")}`;
 
       esNuevo.value = true;
+      id.value = 0;
       institucionEducativaCodigo.value = store.state.institucioneducativa;
       consecutivo.value = 0;
       estado.value = "";
@@ -551,6 +555,7 @@ export default {
 
     return {
       esNuevo,
+      id,
       institucionEducativaCodigo,
       institucionEducativaNombre,
       consecutivo,

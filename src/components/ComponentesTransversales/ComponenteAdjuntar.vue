@@ -9,7 +9,7 @@
         </div>
         <div class="row">
           <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
-            <input id="archivo" type="file" @input="leerArchivo" />
+            <input id="archivo" type="file" @input="leerArchivo" accept="application/pdf"/>
           </div>
         </div>
         <DxDataGrid
@@ -50,13 +50,13 @@ import {
   DxButton,
 } from "devextreme-vue/data-grid";
 import api from "@/api.js";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useStore } from "vuex";
 export default {
   name: "ComponenteAdjuntar",
   props: {
-    tipo: String,
-    id: String,
+    tipo: Number,
+    id: Number,
   },
   components: {
     DxDataGrid,
@@ -68,17 +68,19 @@ export default {
   setup(props) {
     const dataSource = ref([]);
     const store = useStore();
-    const tipo = ref("");
-    const id = ref("");
     const nombreArchivo = ref("");
 
-    const listar = function () {
-      tipo.value = props.tipo;
-      id.value = props.id;
+    watch(
+      () => props.id,
+      () => {
+        listar();
+      }
+    );
 
+    const listar = function () {
       store.commit("ocultarAlerta");
       api
-        .listarAdjuntos(store.state.institucioneducativa)
+        .listarAdjuntos(store.state.institucioneducativa, props.tipo, props.id)
         .then((data) => {
           dataSource.value = data;
         })
@@ -89,8 +91,19 @@ export default {
 
     listar();
 
-    const descargar = function () {
-      console.log("Descargar!");
+    const descargar = function (rowData) {
+      store.commit("ocultarAlerta");
+      api
+        .descargarAdjuntos(rowData.row.values[0])
+        .then((data) => {
+          let a = document.createElement("a");
+          a.href = "data:application/pdf;base64," + data.archivobase64;
+          a.download = data.nombrearchivo;
+          a.click();
+        })
+        .catch(() => {
+          store.commit("mostrarError", "Error al descargar adjunto");
+        });
     };
 
     const eliminar = function (rowData) {
@@ -117,8 +130,8 @@ export default {
           institucioneducativaid: {
             codigo: store.state.institucioneducativa,
           },
-          tipodocumento: tipo.value,
-          consecutivo: id.value,
+          tipo: props.tipo,
+          documnetoid: props.id,
           nombrearchivo: nombreArchivo.value,
           archivobase64: reader.result,
         };

@@ -59,7 +59,10 @@
           ></button>
         </div>
         <div class="modal-body">
-          <componente-adjuntar v-bind:tipo=tipo v-bind:id=id ></componente-adjuntar>
+          <componente-adjuntar
+            v-bind:tipo="tipo"
+            v-bind:id="id_"
+          ></componente-adjuntar>
         </div>
       </div>
     </div>
@@ -68,10 +71,11 @@
 
 <script>
 import $ from "jquery";
-import ComponenteAdjuntar from './ComponenteAdjuntar.vue';
+import ComponenteAdjuntar from "./ComponenteAdjuntar.vue";
+import { ref,watch } from "vue";
 export default {
   name: "BarraBotones",
-  components: {ComponenteAdjuntar},
+  components: { ComponenteAdjuntar },
   props: {
     ocultarBotonAtras: Boolean,
     ocultarBotonNuevo: Boolean,
@@ -81,10 +85,18 @@ export default {
     mostrarBotonImportar: Boolean,
     mostrarBotonEliminar: Boolean,
     mostrarBotonAdjuntar: Boolean,
-    tipo: String,
-    id: String,
+    tipo: Number,
+    id: Number,
   },
   setup(props, context) {
+    const id_ = ref(0);
+    
+    watch(
+      () => props.id,
+      (newId) => {
+        id_.value = newId;
+      }
+    );
 
     const guardar = function () {
       context.emit("guardar");
@@ -119,6 +131,7 @@ export default {
     };
 
     return {
+      id_,
       guardar,
       irAtras,
       nuevo,

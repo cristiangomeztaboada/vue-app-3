@@ -1447,9 +1447,9 @@ const consultarSolicitudPresupuestoSaldo = function (
     });
 };
 
-const listarAdjuntos = function (institucionEducativaCodigo) {
+const listarAdjuntos = function (institucionEducativaCodigo, tipo, id) {
   return fetch(
-    `${url}/adjuntos/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
+    `${url}/adjuntos/?codigoinstitucioneducativa=${institucionEducativaCodigo}&tipo=${tipo}&documnetoid=${id}`,
     { method: "GET" }
   )
     .then(manejarError)
@@ -1481,6 +1481,18 @@ const eliminarAdjuntos = function (
     { method: "DELETE" }
   )
     .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const descargarAdjuntos = function (id) {
+  return fetch(
+    `${url}/adjuntos/descargar/${id}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
     .catch(function (e) {
       throw e;
     });
@@ -1607,4 +1619,5 @@ export default {
   listarAdjuntos,
   insertarAdjuntos,
   eliminarAdjuntos,
+  descargarAdjuntos,
 };
