@@ -21,7 +21,6 @@
             Insertar Ingreso Presupuesto
           </h5>
           <h5 v-if="!esNuevo" class="card-title">Ingreso Presupuesto</h5>
-          <input v-model="id" type="hidden" />
           <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <label>Institución Educativa</label>
@@ -261,6 +260,7 @@ export default {
     const router = useRouter();
     const store = useStore();
 
+    institucionEducativaCodigo.value = store.state.institucioneducativa;
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
     const fuenteRecursoCodigoCambio = function (e) {
@@ -293,7 +293,6 @@ export default {
             esNuevo.value = false;
           }
           id.value = data.id;
-          institucionEducativaCodigo.value = store.state.institucioneducativa;
           consecutivo.value = data.consecutivo;
           estado.value = data.estado;
           fecha.value = data.fecha.substring(0, 10);

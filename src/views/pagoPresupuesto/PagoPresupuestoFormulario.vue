@@ -10,6 +10,9 @@
             v-on:nuevo="nuevo"
             v-bind:ocultarBotonGuardar="!esNuevo"
             v-bind:mostrarBotonEliminar="!esNuevo"
+            v-bind:mostrarBotonAdjuntar="!esNuevo"
+            v-bind:tipo="7"
+            v-bind:id="id"
           />
         </div>
         <div class="card-body">
@@ -111,6 +114,7 @@ export default {
   },
   setup() {
     const esNuevo = ref(true);
+    const id = ref(0);
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const consecutivo = ref(0);
@@ -138,6 +142,7 @@ export default {
           if (data.consecutivo) {
             esNuevo.value = false;
           }
+          id.value = data.id;
           consecutivo.value = data.consecutivo;
           fecha.value = data.fecha.substring(0, 10);
           estado.value = data.estado;
@@ -215,6 +220,7 @@ export default {
     const nuevo = function () {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
+      id.value = 0;
       consecutivo.value = 0;
       estado.value = "";
       fecha.value = api.obtenerFechaActual();
@@ -283,6 +289,7 @@ export default {
 
     return {
       esNuevo,
+      id,
       institucionEducativaCodigo,
       institucionEducativaNombre,
       consecutivo,

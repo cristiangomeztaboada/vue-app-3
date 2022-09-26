@@ -11,7 +11,10 @@
             v-bind:ocultarBotonAtras="true"
             v-bind:ocultarBotonNuevo="true"
             v-bind:mostrarBotonAprobar="true"
-            v-bind:mostrarBotonImportar="true"            
+            v-bind:mostrarBotonImportar="true"   
+            v-bind:mostrarBotonAdjuntar="!esNuevo"
+            v-bind:tipo="8"
+            v-bind:id="id"         
           />
         </div>
         <div class="card-body">
@@ -338,6 +341,7 @@ export default {
   },
   setup() {
     const esNuevo = ref(true);
+    const id = ref(0);
     const institucionEducativaCodigo = ref("");
     const institucionEducativaNombre = ref("");
     const periodoCodigo = ref("");
@@ -464,7 +468,7 @@ export default {
               if (data.id) {
                 esNuevo.value = false;
               }
-
+              id.value = data.id;
               periodoCodigo.value = data.periodoid.codigo;
               institucionEducativaCodigo.value =
                 data.institucioneducativaid.codigo;
@@ -574,6 +578,7 @@ export default {
     const nuevo = function () {
       store.commit("ocultarAlerta");
       esNuevo.value = true;
+      id.value = 0;
       institucionEducativaCodigo.value = store.state.institucioneducativa;
 
       api
@@ -747,6 +752,7 @@ export default {
 
     return {
       esNuevo,
+      id,
       institucionEducativaCodigo,
       institucionEducativaNombre,
       periodoCodigo,
