@@ -35,7 +35,7 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Sistema
+              Maestro
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
@@ -221,6 +221,31 @@
                   :to="{ name: 'pagopresupuesto' }"
                 >
                   Pago Presupuesto
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li
+            v-if="usuario == 'admin' ? true : false"
+            class="nav-item dropdown"
+          >
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Sistema
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'usuarioauditorformulario' }"
+                >
+                  Usuario Auditor
                 </router-link>
               </li>
             </ul>

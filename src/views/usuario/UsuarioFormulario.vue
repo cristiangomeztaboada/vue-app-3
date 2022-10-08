@@ -92,14 +92,18 @@ export default {
       if (esNuevo.value) {
         api
           .insertarUsuario(usuario)
-          .then(store.commit("mostrarInformacion", "registro insertado con exito"))
+          .then(() => {
+            store.commit("mostrarInformacion", "registro insertado con exito");
+          })
           .catch(function (e) {
             store.commit("mostrarError", e);
           });
       } else {
         api
           .actualizarUsuario(usuario)
-          .then(store.commit("mostrarInformacion", "registro actualizado con exito"))
+          .then(() => {
+            store.commit("mostrarInformacion", "registro actualizado con exito");
+          })
           .catch(function (e) {
             store.commit("mostrarError", e);
           });
@@ -131,8 +135,12 @@ export default {
               name: "usuario",
             })
           )
-          .catch(() => store.commit("mostrarError", "No se puede eliminar usuario, se encuentra asociado a una institución educativa"));
-          
+          .catch(() =>
+            store.commit(
+              "mostrarError",
+              "No se puede eliminar usuario, se encuentra asociado a una institución educativa"
+            )
+          );
       }
     };
 

@@ -1498,6 +1498,57 @@ const descargarAdjuntos = function (id) {
     });
 };
 
+const listarUsuarioAuditor = function () {
+  return fetch(
+    `${url}/auditorinstitucioneducativa/listarusuariossinrelacion/`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const consultarUsuarioAuditor = function (usuarioAuditorCodigo) {
+  return fetch(
+    `${url}/auditorinstitucioneducativa/usuario/${usuarioAuditorCodigo}`,
+    { method: "GET" }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const insertarUsuarioAuditor = function (
+  usuarioAuditor
+) {
+  return fetch(`${url}/auditorinstitucioneducativa/usuario/${usuarioAuditor.usuarioid.codigo}/`, {
+    method: "POST",
+    body: JSON.stringify(usuarioAuditor),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
+const eliminarUsuarioAuditorInstitucionEducativa = function (
+  usuarioAuditorInstitucionEducativaId
+) {
+  return fetch(
+    `${url}/auditorinstitucioneducativa/id/${usuarioAuditorInstitucionEducativaId}`,
+    { method: "DELETE" }
+  )
+    .then(manejarError)
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   listarUsuario,
   consultarUsuario,
@@ -1620,4 +1671,8 @@ export default {
   insertarAdjuntos,
   eliminarAdjuntos,
   descargarAdjuntos,
+  listarUsuarioAuditor,
+  consultarUsuarioAuditor,
+  insertarUsuarioAuditor,
+  eliminarUsuarioAuditorInstitucionEducativa,
 };

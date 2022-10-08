@@ -41,7 +41,7 @@
         class="btn btn-success"
         v-on:click="abrirModalAdjuntar"
       >
-        <span>🖇️</span>ADJUNTAR
+        <span>🖇️</span>DOCUMENTOS
       </button>
     </li>
   </ul>
