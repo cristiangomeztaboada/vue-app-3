@@ -8,9 +8,11 @@
             v-on:eliminar="eliminar"
             v-on:irAtras="irAtras"
             v-on:nuevo="nuevo"
+            v-on:imprimir="imprimir"
             v-bind:mostrarBotonEliminar="!esNuevo"
             v-bind:ocultarBotonGuardar="!esNuevo"
             v-bind:mostrarBotonAdjuntar="!esNuevo"
+            v-bind:mostrarBotonImprimir="!esNuevo"
             v-bind:tipo="4"
             v-bind:id="id"
           />
@@ -98,6 +100,105 @@
       </div>
     </div>
   </div>
+
+  <div v-show="imprimiendo" id="pdf" class="card-body">
+    <div align="center">
+      <img src="@/assets/logo2.png" />
+    </div>
+    <br /><br />
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <input
+          v-model="institucionEducativaNombre"
+          class="form-control"
+          type="text"
+          style="text-align: center; border: 0; font-weight: bold"
+        />
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <h5 class="card-title" style="text-align: center">
+          Certificado Presupuesto
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Consecutivo:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="consecutivo" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Estado:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="estado" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Fecha:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="fecha" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Objeto:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <textarea v-model="objeto" class="form-control" type="text" rows="2" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Observación:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <textarea
+          v-model="observacion"
+          class="form-control"
+          type="text"
+          rows="2"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Días Validez:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="diasValidez" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Valor:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <DxNumberBox v-model="valor" format="$ #,##0.##" />
+      </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <hr />
+        <b><center>Elaborado por</center></b>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <hr />
+        <b><center>Aprobado por</center></b>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -109,6 +210,7 @@ import api from "@/api.js";
 import { useStore } from "vuex";
 import DxNumberBox from "devextreme-vue/number-box";
 import { useRoute, useRouter } from "vue-router";
+import html2pdf from "html2pdf.js";
 
 export default {
   name: "CertificadoPresupuestoFormulario",
@@ -129,6 +231,7 @@ export default {
     const objeto = ref("");
     const observacion = ref("");
     const diasValidez = ref(0);
+    const imprimiendo = ref(false);
 
     const solicitudPresupuestoSaldo = ref(0);
     const solicitudPresupuestoConsecutivo = ref(0);
@@ -303,6 +406,20 @@ export default {
         });
     };
 
+    const imprimir = function () {
+      try {
+        imprimiendo.value = true;
+        store.commit("ocultarAlerta");
+        const element = document.getElementById("pdf");
+        html2pdf().from(element).save();
+        setTimeout(() => {
+          imprimiendo.value = false;
+        }, 0);
+      } catch (e) {
+        imprimiendo.value = false;
+      }
+    };
+
     return {
       esNuevo,
       id,
@@ -317,6 +434,7 @@ export default {
       valor,
       solicitudPresupuestoSaldo,
       solicitudPresupuestoConsecutivo,
+      imprimiendo,
 
       guardar,
       eliminar,
@@ -324,6 +442,7 @@ export default {
       irAtras,
       consultarCertificadoPresupuesto,
       consultarSolicitudPresupuesto,
+      imprimir,
     };
   },
 };

@@ -116,100 +116,130 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div v-show="imprimiendo" id="pdf" class="card-body">
-          <h5 class="card-title">Ingreso Presupuesto</h5>
-
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Código</label>
-              <input
-                v-model="institucionEducativaCodigo"
-                class="form-control"
-                type="text"
-                readonly
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Institución Educativa Nombre</label>
-              <input
-                v-model="institucionEducativaNombre"
-                class="form-control"
-                type="text"
-                readonly
-              />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Consecutivo</label>
-              <ingreso-presupuesto-buscador
-                v-on:perderFoco="consultarIngresoPresupuesto"
-                v-bind:codigoPropiedad="consecutivo"
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Fecha</label>
-              <input
-                class="form-control"
-                v-model="fecha"
-                type="date"
-                id="fecha"
-                readonly
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Tercero</label>
-              <tercero-buscador
-                v-on:perderFoco="consultarTercero"
-                v-bind:codigoPropiedad="terceroCodigo"
-              />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Fecha Proyección Recaudo</label>
-              <input
-                class="form-control"
-                v-model="fechaProyeccionRecaudo"
-                type="date"
-                id="fechaProyeccionRecaudo"
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Observación</label>
-              <input v-model="observacion" class="form-control" type="text" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Fuente Recurso</label>
-              <DxSelectBox
-                :items="fuentesRecursos"
-                display-expr="nombre"
-                value-expr="codigo"
-                v-model="fuenteRecursoCodigo"
-                @value-changed="fuenteRecursoCodigoCambio"
-              />
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-              <label>Saldo</label>
-              <DxNumberBox
-                v-model="fuenteRecursoSaldo"
-                format="$ #,##0.##"
-                :read-only="true"
-              />
-            </div>
-          </div>
-
-          <label>Valor</label>
-          <DxNumberBox v-model="valor" format="$ #,##0.##" />
-        </div>
+  <div v-show="imprimiendo" id="pdf" class="card-body">
+    <div align="center">
+      <img src="@/assets/logo2.png" />
+    </div>
+    <br /><br />
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <input
+          v-model="institucionEducativaNombre"
+          class="form-control"
+          type="text"
+          style="text-align: center; border: 0; font-weight: bold"
+        />
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <h5 class="card-title" style="text-align: center">
+          Ingreso Presupuesto
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Consecutivo:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="consecutivo" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Estado:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="estado" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Fecha:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="fecha" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Objeto:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <textarea v-model="objeto" class="form-control" type="text" rows="2" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Observación:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <textarea
+          v-model="observacion"
+          class="form-control"
+          type="text"
+          rows="2"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Tercero:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="terceroNombre" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Proyección:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input
+          v-model="fechaProyeccionRecaudo"
+          class="form-control"
+          type="text"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Fuente:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <DxSelectBox
+          :items="fuentesRecursos"
+          display-expr="nombre"
+          value-expr="codigo"
+          v-model="fuenteRecursoCodigo"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Valor:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <DxNumberBox v-model="valor" format="$ #,##0.##" />
+      </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <hr />
+        <b><center>Elaborado por</center></b>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <hr />
+        <b><center>Aprobado por</center></b>
       </div>
     </div>
   </div>

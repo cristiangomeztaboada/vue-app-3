@@ -8,13 +8,15 @@
             v-on:eliminar="eliminar"
             v-on:aprobar="aprobar"
             v-on:importar="importar"
+            v-on:imprimir="imprimir"
             v-bind:ocultarBotonAtras="true"
             v-bind:ocultarBotonNuevo="true"
             v-bind:mostrarBotonAprobar="true"
-            v-bind:mostrarBotonImportar="true"   
+            v-bind:mostrarBotonImportar="true"
             v-bind:mostrarBotonAdjuntar="!esNuevo"
+            v-bind:mostrarBotonImprimir="!esNuevo"
             v-bind:tipo="8"
-            v-bind:id="id"         
+            v-bind:id="id"
           />
         </div>
         <div class="card-body">
@@ -302,6 +304,197 @@
       </div>
     </div>
   </div>
+  
+  <div v-show="imprimiendo" id="pdf" class="card-body">
+    <div align="center">
+      <img src="@/assets/logo2.png" />
+    </div>
+    <br /><br />
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <input
+          v-model="institucionEducativaNombre"
+          class="form-control"
+          type="text"
+          style="text-align: center; border: 0; font-weight: bold"
+        />
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <h5 class="card-title" style="text-align: center">
+          Proyección Presupuesto
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Vigencia:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="periodoCodigo" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Estado:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <input v-model="estado" class="form-control" type="text" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Objeto:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <textarea v-model="objeto" class="form-control" type="text" rows="2" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <b>Observación:</b>
+      </div>
+      <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+        <textarea
+          v-model="observacion"
+          class="form-control"
+          type="text"
+          rows="2"
+        />
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <DxDataGrid
+          :data-source="proyeccionPresupuestoDetalle"
+          key-expr="id"
+          :show-borders="true"
+          :selection="{ mode: 'single' }"
+          :showRowLines="true"
+          :row-alternation-enabled="true"
+        >
+          <DxEditing :use-icons="true" mode="row"> </DxEditing>
+          <template #fuenteRecursoNombre>
+            <b style="color: black">FUENTE RECURSO</b>
+          </template>
+          <DxColumn
+            data-field="fuenterecursoid.nombre"
+            caption="Fuente Recurso Nombre"
+            header-cell-template="fuenteRecursoNombre"
+          />
+          <template #rubroPresupuestoNombre>
+            <b style="color: black">RUBRO PRESUPUESTO</b>
+          </template>
+          <DxColumn
+            data-field="rubropresupuestalid.nombre"
+            caption="Rubro Presupuesto Nombre"
+            header-cell-template="rubroPresupuestoNombre"
+          />
+          <template #valor>
+            <b style="color: black">VALOR</b>
+          </template>
+          <DxColumn
+            data-field="valor"
+            data-type="number"
+            format="currency"
+            alignment="right"
+            header-cell-template="valor"
+          />
+        </DxDataGrid>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <DxDataGrid
+          :data-source="proyeccionPresupuestoDetalleTotalFuente"
+          key-expr="fuenterecursoid.codigo"
+          :show-borders="true"
+          :selection="{ mode: 'single' }"
+          :showRowLines="true"
+          :row-alternation-enabled="true"
+        >
+          <template #fuenteRecursoNombre>
+            <b style="color: black">FUENTE RECURSO</b>
+          </template>
+          <DxColumn
+            data-field="fuenterecursoid.nombre"
+            caption="Fuente Recurso Nombre"
+            header-cell-template="fuenteRecursoNombre"
+          />
+          <template #valor>
+            <b style="color: black">VALOR</b>
+          </template>
+          <DxColumn
+            data-field="valor"
+            data-type="number"
+            format="currency"
+            alignment="right"
+            header-cell-template="valor"
+          />
+          <DxSummary>
+            <DxTotalItem
+              column="valor"
+              summary-type="sum"
+              value-format="currency"
+            />
+          </DxSummary>
+        </DxDataGrid>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <DxDataGrid
+          :data-source="proyeccionPresupuestoDetalleTotalRubro"
+          key-expr="rubropresupuestalid.codigo"
+          :show-borders="true"
+          :selection="{ mode: 'single' }"
+          :showRowLines="true"
+          :row-alternation-enabled="true"
+        >
+          <template #rubroPresupuestoNombre>
+            <b style="color: black">RUBRO PRESUPUESTO</b>
+          </template>
+          <DxColumn
+            data-field="rubropresupuestalid.nombre"
+            caption="Rubro Presupuesto Nombre"
+            header-cell-template="rubroPresupuestoNombre"
+          />
+          <template #valor>
+            <b style="color: black">VALOR</b>
+          </template>
+          <DxColumn
+            data-field="valor"
+            data-type="number"
+            format="currency"
+            alignment="right"
+            header-cell-template="valor"
+          />
+          <DxSummary>
+            <DxTotalItem
+              column="valor"
+              summary-type="sum"
+              value-format="currency"
+            />
+          </DxSummary>
+        </DxDataGrid>
+      </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <hr />
+        <b><center>Elaborado por</center></b>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <hr />
+        <b><center>Aprobado por</center></b>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -323,6 +516,7 @@ import RubroPresupuestoBuscador from "@/views/rubroPresupuesto/RubroPresupuestoB
 import DxNumberBox from "devextreme-vue/number-box";
 import $ from "jquery";
 import readXlsFile from "read-excel-file";
+import html2pdf from "html2pdf.js";
 
 export default {
   name: "ProyeccionPresupuestoFormulario",
@@ -359,6 +553,7 @@ export default {
     const valor = ref(0);
     const filasArchivo = ref([]);
     const jsonDetalle = ref([]);
+    const imprimiendo = ref(false);
 
     institucionEducativaNombre.value = store.state.institucioneducativanombre;
 
@@ -750,6 +945,20 @@ export default {
       $("#modalImportar").modal("hide");
     };
 
+    const imprimir = function () {
+      try {
+        imprimiendo.value = true;
+        store.commit("ocultarAlerta");
+        const element = document.getElementById("pdf");
+        html2pdf().from(element).save();
+        setTimeout(() => {
+          imprimiendo.value = false;
+        }, 0);
+      } catch (e) {
+        imprimiendo.value = false;
+      }
+    };
+
     return {
       esNuevo,
       id,
@@ -767,6 +976,7 @@ export default {
       rubroPresupuestoCodigo,
       rubroPresupuestoNombre,
       valor,
+      imprimiendo,
       guardar,
       eliminar,
       nuevo,
@@ -778,6 +988,7 @@ export default {
       aprobar,
       importar,
       leerArchivo,
+      imprimir,
     };
   },
 };

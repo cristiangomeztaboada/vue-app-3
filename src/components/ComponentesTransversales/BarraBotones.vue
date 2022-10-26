@@ -5,16 +5,17 @@
         <span>⬅️</span>IR ATRAS
       </button>
     </li>
-    <li v-if="mostrarBotonImprimir ? true : false" class="nav-item">
-      <button type="button" class="btn btn-warning" v-on:click="imprimir">
-        <span>🖨️</span>IMPRIMIR
-      </button>
-    </li>
     <li v-if="ocultarBotonGuardar ? false : true" class="nav-item">
       <button type="button" class="btn btn-success" v-on:click="guardar">
         <span>💾</span>GUARDAR
       </button>
     </li>
+    <li v-if="mostrarBotonImprimir ? true : false" class="nav-item">
+      <button type="button" class="btn btn-warning" v-on:click="imprimir">
+        <span>🖨️</span>IMPRIMIR
+      </button>
+    </li>
+    
     <li v-if="mostrarBotonImportar ? true : false" class="nav-item">
       <button type="button" class="btn btn-danger" v-on:click="importar">
         <span>📥</span>IMPORTAR
@@ -24,15 +25,15 @@
       <button type="button" class="btn btn-warning" v-on:click="aprobar">
         <span>✅</span>APROBAR
       </button>
+    </li>    
+    <li v-if="mostrarBotonEliminar ? true : false" class="nav-item">
+      <button type="button" class="btn btn-danger" v-on:click="eliminar">
+        <span>&#10008;</span>ELIMINAR
+      </button>
     </li>
     <li v-if="ocultarBotonNuevo ? false : true" class="nav-item">
       <button type="button" class="btn btn-warning" v-on:click="nuevo">
         <span>➕</span>NUEVO
-      </button>
-    </li>
-    <li v-if="mostrarBotonEliminar ? true : false" class="nav-item">
-      <button type="button" class="btn btn-danger" v-on:click="eliminar">
-        <span>&#10008;</span>ELIMINAR
       </button>
     </li>
     <li v-if="mostrarBotonAdjuntar ? true : false" class="nav-item">
