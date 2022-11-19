@@ -1,3 +1,9 @@
+const token = sessionStorage.getItem("token");
+const headers = {
+  "Content-type": "application/json; charset=UTF-8",
+  Authorization: `Bearer ${token}`,
+};
+
 //const url = "http://localhost:3000"; //Express
 const url = "http://127.0.0.1:8000"; //Django Rest Framework
 
@@ -16,8 +22,23 @@ const manejarError = function (res) {
   return res;
 };
 
+const consultarToken = function (usuario) {
+  return fetch(`${url}/api/token/`, {
+    method: "POST",
+    body: JSON.stringify(usuario),
+    headers,
+  })
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 const listarUsuario = function () {
-  return fetch(`${url}/usuario`, { method: "GET" })
+  return fetch(`${url}/user`, {
+    method: "GET",
+    headers,
+  })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -26,7 +47,7 @@ const listarUsuario = function () {
 };
 
 const consultarUsuario = function (codigo) {
-  return fetch(`${url}/usuario/${codigo}`, { method: "GET" })
+  return fetch(`${url}/user/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -35,10 +56,10 @@ const consultarUsuario = function (codigo) {
 };
 
 const insertarUsuario = function (usuario) {
-  return fetch(`${url}/usuario/`, {
+  return fetch(`${url}/user/`, {
     method: "POST",
     body: JSON.stringify(usuario),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -47,10 +68,10 @@ const insertarUsuario = function (usuario) {
 };
 
 const actualizarUsuario = function (usuario) {
-  return fetch(`${url}/usuario/${usuario.codigo}/`, {
+  return fetch(`${url}/user/${usuario.id}/`, {
     method: "PUT",
     body: JSON.stringify(usuario),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -61,6 +82,7 @@ const actualizarUsuario = function (usuario) {
 const eliminarUsuario = function (codigo) {
   return fetch(`${url}/usuario/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -69,7 +91,7 @@ const eliminarUsuario = function (codigo) {
 };
 
 const listarInstitucionEducativa = function () {
-  return fetch(`${url}/institucioneducativa`, { method: "GET" })
+  return fetch(`${url}/institucioneducativa`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -78,7 +100,10 @@ const listarInstitucionEducativa = function () {
 };
 
 const consultarInstitucionEducativa = function (codigo) {
-  return fetch(`${url}/institucioneducativa/${codigo}`, { method: "GET" })
+  return fetch(`${url}/institucioneducativa/${codigo}`, {
+    method: "GET",
+    headers,
+  })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -89,6 +114,7 @@ const consultarInstitucionEducativa = function (codigo) {
 const consultarInstitucionEducativaPorUsuario = function (codigo) {
   return fetch(`${url}/institucioneducativa/usuario/${codigo}`, {
     method: "GET",
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -101,7 +127,7 @@ const insertarInstitucionEducativa = function (institucionEducativa) {
   return fetch(`${url}/institucioneducativa/`, {
     method: "POST",
     body: JSON.stringify(institucionEducativa),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -113,7 +139,7 @@ const actualizarInstitucionEducativa = function (institucionEducativa) {
   return fetch(`${url}/institucioneducativa/${institucionEducativa.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(institucionEducativa),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -124,6 +150,7 @@ const actualizarInstitucionEducativa = function (institucionEducativa) {
 const eliminarInstitucionEducativa = function (codigo) {
   return fetch(`${url}/institucioneducativa/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -132,7 +159,7 @@ const eliminarInstitucionEducativa = function (codigo) {
 };
 
 const listarTipoContrato = function () {
-  return fetch(`${url}/tipocontrato`, { method: "GET" })
+  return fetch(`${url}/tipocontrato`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -143,6 +170,7 @@ const listarTipoContrato = function () {
 const eliminarTipoContrato = function (codigo) {
   return fetch(`${url}/tipocontrato/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -151,7 +179,7 @@ const eliminarTipoContrato = function (codigo) {
 };
 
 const consultarTipoContrato = function (codigo) {
-  return fetch(`${url}/tipocontrato/${codigo}`, { method: "GET" })
+  return fetch(`${url}/tipocontrato/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -163,7 +191,7 @@ const insertarTipoContrato = function (tipoContrato) {
   return fetch(`${url}/tipocontrato/`, {
     method: "POST",
     body: JSON.stringify(tipoContrato),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -175,7 +203,7 @@ const actualizarTipoContrato = function (tipoContrato) {
   return fetch(`${url}/tipocontrato/${tipoContrato.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tipoContrato),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -184,7 +212,7 @@ const actualizarTipoContrato = function (tipoContrato) {
 };
 
 const listarTipoRecaudo = function () {
-  return fetch(`${url}/tiporecaudo`, { method: "GET" })
+  return fetch(`${url}/tiporecaudo`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -196,7 +224,7 @@ const insertarTipoRecaudo = function (tipoRecaudo) {
   return fetch(`${url}/tiporecaudo/`, {
     method: "POST",
     body: JSON.stringify(tipoRecaudo),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -208,7 +236,7 @@ const actualizarTipoRecaudo = function (tipoRecaudo) {
   return fetch(`${url}/tiporecaudo/${tipoRecaudo.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tipoRecaudo),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -217,7 +245,7 @@ const actualizarTipoRecaudo = function (tipoRecaudo) {
 };
 
 const consultarTipoRecaudo = function (codigo) {
-  return fetch(`${url}/tiporecaudo/${codigo}`, { method: "GET" })
+  return fetch(`${url}/tiporecaudo/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -228,6 +256,7 @@ const consultarTipoRecaudo = function (codigo) {
 const eliminarTipoRecaudo = function (codigo) {
   return fetch(`${url}/tiporecaudo/${codigo}/`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -238,7 +267,7 @@ const eliminarTipoRecaudo = function (codigo) {
 const listarPersonalPlanta = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/personalplanta/institucioneducativa/${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -248,7 +277,7 @@ const listarPersonalPlanta = function (institucionEducativaCodigo) {
 };
 
 const consultarPersonalPlanta = function (codigo) {
-  return fetch(`${url}/personalplanta/${codigo}`, { method: "GET" })
+  return fetch(`${url}/personalplanta/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -260,7 +289,7 @@ const insertarPersonalPlanta = function (personalPlanta) {
   return fetch(`${url}/personalplanta/`, {
     method: "POST",
     body: JSON.stringify(personalPlanta),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -272,7 +301,7 @@ const actualizarPersonalPlanta = function (personalPlanta) {
   return fetch(`${url}/personalplanta/${personalPlanta.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(personalPlanta),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -283,6 +312,7 @@ const actualizarPersonalPlanta = function (personalPlanta) {
 const eliminarPersonalPlanta = function (codigo) {
   return fetch(`${url}/personalplanta/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -291,7 +321,7 @@ const eliminarPersonalPlanta = function (codigo) {
 };
 
 const listarFuenteRecurso = function () {
-  return fetch(`${url}/fuenterecurso`, { method: "GET" })
+  return fetch(`${url}/fuenterecurso`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -302,7 +332,7 @@ const listarFuenteRecurso = function () {
 const listarFuenteRecursoProyeccion = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/fuenterecurso/proyeccion/${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -312,7 +342,10 @@ const listarFuenteRecursoProyeccion = function (institucionEducativaCodigo) {
 };
 
 const listarFuenteRecursoDetalle = function () {
-  return fetch(`${url}/fuenterecurso/detalle/final/`, { method: "GET" })
+  return fetch(`${url}/fuenterecurso/detalle/final/`, {
+    method: "GET",
+    headers,
+  })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -321,7 +354,7 @@ const listarFuenteRecursoDetalle = function () {
 };
 
 const consultarFuenteRecurso = function (codigo) {
-  return fetch(`${url}/fuenterecurso/${codigo}`, { method: "GET" })
+  return fetch(`${url}/fuenterecurso/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -335,7 +368,7 @@ const consultarFuenteRecursoSaldo = function (
 ) {
   return fetch(
     `${url}/fuenterecurso/fuenterecursoporingreso/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -350,7 +383,7 @@ const consultarFuenteRecursoSaldoRecaudo = function (
 ) {
   return fetch(
     `${url}/fuenterecurso/fuenterecursoporrecaudo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -363,7 +396,7 @@ const insertarFuenteRecurso = function (fuenteRecurso) {
   return fetch(`${url}/fuenterecurso/`, {
     method: "POST",
     body: JSON.stringify(fuenteRecurso),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -375,7 +408,7 @@ const actualizarFuenteRecurso = function (fuenteRecurso) {
   return fetch(`${url}/fuenterecurso/${fuenteRecurso.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(fuenteRecurso),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -386,6 +419,7 @@ const actualizarFuenteRecurso = function (fuenteRecurso) {
 const eliminarFuenteRecurso = function (codigo) {
   return fetch(`${url}/fuenterecurso/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -394,7 +428,7 @@ const eliminarFuenteRecurso = function (codigo) {
 };
 
 const listarRubroPresupuesto = function () {
-  return fetch(`${url}/rubropresupuestal`, { method: "GET" })
+  return fetch(`${url}/rubropresupuestal`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -403,7 +437,10 @@ const listarRubroPresupuesto = function () {
 };
 
 const listarRubroPresupuestoDetalle = function () {
-  return fetch(`${url}/rubropresupuestal/detalle/final/`, { method: "GET" })
+  return fetch(`${url}/rubropresupuestal/detalle/final/`, {
+    method: "GET",
+    headers,
+  })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -412,7 +449,7 @@ const listarRubroPresupuestoDetalle = function () {
 };
 
 const consultarRubroPresupuesto = function (codigo) {
-  return fetch(`${url}/rubropresupuestal/${codigo}`, { method: "GET" })
+  return fetch(`${url}/rubropresupuestal/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -424,7 +461,7 @@ const insertarRubroPresupuesto = function (rubroPresupuesto) {
   return fetch(`${url}/rubropresupuestal/`, {
     method: "POST",
     body: JSON.stringify(rubroPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -436,7 +473,7 @@ const actualizarRubroPresupuesto = function (rubroPresupuesto) {
   return fetch(`${url}/rubropresupuestal/${rubroPresupuesto.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(rubroPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -447,6 +484,7 @@ const actualizarRubroPresupuesto = function (rubroPresupuesto) {
 const eliminarRubroPresupuesto = function (codigo) {
   return fetch(`${url}/rubropresupuestal/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -455,7 +493,7 @@ const eliminarRubroPresupuesto = function (codigo) {
 };
 
 const listarTipoIdentificacion = function () {
-  return fetch(`${url}/tipoidentificacion`, { method: "GET" })
+  return fetch(`${url}/tipoidentificacion`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -464,7 +502,10 @@ const listarTipoIdentificacion = function () {
 };
 
 const consultarTipoIdentificacion = function (codigo) {
-  return fetch(`${url}/tipoidentificacion/${codigo}`, { method: "GET" })
+  return fetch(`${url}/tipoidentificacion/${codigo}`, {
+    method: "GET",
+    headers,
+  })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -475,6 +516,7 @@ const consultarTipoIdentificacion = function (codigo) {
 const eliminarTipoIdentificacion = function (codigo) {
   return fetch(`${url}/tipoidentificacion/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -486,7 +528,7 @@ const insertarTipoIdentificacion = function (tipoIdentificacion) {
   return fetch(`${url}/tipoidentificacion/`, {
     method: "POST",
     body: JSON.stringify(tipoIdentificacion),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -498,7 +540,7 @@ const actualizarTipoIdentificacion = function (tipoIdentificacion) {
   return fetch(`${url}/tipoidentificacion/${tipoIdentificacion.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tipoIdentificacion),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -507,7 +549,7 @@ const actualizarTipoIdentificacion = function (tipoIdentificacion) {
 };
 
 const listarTercero = function () {
-  return fetch(`${url}/tercero`, { method: "GET" })
+  return fetch(`${url}/tercero`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -516,7 +558,7 @@ const listarTercero = function () {
 };
 
 const consultarTercero = function (codigo) {
-  return fetch(`${url}/tercero/${codigo}`, { method: "GET" })
+  return fetch(`${url}/tercero/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -528,7 +570,7 @@ const insertarTercero = function (tercero) {
   return fetch(`${url}/tercero/`, {
     method: "POST",
     body: JSON.stringify(tercero),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -540,7 +582,7 @@ const actualizarTercero = function (tercero) {
   return fetch(`${url}/tercero/${tercero.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(tercero),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -551,6 +593,7 @@ const actualizarTercero = function (tercero) {
 const eliminarTercero = function (codigo) {
   return fetch(`${url}/tercero/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -559,7 +602,7 @@ const eliminarTercero = function (codigo) {
 };
 
 const listarPeriodo = function () {
-  return fetch(`${url}/periodo`, { method: "GET" })
+  return fetch(`${url}/periodo`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -568,7 +611,7 @@ const listarPeriodo = function () {
 };
 
 const listarPeriodoActivos = function () {
-  return fetch(`${url}/periodo/listar/activos`, { method: "GET" })
+  return fetch(`${url}/periodo/listar/activos`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -577,7 +620,7 @@ const listarPeriodoActivos = function () {
 };
 
 const consultarPeriodo = function (codigo) {
-  return fetch(`${url}/periodo/${codigo}`, { method: "GET" })
+  return fetch(`${url}/periodo/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -588,6 +631,7 @@ const consultarPeriodo = function (codigo) {
 const eliminarPeriodo = function (codigo) {
   return fetch(`${url}/periodo/${codigo}`, {
     method: "DELETE",
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -599,7 +643,7 @@ const insertarPeriodo = function (periodo) {
   return fetch(`${url}/periodo/`, {
     method: "POST",
     body: JSON.stringify(periodo),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -611,7 +655,7 @@ const actualizarPeriodo = function (periodo) {
   return fetch(`${url}/periodo/${periodo.codigo}/`, {
     method: "PUT",
     body: JSON.stringify(periodo),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -625,7 +669,7 @@ const consultarProyeccionPresupuesto = function (
 ) {
   return fetch(
     `${url}/proyeccionpresupuestalcabecera/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -640,7 +684,7 @@ const eliminarProyeccionPresupuesto = function (
 ) {
   return fetch(
     `${url}/proyeccionpresupuestalcabecera/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -654,7 +698,7 @@ const aprobarProyeccionPresupuesto = function (
 ) {
   return fetch(
     `${url}/proyeccionpresupuestalcabecera/aprobar/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "PUT" }
+    { method: "PUT", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -666,7 +710,7 @@ const insertarProyeccionPresupuesto = function (proyeccionPresupuesto) {
   return fetch(`${url}/proyeccionpresupuestalcabecera/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -680,7 +724,7 @@ const actualizarProyeccionPresupuesto = function (proyeccionPresupuesto) {
     {
       method: "PUT",
       body: JSON.stringify(proyeccionPresupuesto),
-      headers: { "Content-type": "application/json; charset=UTF-8" },
+      headers,
     }
   )
     .then(manejarError)
@@ -695,7 +739,7 @@ const insertarProyeccionPresupuestoDetalle = function (
   return fetch(`${url}/proyeccionpresupuestaldetalle/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuestoDetalle),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -711,7 +755,7 @@ const insertarProyeccionPresupuestoDetalleMultiple = function (
   return fetch(`${url}/proyeccionpresupuestaldetalle/todos/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuestoDetalle),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -727,7 +771,7 @@ const eliminarProyeccionPresupuestoDetalle = function (
 ) {
   return fetch(
     `${url}/proyeccionpresupuestaldetalle/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}&codigofuenterecurso=${fuenteRecursoCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -741,7 +785,7 @@ const eliminarProyeccionPresupuestoDetalleMultiple = function (
 ) {
   return fetch(
     `${url}/proyeccionpresupuestaldetalle/todos/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -755,7 +799,7 @@ const listarIngresoPresupuesto = function (
 ) {
   return fetch(
     `${url}/ingresopresupuestal/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -770,7 +814,7 @@ const consultarIngresoPresupuesto = function (
 ) {
   return fetch(
     `${url}/ingresopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -785,7 +829,7 @@ const consultarIngresoPresupuestoSaldo = function (
 ) {
   return fetch(
     `${url}/ingresopresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -798,7 +842,7 @@ const insertarIngresoPresupuesto = function (ingresoPresupuestoDetalle) {
   return fetch(`${url}/ingresopresupuestal/`, {
     method: "POST",
     body: JSON.stringify(ingresoPresupuestoDetalle),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -813,7 +857,7 @@ const actualizarIngresoPresupuesto = function (ingresoPresupuesto) {
     {
       method: "PUT",
       body: JSON.stringify(ingresoPresupuesto),
-      headers: { "Content-type": "application/json; charset=UTF-8" },
+      headers,
     }
   )
     .then(manejarError)
@@ -829,7 +873,7 @@ const eliminarIngresoPresupuesto = function (
 ) {
   return fetch(
     `${url}/ingresopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -840,7 +884,7 @@ const eliminarIngresoPresupuesto = function (
 const listarRecaudoPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/recaudopresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -855,7 +899,7 @@ const consultarRecaudoPresupuesto = function (
 ) {
   return fetch(
     `${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -870,7 +914,7 @@ const eliminarRecaudoPresupuesto = function (
 ) {
   return fetch(
     `${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -882,7 +926,7 @@ const insertarRecaudoPresupuesto = function (recaudoPresupuestoDetalle) {
   return fetch(`${url}/recaudopresupuestal/`, {
     method: "POST",
     body: JSON.stringify(recaudoPresupuestoDetalle),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -892,11 +936,14 @@ const insertarRecaudoPresupuesto = function (recaudoPresupuestoDetalle) {
 };
 
 const actualizarRecaudoPresupuesto = function (recaudoPresupuesto) {
-  return fetch(`${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${recaudoPresupuesto.institucioneducativaid.codigo}&consecutivo=${recaudoPresupuesto.consecutivo}`, {
-    method: "PUT",
-    body: JSON.stringify(recaudoPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
+  return fetch(
+    `${url}/recaudopresupuestal/consecutivo/?codigoinstitucioneducativa=${recaudoPresupuesto.institucioneducativaid.codigo}&consecutivo=${recaudoPresupuesto.consecutivo}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(recaudoPresupuesto),
+      headers,
+    }
+  )
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -907,7 +954,7 @@ const actualizarRecaudoPresupuesto = function (recaudoPresupuesto) {
 const listarSolicitudPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/solicitudpresupuestalcabecera/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -922,7 +969,7 @@ const consultarSolicitudPresupuesto = function (
 ) {
   return fetch(
     `${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -936,10 +983,10 @@ const eliminarSolicitudPresupuestoDetalle = function (
   consecutivo,
   id
 ) {
-  return fetch(
-    `${url}/solicitudpresupuestaldetalle/${id}`,
-    { method: "DELETE" }
-  )
+  return fetch(`${url}/solicitudpresupuestaldetalle/${id}`, {
+    method: "DELETE",
+    headers,
+  })
     .then(manejarError)
     .catch(function (e) {
       throw e;
@@ -952,7 +999,7 @@ const insertarSolicitudPresupuestoDetalle = function (
   return fetch(`${url}/solicitudpresupuestaldetalle/`, {
     method: "POST",
     body: JSON.stringify(solicitudPresupuestoDetalle),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -966,7 +1013,7 @@ const eliminarSolicitudPresupuesto = function (
 ) {
   return fetch(
     `${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -978,7 +1025,7 @@ const insertarSolicitudPresupuesto = function (solicitudPresupuesto) {
   return fetch(`${url}/solicitudpresupuestalcabecera/`, {
     method: "POST",
     body: JSON.stringify(solicitudPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -988,11 +1035,14 @@ const insertarSolicitudPresupuesto = function (solicitudPresupuesto) {
 };
 
 const actualizarSolicitudPresupuesto = function (solicitudPresupuesto) {
-  return fetch(`${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${solicitudPresupuesto.institucioneducativaid.codigo}&consecutivo=${solicitudPresupuesto.consecutivo}`, {
-    method: "PUT",
-    body: JSON.stringify(solicitudPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
+  return fetch(
+    `${url}/solicitudpresupuestalcabecera/consecutivo/?codigoinstitucioneducativa=${solicitudPresupuesto.institucioneducativaid.codigo}&consecutivo=${solicitudPresupuesto.consecutivo}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(solicitudPresupuesto),
+      headers,
+    }
+  )
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -1006,7 +1056,7 @@ const consultarRubroPresupuestoSaldo = function (
 ) {
   return fetch(
     `${url}/rubropresupuestal/detalle/saldoporproyeccion/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1020,6 +1070,7 @@ const listarRubroPresupuestoProyeccion = function (institucionEducativaCodigo) {
     `${url}/rubropresupuestal/detalle/proyectados/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
     {
       method: "GET",
+      headers,
     }
   )
     .then(manejarError)
@@ -1034,6 +1085,7 @@ const listarRubroPresupuestoSolicitud = function (institucionEducativaCodigo) {
     `${url}/rubropresupuestal/detalle/solicitados/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
     {
       method: "GET",
+      headers,
     }
   )
     .then(manejarError)
@@ -1046,7 +1098,7 @@ const listarRubroPresupuestoSolicitud = function (institucionEducativaCodigo) {
 const listarCertificadoPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/certificadodisponibilidadpresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1061,7 +1113,7 @@ const consultarCertificadoPresupuesto = function (
 ) {
   return fetch(
     `${url}/certificadodisponibilidadpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1076,7 +1128,7 @@ const consultarRubroPresupuestoSaldoSolicitud = function (
 ) {
   return fetch(
     `${url}/rubropresupuestal/detalle/saldosolicitud/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1091,7 +1143,7 @@ const consultarRubroPresupuestoSaldoRecaudo = function (
 ) {
   return fetch(
     `${url}/rubropresupuestal/detalle/saldorecaudo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&codigorubropresupuestal=${rubroPresupuestoCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1104,7 +1156,7 @@ const insertarCertificadoPresupuesto = function (certificadoPresupuesto) {
   return fetch(`${url}/certificadodisponibilidadpresupuestal/`, {
     method: "POST",
     body: JSON.stringify(certificadoPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -1117,7 +1169,7 @@ const actualizarCertificadoPresupuesto = function (certificadoPresupuesto) {
   return fetch(`${url}/certificadodisponibilidadpresupuestal/`, {
     method: "PUT",
     body: JSON.stringify(certificadoPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -1132,7 +1184,7 @@ const eliminarCertificadoPresupuesto = function (
 ) {
   return fetch(
     `${url}/certificadodisponibilidadpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -1143,7 +1195,7 @@ const eliminarCertificadoPresupuesto = function (
 const listarRegistroPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/registropresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1158,7 +1210,7 @@ const consultarRegistroPresupuesto = function (
 ) {
   return fetch(
     `${url}/registropresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1173,7 +1225,7 @@ const consultarCertificadoPresupuestoSaldo = function (
 ) {
   return fetch(
     `${url}/certificadodisponibilidadpresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1188,7 +1240,7 @@ const eliminarRegistroPresupuesto = function (
 ) {
   return fetch(
     `${url}/registropresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -1200,7 +1252,7 @@ const insertarRegistroPresupuesto = function (registroPresupuesto) {
   return fetch(`${url}/registropresupuestal/`, {
     method: "POST",
     body: JSON.stringify(registroPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -1212,7 +1264,7 @@ const insertarRegistroPresupuesto = function (registroPresupuesto) {
 const listarObligacionPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/obligacionpresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1227,7 +1279,7 @@ const consultarObligacionPresupuesto = function (
 ) {
   return fetch(
     `${url}/obligacionpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1242,7 +1294,7 @@ const consultarRegistroPresupuestoSaldo = function (
 ) {
   return fetch(
     `${url}/registropresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1255,7 +1307,7 @@ const insertarObligacionPresupuesto = function (obligacionPresupuesto) {
   return fetch(`${url}/obligacionpresupuestal/`, {
     method: "POST",
     body: JSON.stringify(obligacionPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -1270,7 +1322,7 @@ const eliminarObligacionPresupuesto = function (
 ) {
   return fetch(
     `${url}/obligacionpresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -1281,7 +1333,7 @@ const eliminarObligacionPresupuesto = function (
 const listarPagoPresupuesto = function (institucionEducativaCodigo) {
   return fetch(
     `${url}/pagopresupuestal/?codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1296,7 +1348,7 @@ const consultarPagoPresupuesto = function (
 ) {
   return fetch(
     `${url}/pagopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1311,7 +1363,7 @@ const consultarObligacionPresupuestoSaldo = function (
 ) {
   return fetch(
     `${url}/obligacionpresupuestal/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1324,7 +1376,7 @@ const insertarPagoPresupuesto = function (pagoPresupuesto) {
   return fetch(`${url}/pagopresupuestal/`, {
     method: "POST",
     body: JSON.stringify(pagoPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .then((res) => res.json())
@@ -1339,7 +1391,7 @@ const eliminarPagoPresupuesto = function (
 ) {
   return fetch(
     `${url}/pagopresupuestal/consecutivo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -1353,7 +1405,7 @@ const consultarModificacionPresupuesto = function (
 ) {
   return fetch(
     `${url}/modificacionproyeccionpresupuestalcabecera/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1366,7 +1418,7 @@ const insertarModificacionPresupuesto = function (proyeccionPresupuesto) {
   return fetch(`${url}/modificacionproyeccionpresupuestalcabecera/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuesto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -1380,7 +1432,7 @@ const actualizarModificacionPresupuesto = function (proyeccionPresupuesto) {
     {
       method: "PUT",
       body: JSON.stringify(proyeccionPresupuesto),
-      headers: { "Content-type": "application/json; charset=UTF-8" },
+      headers,
     }
   )
     .then(manejarError)
@@ -1395,7 +1447,7 @@ const eliminarModificacionPresupuesto = function (
 ) {
   return fetch(
     `${url}/modificacionproyeccionpresupuestalcabecera/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -1409,7 +1461,7 @@ const insertarModificacionPresupuestoDetalle = function (
   return fetch(`${url}/modificacionproyeccionpresupuestaldetalle/`, {
     method: "POST",
     body: JSON.stringify(proyeccionPresupuestoDetalle),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -1420,11 +1472,11 @@ const insertarModificacionPresupuestoDetalle = function (
 const eliminarModificacionPresupuestoDetalle = function (
   periodoCodigo,
   institucionEducativaCodigo,
-  id,
+  id
 ) {
   return fetch(
     `${url}/modificacionproyeccionpresupuestaldetalle/${id}/?codigoperiodo=${periodoCodigo}&codigoinstitucioneducativa=${institucionEducativaCodigo}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -1438,7 +1490,7 @@ const consultarSolicitudPresupuestoSaldo = function (
 ) {
   return fetch(
     `${url}/solicitudpresupuestalcabecera/consecutivo/saldo/?codigoinstitucioneducativa=${institucionEducativaCodigo}&consecutivo=${consecutivo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1450,7 +1502,7 @@ const consultarSolicitudPresupuestoSaldo = function (
 const listarAdjuntos = function (institucionEducativaCodigo, tipo, id) {
   return fetch(
     `${url}/adjuntos/?codigoinstitucioneducativa=${institucionEducativaCodigo}&tipo=${tipo}&documnetoid=${id}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1459,13 +1511,11 @@ const listarAdjuntos = function (institucionEducativaCodigo, tipo, id) {
     });
 };
 
-const insertarAdjuntos = function (
-  adjunto
-) {
+const insertarAdjuntos = function (adjunto) {
   return fetch(`${url}/adjuntos/`, {
     method: "POST",
     body: JSON.stringify(adjunto),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers,
   })
     .then(manejarError)
     .catch(function (e) {
@@ -1473,13 +1523,8 @@ const insertarAdjuntos = function (
     });
 };
 
-const eliminarAdjuntos = function (
-  id,
-) {
-  return fetch(
-    `${url}/adjuntos/id/${id}`,
-    { method: "DELETE" }
-  )
+const eliminarAdjuntos = function (id) {
+  return fetch(`${url}/adjuntos/id/${id}`, { method: "DELETE", headers })
     .then(manejarError)
     .catch(function (e) {
       throw e;
@@ -1487,10 +1532,7 @@ const eliminarAdjuntos = function (
 };
 
 const descargarAdjuntos = function (id) {
-  return fetch(
-    `${url}/adjuntos/descargar/${id}`,
-    { method: "GET" }
-  )
+  return fetch(`${url}/adjuntos/descargar/${id}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
     .catch(function (e) {
@@ -1501,7 +1543,7 @@ const descargarAdjuntos = function (id) {
 const listarUsuarioAuditor = function () {
   return fetch(
     `${url}/auditorinstitucioneducativa/listarusuariossinrelacion/`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1513,7 +1555,7 @@ const listarUsuarioAuditor = function () {
 const consultarUsuarioAuditor = function (usuarioAuditorCodigo) {
   return fetch(
     `${url}/auditorinstitucioneducativa/usuario/${usuarioAuditorCodigo}`,
-    { method: "GET" }
+    { method: "GET", headers }
   )
     .then(manejarError)
     .then((res) => res.json())
@@ -1522,14 +1564,15 @@ const consultarUsuarioAuditor = function (usuarioAuditorCodigo) {
     });
 };
 
-const insertarUsuarioAuditor = function (
-  usuarioAuditor
-) {
-  return fetch(`${url}/auditorinstitucioneducativa/usuario/${usuarioAuditor.usuarioid.codigo}/`, {
-    method: "POST",
-    body: JSON.stringify(usuarioAuditor),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
+const insertarUsuarioAuditor = function (usuarioAuditor) {
+  return fetch(
+    `${url}/auditorinstitucioneducativa/usuario/${usuarioAuditor.usuarioid.codigo}/`,
+    {
+      method: "POST",
+      body: JSON.stringify(usuarioAuditor),
+      headers,
+    }
+  )
     .then(manejarError)
     .catch(function (e) {
       throw e;
@@ -1541,7 +1584,7 @@ const eliminarUsuarioAuditorInstitucionEducativa = function (
 ) {
   return fetch(
     `${url}/auditorinstitucioneducativa/id/${usuarioAuditorInstitucionEducativaId}`,
-    { method: "DELETE" }
+    { method: "DELETE", headers }
   )
     .then(manejarError)
     .catch(function (e) {
@@ -1550,6 +1593,7 @@ const eliminarUsuarioAuditorInstitucionEducativa = function (
 };
 
 export default {
+  consultarToken,
   listarUsuario,
   consultarUsuario,
   insertarUsuario,

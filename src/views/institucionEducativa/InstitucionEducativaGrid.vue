@@ -46,10 +46,10 @@
             header-cell-template="institucionEducativaNombre"
           />
           <template #usuarioCodigo>
-            <b style="color: black">NOMBRE</b>
+            <b style="color: black">USUARIO</b>
           </template>
           <DxColumn
-            data-field="usuarioid.codigo"
+            data-field="usuarioid.username"
             header-cell-template="usuarioCodigo"
           />
 

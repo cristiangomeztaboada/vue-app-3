@@ -76,7 +76,7 @@ export default {
           }
           codigo.value = data.codigo;
           nombre.value = data.nombre;
-          usuarioCodigo.value = data.usuarioid.codigo;
+          usuarioCodigo.value = data.usuarioid.username;
         })
         .catch(function () {
           nuevo();
@@ -91,7 +91,7 @@ export default {
       const institucionEducativa = {
         codigo: codigo.value,
         nombre: nombre.value,
-        usuarioid: { codigo: usuarioCodigo.value },
+        usuarioid: { username: usuarioCodigo.value },
       };
 
       if (esNuevo.value) {
@@ -160,7 +160,7 @@ export default {
       api
         .consultarUsuario(c)
         .then((data) => {
-          usuarioCodigo.value = data.codigo;
+          usuarioCodigo.value = data.username;
         })
         .catch(function () {
           usuarioCodigo.value = "";

@@ -21,11 +21,7 @@
             />
           </div>
           <div class="row">
-            <button
-              v-on:click="ingresar"
-              type="button"
-              class="btn btn-warning"
-            >
+            <button v-on:click="ingresar" type="button" class="btn btn-warning">
               Ingresar
             </button>
           </div>
@@ -56,12 +52,18 @@ export default {
     const ingresar = function () {
       store.commit("ocultarAlerta");
       try {
+        const usuario = {
+          username: codigo.value,
+          password: clave.value,
+        };
+
         api
-          .consultarUsuario(codigo.value)
+          .consultarToken(usuario)
           .then((data) => {
-            if (codigo.value == data.codigo && clave.value == data.clave) {
+            if (data.access) {
               sessionStorage.setItem("usuario", codigo.value);
               sessionStorage.setItem("usuarionombre", codigo.value);
+              sessionStorage.setItem("token", data.access);
 
               api
                 .consultarInstitucionEducativaPorUsuario(codigo.value)
@@ -76,7 +78,10 @@ export default {
                   router.push({ name: "principal" });
                 })
                 .catch(() => {
-                  store.commit("mostrarError", "El usuario no tiene una institución educativa asignada, póngase en contacto con el administrador del sistema");
+                  store.commit(
+                    "mostrarError",
+                    "El usuario no tiene una institución educativa asignada, póngase en contacto con el administrador del sistema"
+                  );
                   if (codigo.value == "admin") {
                     store.commit("ocultarAlerta");
                   }
@@ -88,10 +93,13 @@ export default {
                 store.commit("ocultarAlerta");
               }
             } else {
-              store.commit("mostrarError", "ingrese un usuario y clave correcta");
+              store.commit(
+                "mostrarError",
+                "ingrese un usuario y clave correcta"
+              );
             }
           })
-          .catch(()=> {
+          .catch(() => {
             store.commit("mostrarError", "ingrese un usuario y clave correcta");
           });
       } catch (e) {

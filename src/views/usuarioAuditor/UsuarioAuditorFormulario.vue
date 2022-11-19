@@ -13,8 +13,8 @@
           <h5 class="card-title">Usuario Auditor</h5>
           <DxSelectBox
             :items="usuarioAuditor"
-            display-expr="nombre"
-            value-expr="codigo"
+            display-expr="name"
+            value-expr="username"
             v-model="usuarioAuditorCodigo"
             @value-changed="usuarioAuditorCodigoCambio"
           />
@@ -119,6 +119,7 @@ export default {
       api
         .listarUsuarioAuditor()
         .then((data) => {
+          console.log(data);
           usuarioAuditor.value = data;
         })
         .catch(() => {});
@@ -129,11 +130,11 @@ export default {
     const guardar = function () {
       store.commit("ocultarAlerta");
       const objeto = {
-        usuarioid: { codigo: usuarioAuditorCodigo.value },
+        usuarioid: { username: usuarioAuditorCodigo.value },
         institucioneducativaid: { codigo: institucionEducativaCodigo.value },
       };
       
-      if(!objeto.usuarioid.codigo || !objeto.institucioneducativaid.codigo){
+      if(!objeto.usuarioid.username || !objeto.institucioneducativaid.codigo){
         store.commit("mostrarError", "Ingrese el usuario y la institución educativa");
         return;
       }

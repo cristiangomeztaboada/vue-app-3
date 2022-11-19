@@ -54,6 +54,7 @@ export default {
   },
   setup() {
     const esNuevo = ref(true);
+    const id = ref("");
     const codigo = ref("");
     const nombre = ref("");
     const clave = ref("");
@@ -70,9 +71,10 @@ export default {
           if (data.codigo) {
             esNuevo.value = false;
           }
-          codigo.value = data.codigo;
-          nombre.value = data.nombre;
-          clave.value = data.clave;
+          id.value = data.id;
+          codigo.value = data.username;
+          nombre.value = data.name;
+          clave.value = data.password;
         })
         .catch(function () {
           nuevo();
@@ -85,9 +87,10 @@ export default {
     const guardar = function () {
       store.commit("ocultarAlerta");
       const usuario = {
-        codigo: codigo.value,
-        nombre: nombre.value,
-        clave: clave.value,
+        id: id.value,
+        username: codigo.value,
+        name: nombre.value,
+        password: clave.value,
       };
       if (esNuevo.value) {
         api
@@ -146,6 +149,7 @@ export default {
 
     return {
       esNuevo,
+      id,
       codigo,
       nombre,
       clave,

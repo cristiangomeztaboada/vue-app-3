@@ -19,7 +19,7 @@
         </div>
         <DxDataGrid
           :data-source="dataSource"
-          key-expr="codigo"
+          key-expr="username"
           :show-borders="true"
           :selection="{ mode: 'single' }"
           @row-click="seleccionarUsuario"
@@ -31,11 +31,11 @@
           <template #usuarioCodigo>
             <b style="color: black">CÓDIGO</b>
           </template>
-          <DxColumn data-field="codigo" header-cell-template="usuarioCodigo" />
+          <DxColumn data-field="username" header-cell-template="usuarioCodigo" />
           <template #usuarioNombre>
             <b style="color: black">NOMBRE</b>
           </template>
-          <DxColumn data-field="nombre" header-cell-template="usuarioNombre" />
+          <DxColumn data-field="name" header-cell-template="usuarioNombre" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
             <DxButton :on-click="eliminar" hint="Eliminar" icon="trash" />
@@ -94,7 +94,7 @@ export default {
 
     const seleccionarUsuario = function (e) {
       store.commit("ocultarAlerta");
-      context.emit("seleccionarUsuario", e.data.codigo);
+      context.emit("seleccionarUsuario", e.data.username);
     };
 
     const eliminar = function (rowData) {

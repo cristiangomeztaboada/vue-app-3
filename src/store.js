@@ -13,16 +13,18 @@ const store = createStore({
       state.usuarionombre = sessionStorage.getItem("usuarionombre");
       state.institucioneducativa = sessionStorage.getItem("institucioneducativa");
       state.institucioneducativanombre = sessionStorage.getItem("institucioneducativanombre");
+      state.token = sessionStorage.getItem("token");
     },
     logout(state) {
       sessionStorage.clear();
       state.usuario = "";
+      state.token = "";
     },
     mostrarInformacion(state, mensaje) {
       state.informacion = mensaje;
-      state.error = "";      
+      state.error = "";
     },
-    mostrarError(state, mensaje) {      
+    mostrarError(state, mensaje) {
       state.error = mensaje;
       state.informacion = "";
     },
