@@ -68,7 +68,7 @@ const insertarUsuario = function (usuario) {
 };
 
 const actualizarUsuario = function (usuario) {
-  return fetch(`${url}/user/${usuario.id}/`, {
+  return fetch(`${url}/user/${usuario.username}/`, {
     method: "PUT",
     body: JSON.stringify(usuario),
     headers,

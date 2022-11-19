@@ -84,6 +84,9 @@ export default {
                   );
                   if (codigo.value == "admin") {
                     store.commit("ocultarAlerta");
+                  } else {
+                    store.commit("logout");
+                    router.push({ name: "login" });
                   }
                 });
 

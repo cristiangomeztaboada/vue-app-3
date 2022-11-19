@@ -68,7 +68,7 @@ export default {
       api
         .consultarUsuario(c)
         .then((data) => {
-          if (data.codigo) {
+          if (data.username) {
             esNuevo.value = false;
           }
           id.value = data.id;
@@ -91,7 +91,7 @@ export default {
         username: codigo.value,
         name: nombre.value,
         password: clave.value,
-      };
+      };      
       if (esNuevo.value) {
         api
           .insertarUsuario(usuario)

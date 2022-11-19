@@ -21,13 +21,6 @@
           <input v-model="codigo" class="form-control" type="text" readonly />
           <label>Nombre</label>
           <input v-model="nombre" class="form-control" type="text" readonly />
-          <label>Clave actual</label>
-          <input
-            class="form-control"
-            v-model="claveActual"
-            type="password"
-            id="clave"
-          />
           <label>Nueva clave</label>
           <input
             class="form-control"
@@ -61,8 +54,6 @@ export default {
   setup() {
     const codigo = ref("");
     const nombre = ref("");
-    const clave = ref("");
-    const claveActual = ref("");
     const claveNueva1 = ref("");
     const claveNueva2 = ref("");
     const router = useRouter();
@@ -73,9 +64,8 @@ export default {
       api
         .consultarUsuario(store.state.usuario)
         .then((data) => {
-          codigo.value = data.codigo;
-          nombre.value = data.nombre;
-          clave.value = data.clave;
+          codigo.value = data.username;
+          nombre.value = data.name;
         })
         .catch((e) => store.commit("mostrarError", e));
     };
@@ -84,13 +74,12 @@ export default {
 
     const guardar = function () {
       if (
-        clave.value == claveActual.value &&
         claveNueva1.value == claveNueva2.value
       ) {
         const usuario = {
-          codigo: codigo.value,
-          nombre: nombre.value,
-          clave: claveNueva1.value,
+          username: codigo.value,
+          name: nombre.value,
+          password: claveNueva1.value,
         };
 
         api
@@ -110,8 +99,6 @@ export default {
     return {
       codigo,
       nombre,
-      clave,
-      claveActual,
       claveNueva1,
       claveNueva2,
       guardar,
