@@ -36,6 +36,10 @@
             <b style="color: black">NOMBRE</b>
           </template>
           <DxColumn data-field="name" header-cell-template="usuarioNombre" />
+          <template #usuarioRol>
+            <b style="color: black">ROL</b>
+          </template>
+          <DxColumn data-field="rol" header-cell-template="usuarioRol" />
           <DxColumn v-if="mostrarColumnaBotones" type="buttons" :width="110">
             <DxButton :on-click="editar" hint="Editar" icon="edit" />
             <DxButton :on-click="eliminar" hint="Eliminar" icon="trash" />

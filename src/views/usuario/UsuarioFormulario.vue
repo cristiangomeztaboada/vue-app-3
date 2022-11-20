@@ -32,6 +32,13 @@
             type="password"
             id="clave"
           />
+          <label>Rol</label>
+          <DxSelectBox
+            :items="roles"
+            display-expr="nombre"
+            value-expr="codigo"
+            v-model="rol"
+          />
         </div>
       </div>
     </div>
@@ -45,12 +52,14 @@ import BarraBotones from "@/components/ComponentesTransversales/BarraBotones.vue
 import api from "@/api.js";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import DxSelectBox from "devextreme-vue/select-box";
 
 export default {
   name: "UsuarioFormulario",
   components: {
     UsuarioBuscador,
     BarraBotones,
+    DxSelectBox,
   },
   setup() {
     const esNuevo = ref(true);
@@ -58,6 +67,8 @@ export default {
     const codigo = ref("");
     const nombre = ref("");
     const clave = ref("");
+    const rol = ref("");
+    const roles = ref([{codigo:"Admin",nombre:"Admin"},{codigo:"Institucion",nombre:"Institucion"},{codigo:"Auditor",nombre:"Auditor"}]);
     const route = new useRoute();
     const router = useRouter();
     const store = useStore();
@@ -75,6 +86,7 @@ export default {
           codigo.value = data.username;
           nombre.value = data.name;
           clave.value = data.password;
+          rol.value=data.rol;
         })
         .catch(function () {
           nuevo();
@@ -91,6 +103,7 @@ export default {
         username: codigo.value,
         name: nombre.value,
         password: clave.value,
+        rol:rol.value
       };      
       if (esNuevo.value) {
         api
@@ -153,6 +166,8 @@ export default {
       codigo,
       nombre,
       clave,
+      rol,
+      roles,
       guardar,
       irAtras,
       nuevo,
