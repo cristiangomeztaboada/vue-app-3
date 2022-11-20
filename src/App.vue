@@ -24,7 +24,7 @@
       >
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li
-            v-if="usuario == 'admin' ? true : false"
+            v-if="usuariorol == 'Admin' ? true : false"
             class="nav-item dropdown"
           >
             <a
@@ -106,7 +106,7 @@
             </ul>
           </li>
           <li
-            v-if="usuario == 'admin' ? false : true"
+            v-if="usuariorol == 'Institucion' ? true : false"
             class="nav-item dropdown"
           >
             <a
@@ -137,7 +137,7 @@
             </ul>
           </li>
           <li
-            v-if="usuario == 'admin' ? false : true"
+            v-if="usuariorol == 'Institucion' ? true : false"
             class="nav-item dropdown"
           >
             <a
@@ -226,7 +226,7 @@
             </ul>
           </li>
           <li
-            v-if="usuario == 'admin' ? true : false"
+            v-if="usuariorol == 'Admin' ? true : false"
             class="nav-item dropdown"
           >
             <a
@@ -324,6 +324,10 @@ export default {
       return store.state.usuarionombre;
     });
 
+    const usuariorol = computed(() => {
+      return store.state.usuariorol;
+    });
+
     const institucioneducativanombre = computed(() => {
       return store.state.institucioneducativanombre;
     });
@@ -344,6 +348,7 @@ export default {
     return {
       usuario,
       usuarionombre,
+      usuariorol,
       institucioneducativanombre,
       salir,
       informacion,

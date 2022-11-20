@@ -14,6 +14,7 @@ const store = createStore({
       state.institucioneducativa = sessionStorage.getItem("institucioneducativa");
       state.institucioneducativanombre = sessionStorage.getItem("institucioneducativanombre");
       state.token = sessionStorage.getItem("token");
+      state.usuariorol = sessionStorage.getItem("usuariorol");
     },
     logout(state) {
       sessionStorage.clear();

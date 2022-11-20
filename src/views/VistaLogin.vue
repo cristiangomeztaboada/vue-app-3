@@ -66,35 +66,39 @@ export default {
               sessionStorage.setItem("token", data.access);
 
               api
-                .consultarInstitucionEducativaPorUsuario(codigo.value)
+                .consultarUsuario(codigo.value)
                 .then((data) => {
-                  sessionStorage.setItem("institucioneducativa", data.codigo);
-                  sessionStorage.setItem(
-                    "institucioneducativanombre",
-                    data.nombre
-                  );
+                  sessionStorage.setItem("usuariorol", data.rol);
 
-                  store.commit("login");
-                  router.push({ name: "principal" });
-                })
-                .catch(() => {
-                  store.commit(
-                    "mostrarError",
-                    "El usuario no tiene una institución educativa asignada, póngase en contacto con el administrador del sistema"
-                  );
-                  if (codigo.value == "admin") {
-                    store.commit("ocultarAlerta");
+                  if (sessionStorage.getItem("usuariorol") == "Institucion") {
+                    api
+                      .consultarInstitucionEducativaPorUsuario(codigo.value)
+                      .then((data) => {
+                        sessionStorage.setItem(
+                          "institucioneducativa",
+                          data.codigo
+                        );
+                        sessionStorage.setItem(
+                          "institucioneducativanombre",
+                          data.nombre
+                        );
+
+                        store.commit("login");
+                        router.push({ name: "principal" });
+                      })
+                      .catch(() => {
+                        store.commit(
+                          "mostrarError",
+                          "El usuario no tiene una institución educativa asignada, póngase en contacto con el administrador del sistema"
+                        );
+                      });
                   } else {
-                    store.commit("logout");
-                    router.push({ name: "login" });
+                    store.commit("login");
+                    router.push({ name: "principal" });
+                    store.commit("ocultarAlerta");
                   }
-                });
-
-              if (codigo.value == "admin") {
-                store.commit("login");
-                router.push({ name: "principal" });
-                store.commit("ocultarAlerta");
-              }
+                })
+                .catch(() => {});
             } else {
               store.commit(
                 "mostrarError",
