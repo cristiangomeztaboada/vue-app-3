@@ -46,7 +46,8 @@ const listarUsuario = function () {
     });
 };
 
-const consultarUsuario = function (codigo) {
+const consultarUsuario = function (codigo, access) {
+  headers.Authorization = `Bearer ${access}`;
   return fetch(`${url}/user/${codigo}`, { method: "GET", headers })
     .then(manejarError)
     .then((res) => res.json())
@@ -1592,6 +1593,22 @@ const eliminarUsuarioAuditorInstitucionEducativa = function (
     });
 };
 
+const consultarDocumentos = function (
+  consulta
+) {
+  console.log(consulta);
+  console.log(`${url}/ingresopresupuestal/consulta/documentos/`);
+  return fetch(
+    `${url}/ingresopresupuestal/consulta/documentos/`,
+    { method: "POST",body: JSON.stringify(consulta), headers }
+  )
+    .then(manejarError)
+    .then((res) => res.json())
+    .catch(function (e) {
+      throw e;
+    });
+};
+
 export default {
   consultarToken,
   listarUsuario,
@@ -1719,4 +1736,5 @@ export default {
   consultarUsuarioAuditor,
   insertarUsuarioAuditor,
   eliminarUsuarioAuditorInstitucionEducativa,
+  consultarDocumentos,
 };

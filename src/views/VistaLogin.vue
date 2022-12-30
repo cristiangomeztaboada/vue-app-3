@@ -66,7 +66,7 @@ export default {
               sessionStorage.setItem("token", data.access);
 
               api
-                .consultarUsuario(codigo.value)
+                .consultarUsuario(codigo.value, data.access)
                 .then((data) => {
                   sessionStorage.setItem("usuariorol", data.rol);
 

@@ -304,7 +304,7 @@
       </div>
     </div>
   </div>
-  
+
   <div v-show="imprimiendo" id="pdf" class="card-body">
     <div align="center">
       <img src="@/assets/logo2.png" />
@@ -678,8 +678,8 @@ export default {
               store.commit("mostrarError", "No existe proyección presupuestal");
             });
         })
-        .catch(function (e) {
-          store.commit("mostrarError", e);
+        .catch(() => {
+          store.commit("mostrarError", "No existe periodo activo");
         });
     };
 

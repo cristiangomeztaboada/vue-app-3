@@ -118,8 +118,7 @@ export default {
       store.commit("ocultarAlerta");
       api
         .listarUsuarioAuditor()
-        .then((data) => {
-          console.log(data);
+        .then((data) => {          
           usuarioAuditor.value = data;
         })
         .catch(() => {});

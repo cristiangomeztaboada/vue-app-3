@@ -45,6 +45,11 @@
         <span>🖇️</span>DOCUMENTOS
       </button>
     </li>
+    <li v-if="mostrarBotonConsultar ? true : false" class="nav-item">
+      <button type="button" class="btn btn-success" v-on:click="consultar">
+        <span>🔁</span>CONSULTAR
+      </button>
+    </li>
   </ul>
 
   <div class="modal" id="modalAdjuntar" tabindex="-1">
@@ -86,6 +91,7 @@ export default {
     mostrarBotonImportar: Boolean,
     mostrarBotonEliminar: Boolean,
     mostrarBotonAdjuntar: Boolean,
+    mostrarBotonConsultar: Boolean,
     tipo: Number,
     id: Number,
   },
@@ -127,6 +133,10 @@ export default {
       context.emit("importar");
     };
 
+    const consultar = function () {
+      context.emit("consultar");
+    };
+
     const abrirModalAdjuntar = function () {
       $("#modalAdjuntar").modal("show");
     };
@@ -140,6 +150,7 @@ export default {
       imprimir,
       aprobar,
       importar,
+      consultar,
       abrirModalAdjuntar,
     };
   },
