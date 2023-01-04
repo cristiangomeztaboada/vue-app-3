@@ -1,42 +1,56 @@
 <template>
   <ul class="nav nav-pills card-header-pills">
     <li v-if="ocultarBotonAtras ? false : true" class="nav-item">
-      <button type="button" class="btn btn-danger" v-on:click="irAtras">
+      &nbsp;
+      <button type="button" class="btn btn-success" v-on:click="irAtras">
         <span>⬅️</span>IR ATRAS
       </button>
     </li>
+
     <li v-if="ocultarBotonGuardar ? false : true" class="nav-item">
+      &nbsp;
       <button type="button" class="btn btn-success" v-on:click="guardar">
         <span>💾</span>GUARDAR
       </button>
     </li>
+
     <li v-if="mostrarBotonImprimir ? true : false" class="nav-item">
-      <button type="button" class="btn btn-warning" v-on:click="imprimir">
+      &nbsp;
+      <button type="button" class="btn btn-success" v-on:click="imprimir">
         <span>🖨️</span>IMPRIMIR
       </button>
     </li>
-    
+
     <li v-if="mostrarBotonImportar ? true : false" class="nav-item">
-      <button type="button" class="btn btn-danger" v-on:click="importar">
+      &nbsp;
+      <button type="button" class="btn btn-success" v-on:click="importar">
         <span>📥</span>IMPORTAR
       </button>
     </li>
+
     <li v-if="mostrarBotonAprobar ? true : false" class="nav-item">
-      <button type="button" class="btn btn-warning" v-on:click="aprobar">
+      &nbsp;
+      <button type="button" class="btn btn-success" v-on:click="aprobar">
         <span>✅</span>APROBAR
       </button>
-    </li>    
+    </li>
+
     <li v-if="mostrarBotonEliminar ? true : false" class="nav-item">
-      <button type="button" class="btn btn-danger" v-on:click="eliminar">
+      &nbsp;
+      <button type="button" class="btn btn-success" v-on:click="eliminar">
         <span>&#10008;</span>ELIMINAR
       </button>
     </li>
+
     <li v-if="ocultarBotonNuevo ? false : true" class="nav-item">
-      <button type="button" class="btn btn-warning" v-on:click="nuevo">
+      &nbsp;
+      <button type="button" class="btn btn-success" v-on:click="nuevo">
         <span>➕</span>NUEVO
       </button>
     </li>
+
     <li v-if="mostrarBotonAdjuntar ? true : false" class="nav-item">
+      &nbsp;
       <button
         type="button"
         class="btn btn-success"
@@ -45,7 +59,9 @@
         <span>🖇️</span>DOCUMENTOS
       </button>
     </li>
+
     <li v-if="mostrarBotonConsultar ? true : false" class="nav-item">
+      &nbsp;
       <button type="button" class="btn btn-success" v-on:click="consultar">
         <span>🔁</span>CONSULTAR
       </button>
@@ -78,7 +94,7 @@
 <script>
 import $ from "jquery";
 import ComponenteAdjuntar from "./ComponenteAdjuntar.vue";
-import { ref,watch } from "vue";
+import { ref, watch } from "vue";
 export default {
   name: "BarraBotones",
   components: { ComponenteAdjuntar },
@@ -97,7 +113,7 @@ export default {
   },
   setup(props, context) {
     const id_ = ref(0);
-    
+
     watch(
       () => props.id,
       (newId) => {

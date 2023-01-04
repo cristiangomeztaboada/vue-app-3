@@ -273,6 +273,7 @@
                   Consulta Integral De Documentos
                 </router-link>
               </li>
+              <!--
               <li>
                 <router-link
                   class="dropdown-item"
@@ -281,6 +282,7 @@
                   Dashboard
                 </router-link>
               </li>
+              -->
             </ul>
           </li>
         </ul>
